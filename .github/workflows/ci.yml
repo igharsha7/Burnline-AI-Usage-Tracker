@@ -65,6 +65,11 @@ jobs:
       - name: Test suite
         id: tests
         continue-on-error: true
+        env:
+          # At most six tests at once, twice the runner's three cores. Left
+          # unbounded, every test is in flight together and timing-sensitive
+          # ones starve: tests taking milliseconds took thirty seconds.
+          SWT_EXPERIMENTAL_MAXIMUM_PARALLELIZATION_WIDTH: 6
         run: |
           set -o pipefail
           swift test --package-path "$PACKAGES" --enable-code-coverage 2>&1 | tee "$LOGS/tests.log"
@@ -115,23 +120,49 @@ jobs:
     runs-on: macos-26
     timeout-minutes: 60
     outputs:
-      # The gate runs only when the build and measurements did, so a gate
+      # "unaffected" when nothing that could change speed changed. Otherwise
+      # the gate runs only when the build and measurements did, so a gate
       # that did not succeed is a failure, never "not run".
-      perf: ${{ steps.gate.outcome == 'success' && 'success' || 'failure' }}
+      perf: >-
+        ${{ steps.scope.outputs.measure == 'false' && 'unaffected'
+            || (steps.gate.outcome == 'success' && 'success' || 'failure') }}
     env:
       PERF: ${{ github.workspace }}/perf
-      BASE: ${{ github.workspace }}/../base
+      # Inside the workspace, so the cached base build has the same path on
+      # every run.
+      BASE: ${{ github.workspace }}/.base
       BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      # What the base's compiled suites are cached as: built once per base
+      # commit, then reused by every later push to a pull request against it.
+      BASE_BUILT: .build/arm64-apple-macosx/release
     steps:
       - uses: actions/checkout@v4
 
+      - name: Decide whether to measure
+        id: scope
+        run: |
+          mkdir -p "$LOGS"
+          # A push to nightly has no base: always measure.
+          if [ -z "$BASE_SHA" ]; then echo "measure=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          git fetch --depth=1 origin "$BASE_SHA"
+          # The package, the shared schema and data, and the gate itself.
+          if git diff --name-only "$BASE_SHA" HEAD \
+              | grep -qE '^(macos/Packages/|shared/|\.github/workflows/ci\.yml$|\.github/scripts/perf_compare\.py$)'; then
+            echo "measure=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "measure=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Select Xcode
+        id: xcode
+        if: steps.scope.outputs.measure == 'true'
         run: |
           xcode=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -n 1)
           sudo xcode-select -s "$xcode"
-          mkdir -p "$LOGS"
+          echo "version=$(xcodebuild -version | tr -s ' \n' '-')" >> "$GITHUB_OUTPUT"
 
       - uses: actions/cache@v4
+        if: steps.scope.outputs.measure == 'true'
         with:
           path: ${{ env.PACKAGES }}/.build
           key: spm-release-${{ runner.os }}-${{ hashFiles('macos/Packages/Package.resolved', 'macos/Packages/Package.swift') }}
@@ -139,25 +170,49 @@ jobs:
 
       - name: Check out the base branch
         id: base
-        if: github.event_name == 'pull_request'
+        if: steps.scope.outputs.measure == 'true' && github.event_name == 'pull_request'
         run: |
-          git fetch --depth=1 origin "$BASE_SHA"
           git worktree add --detach "$BASE" "$BASE_SHA"
           # Compare only when the base has the suites; until then, budgets only.
           if [ -f "$BASE/$PACKAGES/Tests/BurnlineStoreTests/StorePerformanceTests.swift" ]; then
             echo "compare=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Restore the base's build
+        id: base-build
+        if: steps.base.outputs.compare == 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ${{ env.BASE }}/${{ env.PACKAGES }}/${{ env.BASE_BUILT }}/*.xctest
+            ${{ env.BASE }}/${{ env.PACKAGES }}/${{ env.BASE_BUILT }}/*.bundle
+            ${{ env.BASE }}/${{ env.PACKAGES }}/${{ env.BASE_BUILT }}/*.framework
+          key: perf-base-${{ runner.os }}-${{ steps.xcode.outputs.version }}-${{ env.BASE_SHA }}
+
       - name: Build
+        if: steps.scope.outputs.measure == 'true'
         run: |
           # `swift test` builds with testing enabled, which the suites need;
           # without BURNLINE_PERF they skip, so this only builds.
           set -o pipefail
           build() { swift test -c release --package-path "$1" --filter PerformanceTests 2>&1 | tail -n 20; }
           build "$PACKAGES" | tee "$LOGS/perf-build.log"
-          if [ "${{ steps.base.outputs.compare }}" = true ]; then build "$BASE/$PACKAGES"; fi
+          if [ "${{ steps.base.outputs.compare }}" = true ] && [ "${{ steps.base-build.outputs.cache-hit }}" != true ]; then
+            build "$BASE/$PACKAGES"
+          fi
+
+      - name: Keep the base's build
+        if: steps.base.outputs.compare == 'true' && steps.base-build.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ${{ env.BASE }}/${{ env.PACKAGES }}/${{ env.BASE_BUILT }}/*.xctest
+            ${{ env.BASE }}/${{ env.PACKAGES }}/${{ env.BASE_BUILT }}/*.bundle
+            ${{ env.BASE }}/${{ env.PACKAGES }}/${{ env.BASE_BUILT }}/*.framework
+          key: perf-base-${{ runner.os }}-${{ steps.xcode.outputs.version }}-${{ env.BASE_SHA }}
 
       - name: Measure
+        if: steps.scope.outputs.measure == 'true'
         run: |
           # Base and pull request take turns, three times, so a slow minute on the
           # runner falls on both; the best run of each counts.
@@ -172,6 +227,7 @@ jobs:
 
       - name: Performance gate
         id: gate
+        if: steps.scope.outputs.measure == 'true'
         continue-on-error: true
         run: |
           set -o pipefail
@@ -187,7 +243,7 @@ jobs:
           retention-days: 14
 
       - name: Fail if the gate failed
-        if: always()
+        if: always() && steps.scope.outputs.measure == 'true'
         run: test "${{ steps.gate.outcome }}" != failure
 
   checks:

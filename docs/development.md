@@ -244,7 +244,10 @@ branch or `nightly`, and on every push to `nightly`, in three jobs:
 
 - **Tests and build**, on a macOS runner with the newest Xcode 26: the test
   suite (with coverage), the license header check, the coverage floor and an
-  unsigned app build. Each step runs even if an earlier one failed.
+  unsigned app build. Each step runs even if an earlier one failed. The suite
+  runs at most six tests at once (`SWT_EXPERIMENTAL_MAXIMUM_PARALLELIZATION_WIDTH`):
+  on the runner's three cores, all of them at once starved the
+  timing-sensitive ones.
 - **Performance**, on a second macOS runner at the same time: the
   [performance gate](performance.md#the-performance-gate).
 - **Checks**, once both finish: `.github/scripts/ci_report.py` turns their logs
