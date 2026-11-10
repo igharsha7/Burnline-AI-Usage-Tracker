@@ -48,6 +48,9 @@ let package = Package(
         // Apache-2.0, so AGPL-compatible. Plays the Streaks card's fire, a
         // Lottie animation, which SwiftUI has no player for.
         .package(url: "https://github.com/airbnb/lottie-spm.git", from: "4.6.1"),
+        // MIT, so AGPL-compatible. In-app updates: checks a signed feed of
+        // versions and installs a new one, verified against Burnline's key.
+        .package(url: "https://github.com/sparkle-project/Sparkle.git", from: "2.10.1"),
     ],
     targets: [
         .target(name: "BurnlineCore",
@@ -62,7 +65,8 @@ let package = Package(
                 dependencies: ["BurnlineCore", "BurnlineStore", "BurnlineProviders"],
                 swiftSettings: approachableConcurrency),
         .target(name: "BurnlineUI",
-                dependencies: ["BurnlineCore", "BurnlineServices", .product(name: "Lottie", package: "lottie-spm")],
+                dependencies: ["BurnlineCore", "BurnlineServices", .product(name: "Lottie", package: "lottie-spm"),
+                               .product(name: "Sparkle", package: "Sparkle")],
                 // The providers' marks, the Streaks card's pixel font and its
                 // fire, kept as published and outside the license (see their
                 // READMEs).

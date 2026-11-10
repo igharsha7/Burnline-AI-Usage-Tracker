@@ -430,7 +430,7 @@ public final class SettingsModel {
             "Price updates: \(pricingUpdates ? "on" : "off")",
             "Notifications: \(permission.map { "\($0)" } ?? "unknown")",
         ]
-        return await data.diagnostics(app: AboutView.version, settings: settings)
+        return await data.diagnostics(app: BuildInfo.main().diagnosticVersion, settings: settings)
     }
 
     func finishOnboarding() {

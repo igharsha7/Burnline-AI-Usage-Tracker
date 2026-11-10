@@ -50,7 +50,7 @@ public struct LiveIngestion: Sendable {
             resources: resources, pricingUpdates: pricingUpdates, retention: retention, history: history,
             alerts: alerts, weekStart: weekStart, tracked: tracked, location: Self.location, clock: clock,
             poster: SystemNotificationPoster(),
-            readers: [
+            readers: Self.demoQuotaReaders(clock: clock) ?? [
                 FallbackQuotaReader([ClaudeUsageEndpointReader(clock: clock), ClaudeCodeUsageReader(clock: clock)]),
                 FallbackQuotaReader([CodexAppServerReader(clock: clock), CodexRolloutQuotaReader()]),
             ],
@@ -131,6 +131,21 @@ public struct LiveIngestion: Sendable {
     /// so an unreleased migration never reaches the real one.
     /// The folder the database lives in, for Settings to show.
     public static var databaseDirectory: URL { location.directory }
+
+    /// Invented quota from the file `BURNLINE_DEMO_QUOTA` names, in place of
+    /// every real reader, for screenshots of a demo store. Debug builds only.
+    static func demoQuotaReaders(clock: any WallClock,
+                                 environment: [String: String] = ProcessInfo.processInfo.environment)
+        -> [any QuotaReader]? {
+        #if DEBUG
+        if let file = environment["BURNLINE_DEMO_QUOTA"] {
+            return [ProviderKey.claudeCode, .codex].map {
+                DemoQuotaReader(provider: $0, file: URL(filePath: file), clock: clock)
+            }
+        }
+        #endif
+        return nil
+    }
 
     static var location: StoreLocation {
         #if DEBUG

@@ -50,9 +50,11 @@ Burnline makes exactly these requests, and no others:
 | `GET api.anthropic.com/api/oauth/usage?cedar_ember=1` | Burnline | Claude Code's access token, and a `User-Agent` naming Burnline | Only Claude quota needs it; untracking Claude Code stops it |
 | Codex's rate-limit request | `codex app-server`, with its own login | Whatever Codex sends | Untracking Codex stops it |
 | Claude's usage request | `claude -p`, with its own login | Whatever Claude Code sends | Used only as the fallback |
+| `GET raw.githubusercontent.com/igharsha7/Burnline-AI-Usage-Tracker/appcast/appcast.xml`, at most daily, and an update's download when one is chosen | Burnline, through Sparkle | Sparkle's `User-Agent`, the app's name and version; system profiling is off | Settings → General → Updates |
 
-- **No telemetry.** No analytics, crash reporting or update check. Any future
-  telemetry must be explicit opt-in and never include usage figures, project
+- **No telemetry.** No analytics or crash reporting, and the update check
+  reports nothing: it downloads the list of versions and compares it with its
+  own. Any future telemetry must be explicit opt-in and never include usage figures, project
   paths, prompts or token counts.
 - **Never posing.** The one request carrying a provider's token names itself
   as Burnline, with the source link, never as the provider's tool.

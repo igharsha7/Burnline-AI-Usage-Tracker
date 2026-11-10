@@ -107,7 +107,7 @@ struct RealHistoryTests {
         // skipped rather than fatal, so it is printed above, not asserted.
         #expect(first.issues == 0)
         #expect(summary["events"]! > 0)
-        // The storage phase's budget for a sync that finds nothing new.
+        // The idle-sync budget in docs/performance.md: a sync that finds nothing new.
         #expect(second.filesRead == 0 && secondElapsed < .milliseconds(100))
     }
 }

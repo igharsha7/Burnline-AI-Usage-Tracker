@@ -32,8 +32,13 @@ final class KeepingLauncher: ProcessLauncher, @unchecked Sendable {
 /// tool behaves.
 @Suite(.timeLimit(.minutes(1)))
 struct ChildProcessTests {
+    /// How long a real child may take to answer: a bound, not an expectation.
+    /// Answers take milliseconds here, but a shared CI runner, starved by the
+    /// whole suite running at once, once took over five seconds to start one.
+    static let answerWithin = 30.0
+
     /// A `codex` that runs `script`, and a reader that starts it.
-    static func reader(_ script: String, timeout: Double = 5) throws -> (CodexAppServerReader, KeepingLauncher) {
+    static func reader(_ script: String, timeout: Double = answerWithin) throws -> (CodexAppServerReader, KeepingLauncher) {
         let directory = TestDirectory.make("FakeCodex")
         let tool = directory.appending(path: "codex")
         try Data(("#!/bin/sh\n" + script).utf8).write(to: tool)
@@ -65,8 +70,50 @@ struct ChildProcessTests {
         let directory = TestDirectory.make("ExitedChild")
         let process = try RunningProcess(URL(filePath: "/bin/sh"), arguments: ["-c", "exit 0"],
                                          workingDirectory: directory)
+        let launched = Self.identity(of: process.inputDescriptor)
         process.waitUntilExit()
-        #expect(throws: (any Error).self) { try process.send("request") }
+        do {
+            try process.send("request")
+            // This once passed on a busy CI runner. Say what the pipe was, so
+            // the next time explains itself.
+            Issue.record("""
+                The send to an exited child succeeded. Running: \(process.isRunning), \
+                exit status: \(process.terminationStatus.map(String.init) ?? "none yet"), descriptor \(process.inputDescriptor) \
+                at launch: \(launched), now: \(Self.identity(of: process.inputDescriptor)), \
+                flags: \(fcntl(process.inputDescriptor, F_GETFD)), status flags: \(fcntl(process.inputDescriptor, F_GETFL)).
+                Holders of this pipe:
+                \(Self.holders(of: process.inputDescriptor))
+                """)
+        } catch {}
+    }
+
+    /// A descriptor's file type, device and inode, or why it has none.
+    static func identity(of descriptor: Int32) -> String {
+        var info = stat()
+        guard fstat(descriptor, &info) == 0 else { return "fstat failed, errno \(errno)" }
+        let type = info.st_mode & S_IFMT == S_IFIFO ? "pipe" : "type \(info.st_mode & S_IFMT)"
+        return "\(type) dev \(info.st_dev) inode \(info.st_ino)"
+    }
+
+    /// Every process holding either end of the pipe behind `descriptor`, from
+    /// lsof: this process's line names the pipe, and each holder's line names it too.
+    static func holders(of descriptor: Int32) -> String {
+        func lsof(_ arguments: [String]) -> String {
+            let process = Process(), output = Pipe()
+            process.executableURL = URL(filePath: "/usr/sbin/lsof")
+            process.arguments = arguments
+            process.standardOutput = output
+            process.standardError = FileHandle.nullDevice
+            guard (try? process.run()) != nil else { return "" }
+            let data = output.fileHandleForReading.readDataToEndOfFile()
+            process.waitUntilExit()
+            return String(decoding: data, as: UTF8.self)
+        }
+        let own = lsof(["-n", "-a", "-p", "\(getpid())", "-d", "\(descriptor)"])
+        let addresses = own.matches(of: /0x[0-9a-f]+/).map { String($0.output) }
+        guard !addresses.isEmpty else { return own.isEmpty ? "lsof found nothing" : own }
+        return lsof(["-n"]).split(separator: "\n").filter { line in addresses.contains { line.contains($0) } }
+            .joined(separator: "\n")
     }
 
     @Test func `a tool ignoring SIGTERM cannot leave its stdout-holding child behind`() async throws {
@@ -79,7 +126,7 @@ struct ChildProcessTests {
             while IFS= read -r line; do :; done
             wait "$child"
             """], workingDirectory: directory)
-        let line = try #require(try await firstLine(of: process, within: 5) { _ in true })
+        let line = try #require(try await firstLine(of: process, within: Self.answerWithin) { _ in true })
         let child = try #require(Int32(line))
         defer {
             if getpgid(child) == process.processIdentifier { kill(child, SIGKILL) }
@@ -101,10 +148,10 @@ struct ChildProcessTests {
             trap 'exit 0' TERM
             \(exitsOnItsOwn ? "exit 0" : "wait \"$child\"")
             """], workingDirectory: directory)
-        let line = try #require(try await firstLine(of: process, within: 5) { Int32($0) != nil })
+        let line = try #require(try await firstLine(of: process, within: Self.answerWithin) { Int32($0) != nil })
         let child = try #require(Int32(line))
         defer { kill(child, SIGKILL); process.terminate() }
-        #expect(try await firstLine(of: process, within: 5) { $0 == "ready" } == "ready")
+        #expect(try await firstLine(of: process, within: Self.answerWithin) { $0 == "ready" } == "ready")
         if exitsOnItsOwn { process.waitUntilExit() }
         process.terminate()
         process.waitUntilExit()

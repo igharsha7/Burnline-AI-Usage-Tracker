@@ -309,8 +309,9 @@ explains each.
   renewed, since renewing writes to the provider's own login.
 - **No telemetry.** Any future telemetry is explicit opt-in and never includes
   usage figures, project paths, prompts or token counts.
-- **Network use is limited** to the public price list (no identifier, with an
-  opt-out) and quota reads. A request carrying a provider's token names itself
+- **Network use is limited** to the public price list and the public list of
+  updates (no identifier, each with an opt-out), an update's download, and
+  quota reads. A request carrying a provider's token names itself
   as Burnline, never posing as the provider's tool.
 - **Read-only toward providers.** Never modify their configuration or files.
 

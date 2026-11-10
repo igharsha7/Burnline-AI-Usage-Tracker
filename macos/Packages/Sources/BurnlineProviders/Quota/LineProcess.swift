@@ -121,6 +121,12 @@ final class RunningProcess: LineProcess, @unchecked Sendable {
     /// Blocks until the process has exited, for tests.
     func waitUntilExit() { process.waitUntilExit() }
 
+    /// For tests that need to say why a send behaved as it did.
+    var isRunning: Bool { process.isRunning }
+    /// Nil while running: Foundation raises if asked before the exit.
+    var terminationStatus: Int32? { process.isRunning ? nil : process.terminationStatus }
+    var inputDescriptor: Int32 { input.fileHandleForWriting.fileDescriptor }
+
     deinit { terminate() }
 
     /// The user's environment, with the tool's own directory and the usual

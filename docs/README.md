@@ -62,6 +62,7 @@ the page for the area you are touching → [Edge cases](edge-cases.md) →
 | [Performance](performance.md) | Budgets, measured figures, and what it took to reach them |
 | [Adding a provider](adding-a-provider.md) | A step-by-step guide |
 | [Releasing](releasing.md) | Distribution, signing, the release checklist |
+| [Updates](updates.md) | In-app updates, the stable and nightly channels, the nightly look, the appcast |
 | [Licensing](licensing.md) | The AGPL and its attribution term, obligations in the code, dependencies, third-party material |
 
 ## Conventions in these pages

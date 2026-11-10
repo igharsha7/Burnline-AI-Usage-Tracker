@@ -100,6 +100,7 @@ Current dependencies:
 | GRDB.swift 7.11.1 or later | MIT | SQLite access in the store |
 | Zstandard 1.5.7, exactly | Dual BSD-3-Clause or GPLv2; **used under BSD-3-Clause** | Reading Codex's compressed session archives |
 | lottie-spm 4.6.1 or later | Apache-2.0 | Playing the Streaks card's fire |
+| Sparkle 2.10.1 or later | MIT | In-app updates |
 
 ## Third-party material
 

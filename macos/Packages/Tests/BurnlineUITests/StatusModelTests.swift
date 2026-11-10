@@ -191,9 +191,14 @@ struct StatusModelTests {
         #expect(await eventually { fixture.sleeper.isWaiting(.seconds(wait)) })
 
         fixture.clock.advance(seconds: wait + 1)
-        fixture.sleeper.release(.seconds(wait))
-
-        #expect(await eventually { fixture.model.live == nil })
+        // A load that read live just before the clock moved can finish just
+        // after, replacing the released expiry with one at the one-second
+        // minimum, since live's end has passed. End both until live ends.
+        #expect(await eventually {
+            fixture.sleeper.release(.seconds(wait))
+            fixture.sleeper.release(.seconds(1))
+            return fixture.model.live == nil
+        })
         #expect(fixture.model.heat == 0)
     }
 

@@ -110,7 +110,7 @@ flowchart BT
     Store["BurnlineStore<br/>+ GRDB"]
     Providers["BurnlineProviders<br/>+ zstd"]
     Services["BurnlineServices"]
-    UI["BurnlineUI<br/>+ Lottie"]
+    UI["BurnlineUI<br/>+ Lottie, Sparkle"]
     App["Burnline app target"]
 
     Store --> Core
@@ -297,6 +297,7 @@ domain; see [development](development.md#running-a-debug-build-safely).
 | [GRDB.swift](https://github.com/groue/GRDB.swift) | from 7.11.1 | MIT | SQLite access in BurnlineStore |
 | [zstd](https://github.com/facebook/zstd) | exactly 1.5.7 | BSD-3-Clause (dual with GPLv2, used under BSD) | Codex's compressed session archives |
 | [lottie-spm](https://github.com/airbnb/lottie-spm) | from 4.6.1 | Apache-2.0 | Playing the Streaks card's fire animation |
+| [Sparkle](https://github.com/sparkle-project/Sparkle) | from 2.10.1 | MIT | In-app updates; see [updates](updates.md) |
 
 zstd is pinned exactly because it is C built from source. Bundled assets (the
 provider marks, the Silkscreen font, the Noto fire animation) have licenses of

@@ -11,7 +11,8 @@ import Foundation
 ///
 /// Burnline modules may import only the Burnline modules listed for them. The
 /// core is stricter still: Foundation and nothing else. GRDB belongs to the
-/// store alone, and the UI frameworks belong to the UI and the app.
+/// store alone, and the UI frameworks, Sparkle among them, belong to the UI
+/// and the app.
 struct ImportRule {
     let module: String
     let allowedBurnline: Set<String>
@@ -22,7 +23,7 @@ struct ImportRule {
         "BurnlineCore", "BurnlineStore", "BurnlineProviders", "BurnlineServices", "BurnlineUI",
     ]
     static let storeOnly: Set<String> = ["GRDB"]
-    static let interfaceOnly: Set<String> = ["SwiftUI", "AppKit", "Charts"]
+    static let interfaceOnly: Set<String> = ["SwiftUI", "AppKit", "Charts", "Sparkle"]
 
     static let all: [ImportRule] = [
         ImportRule(module: "BurnlineCore", allowedBurnline: [], onlyExternal: ["Foundation"]),
