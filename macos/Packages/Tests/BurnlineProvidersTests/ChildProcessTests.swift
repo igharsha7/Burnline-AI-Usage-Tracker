@@ -141,17 +141,18 @@ struct ChildProcessTests {
     @Test(arguments: [false, true])
     func `an exited tool cannot leave a SIGTERM-ignoring helper holding stdout`(exitsOnItsOwn: Bool) async throws {
         let directory = TestDirectory.make("ExitedToolDescendant")
+        // The helper says it is ready and its own id on one line, the id it
+        // keeps through exec: two lines from two processes can come in either
+        // order, and a wait for one skips the other.
         let process = try RunningProcess(URL(filePath: "/bin/sh"), arguments: ["-c", """
-            /bin/sh -c 'trap "" TERM; echo ready; exec /bin/sleep 30' &
+            /bin/sh -c 'trap "" TERM; echo "ready $$"; exec /bin/sleep 30' &
             child=$!
-            echo "$child"
             trap 'exit 0' TERM
             \(exitsOnItsOwn ? "exit 0" : "wait \"$child\"")
             """], workingDirectory: directory)
-        let line = try #require(try await firstLine(of: process, within: Self.answerWithin) { Int32($0) != nil })
-        let child = try #require(Int32(line))
+        let line = try #require(try await firstLine(of: process, within: Self.answerWithin) { $0.hasPrefix("ready ") })
+        let child = try #require(Int32(line.dropFirst("ready ".count)))
         defer { kill(child, SIGKILL); process.terminate() }
-        #expect(try await firstLine(of: process, within: Self.answerWithin) { $0 == "ready" } == "ready")
         if exitsOnItsOwn { process.waitUntilExit() }
         process.terminate()
         process.waitUntilExit()
