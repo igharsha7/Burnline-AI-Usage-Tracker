@@ -44,7 +44,10 @@ python3 .github/scripts/perf_compare.py --head /tmp/perf
 
 In CI, the Performance job builds the pull request and its base branch and
 measures them in turns on the same runner, three times each, keeping each figure's
-best run. `.github/scripts/perf_compare.py` then fails the check when:
+best run. The base's compiled suites are cached by its commit, so only the
+first run against a base builds it. A pull request that changes nothing in
+`macos/Packages/`, `shared/` or the gate itself is not measured, and the
+report says so. `.github/scripts/perf_compare.py` then fails the check when:
 
 - **a figure is over its budget.** The budgets are the table above, except
   the insert rate, whose floor in CI is 10,000 a second: the shared runner

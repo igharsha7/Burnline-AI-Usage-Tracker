@@ -12,7 +12,8 @@
 #   python3 .github/scripts/ci_report.py <logs-dir> <out-dir>
 #
 # Reads each check's outcome from the environment (TESTS, HEADERS, COVERAGE,
-# APP, PERF: success, failure or skipped) and writes <out-dir>/report.md and
+# APP, PERF: success, failure or skipped, and PERF also unaffected when the
+# pull request changes nothing that affects speed) and writes <out-dir>/report.md and
 # <out-dir>/meta.json. Everything quoted from the logs comes from the pull
 # request's own code, so it is shown only inside code spans, with mentions
 # and markup made harmless.
@@ -30,7 +31,7 @@ LISTED = 10
 # GitHub refuses comments longer than 65,536 characters; stay well inside.
 MAX_REPORT = 60_000
 
-ICON = {"success": "✅", "failure": "❌", "skipped": "⏭️", "cancelled": "⏹️", "": "⏭️"}
+ICON = {"success": "✅", "failure": "❌", "skipped": "⏭️", "unaffected": "⏭️", "cancelled": "⏹️", "": "⏭️"}
 
 
 def safe(text: str, limit: int = 300) -> str:
@@ -144,6 +145,8 @@ def number(value) -> str:
 
 
 def perf_section(text: str, outcome: str) -> tuple[str, list[str]]:
+    if outcome == "unaffected":
+        return "not measured: nothing that affects speed changed", []
     if outcome in ("skipped", ""):
         return "not run", []
     try:

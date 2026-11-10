@@ -1,0 +1,114 @@
+# ci-cache.yml
+# Burnline
+#
+# Copyright (C) 2026 Challapalli Harshavardhan Reddy
+# Licensed under the GNU Affero General Public License v3. See LICENSE and NOTICE.
+#
+# Warms CI's caches from a branch pull requests target, each time it moves.
+# GitHub lets a pull request read caches saved on its own branch or on its
+# base, never another pull request's, so caches saved only by pull requests
+# leave every new one starting cold. This builds what `ci.yml` restores, with
+# the same keys and the same paths (a cache only matches the paths it was
+# saved from):
+#
+# - the debug build with coverage, for the test suite;
+# - the release build, for the performance suites;
+# - this commit's compiled performance suites, as the base of the next pull
+#   request, which then never builds its base.
+
+name: Warm CI caches
+
+on:
+  push:
+    branches: [main, "staging-build-*", nightly]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-cache-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PACKAGES: macos/Packages
+  # As in ci.yml's Performance job.
+  BASE: ${{ github.workspace }}/.base
+  BASE_BUILT: .build/arm64-apple-macosx/release
+
+jobs:
+  warm:
+    name: Warm caches
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        id: xcode
+        run: |
+          xcode=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -n 1)
+          sudo xcode-select -s "$xcode"
+          echo "version=$(xcodebuild -version | tr -s ' \n' '-')" >> "$GITHUB_OUTPUT"
+
+      - name: Restore the debug build
+        id: debug
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.PACKAGES }}/.build
+          key: spm-debug-${{ runner.os }}-${{ hashFiles('macos/Packages/Package.resolved', 'macos/Packages/Package.swift') }}
+          restore-keys: spm-debug-${{ runner.os }}-
+
+      - name: Build for the test suite
+        if: steps.debug.outputs.cache-hit != 'true'
+        # Built as the test suite builds it; no test is named this, so none runs.
+        run: swift test --package-path "$PACKAGES" --enable-code-coverage --filter WarmTheCacheOnly
+
+      - name: Keep the debug build
+        if: steps.debug.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.PACKAGES }}/.build
+          key: spm-debug-${{ runner.os }}-${{ hashFiles('macos/Packages/Package.resolved', 'macos/Packages/Package.swift') }}
+
+      - name: Start the release build clean
+        # Both caches use the same path; one must not carry the other's build.
+        run: rm -rf "$PACKAGES/.build"
+
+      - name: Restore the release build
+        id: release
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.PACKAGES }}/.build
+          key: spm-release-${{ runner.os }}-${{ hashFiles('macos/Packages/Package.resolved', 'macos/Packages/Package.swift') }}
+          restore-keys: spm-release-${{ runner.os }}-
+
+      - name: Build this commit as a base
+        # In the worktree path the Performance job restores from, and after
+        # the release cache, so its dependencies are not built again.
+        run: |
+          git worktree add --detach "$BASE" HEAD
+          if [ -d "$PACKAGES/.build" ]; then cp -R "$PACKAGES/.build" "$BASE/$PACKAGES/.build"; fi
+          swift test -c release --package-path "$BASE/$PACKAGES" --filter WarmTheCacheOnly
+
+      - name: Keep the release build
+        if: steps.release.outputs.cache-hit != 'true'
+        run: |
+          rm -rf "$PACKAGES/.build"
+          cp -R "$BASE/$PACKAGES/.build" "$PACKAGES/.build"
+
+      - name: Save the release build
+        if: steps.release.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.PACKAGES }}/.build
+          key: spm-release-${{ runner.os }}-${{ hashFiles('macos/Packages/Package.resolved', 'macos/Packages/Package.swift') }}
+
+      - name: Keep this commit's suites as a base
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ${{ env.BASE }}/${{ env.PACKAGES }}/${{ env.BASE_BUILT }}/*.xctest
+            ${{ env.BASE }}/${{ env.PACKAGES }}/${{ env.BASE_BUILT }}/*.bundle
+            ${{ env.BASE }}/${{ env.PACKAGES }}/${{ env.BASE_BUILT }}/*.framework
+          key: perf-base-${{ runner.os }}-${{ steps.xcode.outputs.version }}-${{ github.sha }}

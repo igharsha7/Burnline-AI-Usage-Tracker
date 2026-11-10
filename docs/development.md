@@ -244,7 +244,10 @@ branch or `nightly`, and on every push to `nightly`, in three jobs:
 
 - **Tests and build**, on a macOS runner with the newest Xcode 26: the test
   suite (with coverage), the license header check, the coverage floor and an
-  unsigned app build. Each step runs even if an earlier one failed.
+  unsigned app build. Each step runs even if an earlier one failed. The suite
+  runs at most six tests at once (`SWT_EXPERIMENTAL_MAXIMUM_PARALLELIZATION_WIDTH`):
+  on the runner's three cores, all of them at once starved the
+  timing-sensitive ones.
 - **Performance**, on a second macOS runner at the same time: the
   [performance gate](performance.md#the-performance-gate).
 - **Checks**, once both finish: `.github/scripts/ci_report.py` turns their logs
@@ -252,6 +255,12 @@ branch or `nightly`, and on every push to `nightly`, in three jobs:
   tests, files or figures and the page to read), writes it to the run's
   summary page and uploads it as an artifact. Checks fails if either job did,
   and it is the status the branch rules require.
+
+`.github/workflows/ci-cache.yml` warms CI's caches each time `main`, a
+staging branch or `nightly` moves. A pull request can read caches saved on its
+own branch or its base, never another pull request's, so this is what lets a
+new pull request start with its dependencies built and its base's
+performance suites already compiled.
 
 `.github/workflows/ci-report.yml` posts that report on the pull request, as one
 comment it updates on every push. It is a separate workflow so that the pull
