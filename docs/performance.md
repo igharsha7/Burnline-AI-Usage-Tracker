@@ -189,6 +189,7 @@ How it stays there:
 - Animations (the popover's glow, the comparison ticker, the Streaks fire) run
   only while they are on screen, and hold still under Reduce Motion.
 - `PRAGMA optimize` runs on a slow timer and at quit.
+- The update check is one timer a day, Sparkle's own.
 
 ## Measuring a change
 

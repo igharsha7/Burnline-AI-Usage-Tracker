@@ -22,28 +22,34 @@ struct BurnlineApp: App {
         // One dashboard over one model: a Window, so File has no New Window.
         Window("Usage", id: SceneID.dashboard) {
             DashboardWindow(dashboard: appDelegate.dashboard, status: appDelegate.status, settings: appDelegate.settings)
+                .environment(appDelegate.updates)
         }
         .defaultSize(width: 1120, height: 860)
         .windowToolbarStyle(.unified)
         .commands {
             AboutCommand()
+            UpdateCommands(updates: appDelegate.updates)
             DashboardCommands(model: appDelegate.dashboard, settings: appDelegate.settings)
         }
 
         Settings {
             SettingsView(settings: appDelegate.settings, status: appDelegate.status)
+                .environment(appDelegate.updates)
         }
 
         Window("About Burnline", id: SceneID.about) {
             AboutView()
+                .environment(appDelegate.updates)
         }
         .windowResizability(.contentSize)
         .defaultSize(width: 520, height: 640)
 
         MenuBarExtra {
             PopoverView(model: appDelegate.status)
+                .environment(appDelegate.updates)
         } label: {
             MenuBarLabel(model: appDelegate.status)
+                .environment(appDelegate.updates)
         }
         .menuBarExtraStyle(.window)
     }
@@ -64,6 +70,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let dashboard: DashboardModel
     /// Preferences, onboarding and the Settings window's figures.
     let settings: SettingsModel
+    /// In-app updates and the channel followed.
+    let updates: UpdateModel
 
     override init() {
         // A restore chosen before the last quit brings its settings; they
@@ -74,6 +82,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         dashboard = DashboardModel()
         settings = SettingsModel(defaults: Self.settingsDefaults)
+        updates = UpdateModel.live(defaults: Self.settingsDefaults)
         super.init()
         settings.relaunch = { Self.relaunch() }
     }
@@ -120,6 +129,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Burnline is dark only: every window, the popover, Settings and
         // About, whatever the system appearance. Set before any window opens.
         NSApp.appearance = NSAppearance(named: .darkAqua)
+        // Both channels share one bundle identifier, so an update can move
+        // between them, and macOS caches the Dock icon by identifier. A
+        // nightly sets its own, so it never shows the release's.
+        if updates.build.isNightly { NSApp.applicationIconImage = AboutView.icon }
         DockPresence.apply(menuBarOnly: DockPresence.isMenuBarOnly)
         // Set before launch finishes, so a click that launched the app arrives.
         UNUserNotificationCenter.current().delegate = self

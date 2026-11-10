@@ -42,7 +42,7 @@ Burnline uses semantic versions, `MAJOR.MINOR.PATCH`:
   into `main` by pull request, and the release is tagged on `main`. See
   [development](development.md#branches).
 
-## Channels *(to build)*
+## Channels
 
 | Channel | Built from | Version | For |
 |---|---|---|---|
@@ -53,6 +53,7 @@ Burnline uses semantic versions, `MAJOR.MINOR.PATCH`:
   rolling pre-release.
 - The in-app updater follows the channel chosen in Settings; build numbers
   rise across both channels, so moving between them always compares correctly.
+  How it works, and how a nightly looks, is in [updates](updates.md).
 - **Nightly can carry migrations no stable release has yet.** A database a
   nightly build has migrated is refused by an older stable build as newer than
   it supports, so going back from nightly to stable means restoring a backup
@@ -142,7 +143,7 @@ by hand asks again.
 
 - It does not migrate anyone's data at install. Migrations run when the new
   version first opens the database, after copying it to `Backups/`.
-- It does not track anyone. The in-app updater *(to build)* will check a
-  public feed of versions once a day, can be turned off, and sends nothing
-  about the Mac or its usage; [privacy and security](privacy-and-security.md#network)
-  will list it beside the price fetch and quota reads before it ships.
+- It does not track anyone. The in-app updater checks a public feed of
+  versions once a day, can be turned off, and sends nothing about the Mac or
+  its usage; [privacy and security](privacy-and-security.md#network) lists it
+  beside the price fetch and quota reads.

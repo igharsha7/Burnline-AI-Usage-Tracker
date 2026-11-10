@@ -159,6 +159,8 @@ read `~/.claude` and `~/.codex`. It makes exactly these network requests:
 
 - a daily download of the public price list from this repository (can be
   turned off);
+- a daily check of the public list of updates, and the download of one you
+  choose to install (can be turned off);
 - Claude's usage endpoint, with Claude Code's own login, for Claude's limits;
 - whatever Codex's own tool sends when asked for its limits.
 

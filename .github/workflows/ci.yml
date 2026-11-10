@@ -20,7 +20,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [main, "staging-build-*"]
+    branches: [main, "staging-build-*", nightly]
   push:
     branches: [nightly]
 

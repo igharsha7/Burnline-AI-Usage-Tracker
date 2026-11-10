@@ -28,6 +28,7 @@ writing code against it.
 | **Un-notarized `.dmg` plus a Homebrew tap** | Notarization needs the paid Apple Developer Program. The AGPL rules out the Mac App Store for redistributors anyway. Without notarization every download needs one "Open Anyway" in System Settings on first launch; Homebrew 5.0 no longer bypasses it. See [releasing](releasing.md). |
 | **Dark only** | The app sets the dark appearance at launch, so every surface is designed and checked once. Each colour token has one value and an Increase Contrast variant. |
 | **Pure neutral greys** | Warm-tinted surfaces read as yellow beside the ember accent. |
+| **In-app updates through Sparkle, stable and nightly** | Without the App Store, an app that cannot update itself stays on its first version. Sparkle is the standard, verifies every update against the maintainer's key, and sends nothing about the Mac. A nightly channel lets the newest work be tried without building from source, and wears its own look so it is never mistaken for a release. See [updates](updates.md). |
 
 ### Data
 

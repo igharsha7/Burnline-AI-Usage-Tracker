@@ -46,6 +46,7 @@ private struct GeneralPane: View {
     @AppStorage(ActivityPreferences.comparisonToneKey) private var tone = ActivityPreferences.mix
     @State private var launchAtLogin = LoginItem.isEnabled
     @State private var needsApproval = LoginItem.needsApproval
+    @Environment(UpdateModel.self) private var updates: UpdateModel?
 
     var body: some View {
         Form {
@@ -99,6 +100,7 @@ private struct GeneralPane: View {
                 }
                 .disabled(!showComparisons)
             }
+            if let updates { UpdatesSection(updates: updates) }
         }
         .formStyle(.grouped)
     }
@@ -293,7 +295,7 @@ private struct PricingPane: View {
             Section {
                 Toggle(isOn: $settings.pricingUpdates) {
                     Text("Fetch new prices daily")
-                    Text("Burnline's only network request: a public price list, with nothing sent but the request.")
+                    Text("A public price list, downloaded with nothing sent but the request.")
                 }
                 LabeledContent("Price history") {
                     Text(settings.priceVersions.map { "\($0) versions" } ?? "…")
@@ -324,7 +326,8 @@ private struct PrivacyPane: View {
         Form {
             Section {
                 point("internaldrive", "Your usage stays on this Mac.",
-                      "No account, no server, no analytics. The only request Burnline makes is for the public price list.")
+                      "No account, no server, no analytics. Burnline downloads public price and update lists, "
+                        + "and reads your limits with your tools' own logins. Nothing about you is sent.")
                 point("text.badge.xmark", "Burnline never stores what you said.",
                       "It reads token counts, models and times. Prompts, replies and code are never saved.")
                 point("folder", "Project paths stay local.", "They name your projects on this Mac and nowhere else.")

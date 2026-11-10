@@ -37,7 +37,7 @@ only" removes the Dock icon. Run debug builds against a scratch store (below).
 | `macos/scripts/check-license-headers.sh` | Fails if a source file lacks the AGPL header. Also runs as an Xcode build phase. |
 | `python3 shared/pricing/tools/update_pricing.py` | Appends LiteLLM's price changes to `shared/pricing/pricing.json` |
 | `python3 -m unittest -v` (in `shared/pricing/tools`) | The pricing generator's tests |
-| `python3 macos/scripts/generate-icon.py` | Redraws the app icon, `macos/Burnline/AppIcon.icon` |
+| `python3 macos/scripts/generate-icon.py` | Redraws the app icon, `macos/Burnline/AppIcon.icon`; with `--nightly`, the nightly one, `AppIcon-Nightly.icon` |
 
 The opt-in tests that read real data or measure performance are listed in
 [testing](testing.md#opt-in-tests).
@@ -82,7 +82,9 @@ limits in a debug build. The app runs under a sandbox profile that denies
 reading `~/.claude`, `~/.codex`, Xcode's coding-assistant homes and the real
 store, so nothing real can appear in a screenshot. The README's images come
 from it, in the window's default size, captured with
-`screencapture -x -o -l <window id>`.
+`screencapture -x -o -l <window id>`. To see the nightly look or the update
+button, add `BURNLINE_CHANNEL=nightly` or `BURNLINE_DEMO_UPDATE=0.2.0` in
+front of the command; see [updates](updates.md#trying-it-in-a-debug-build).
 
 ## Where things go
 
@@ -165,7 +167,9 @@ See [pricing](pricing.md) for the manifest format and how the app uses it.
 
 `macos/Burnline/AppIcon.icon` is a layered Icon Composer document written by
 `macos/scripts/generate-icon.py` from named measurements. Change the
-measurements in the script and run it again; never edit the `.icon` by hand.
+measurements in the script and run it again, with and without `--nightly`;
+never edit either `.icon` by hand. The nightly icon is the same mark under a
+night sky, chosen by the `BURNLINE_CHANNEL` build setting.
 `macos/design/README.md` explains the layers and how to preview the icon with
 Icon Composer's `ictool`.
 
@@ -212,6 +216,7 @@ phase of the app, so a missing header fails the build. See
 flowchart LR
     C["contributor branches"] -->|pull request| M["main"]
     D["dev/Harsha"] -->|pull request| S["staging-build-vN"]
+    S -->|pull request| N["nightly"]
     S -->|pull request, version N released| M
 ```
 
@@ -221,9 +226,10 @@ flowchart LR
   each time a staging branch is merged to `main`.
 - `dev/Harsha` is the maintainer's day-to-day line. The staging branches are
   the maintainer's release line too.
-- `nightly` is the maintainer's branch for nightly builds *(to build)*: work
-  in progress toward the next release, built each night it changes (see
-  [channels](releasing.md#channels-to-build)).
+- `nightly` is what nightly builds are made from: the current staging branch,
+  brought over by pull request, so a nightly carries only work that passed
+  CI. It is built each night it changed *(to build)*; see
+  [updates](updates.md#channels).
 - Contributors branch from `main` and open their pull request against `main`,
   never against a staging branch.
 
@@ -233,8 +239,8 @@ for the Windows version in progress, with language-neutral contracts in
 
 ## CI
 
-`.github/workflows/ci.yml` runs on every pull request to `main` or a staging
-branch, and on every push to `nightly`, in three jobs:
+`.github/workflows/ci.yml` runs on every pull request to `main`, a staging
+branch or `nightly`, and on every push to `nightly`, in three jobs:
 
 - **Tests and build**, on a macOS runner with the newest Xcode 26: the test
   suite (with coverage), the license header check, the coverage floor and an
@@ -257,7 +263,7 @@ under `pull_request_target`.
 
 Two branch rulesets enforce the result:
 
-- **Checks before merging**, on `main` and `staging-build-*`: changes arrive
+- **Checks before merging**, on `main`, `staging-build-*` and `nightly`: changes arrive
   only by pull request, **Checks** must pass, and the branch cannot be
   force-pushed or deleted. Nobody can bypass it.
 - **Maintainer approval on main**: a pull request into `main` needs an

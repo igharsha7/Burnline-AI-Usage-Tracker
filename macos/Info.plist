@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Info.plist
+  Burnline
+
+  Copyright (C) 2026 Challapalli Harshavardhan Reddy
+  Licensed under the GNU Affero General Public License v3. See LICENSE and NOTICE.
+
+  The keys Xcode cannot generate, merged into the generated Info.plist.
+  BurnlineChannel says which channel this build belongs to, set by the
+  BURNLINE_CHANNEL build setting: stable, or nightly. The Sparkle keys say
+  where updates are published and the public half of the key they are signed
+  with; a build without a key never checks. See docs/updates.md.
+-->
+<plist version="1.0">
+<dict>
+	<key>BurnlineChannel</key>
+	<string>$(BURNLINE_CHANNEL)</string>
+	<key>SUFeedURL</key>
+	<string>$(BURNLINE_APPCAST_URL)</string>
+	<key>SUPublicEDKey</key>
+	<string>$(SPARKLE_PUBLIC_KEY)</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
+	<key>SUEnableSystemProfiling</key>
+	<false/>
+	<key>SUAllowsAutomaticUpdates</key>
+	<false/>
+</dict>
+</plist>
