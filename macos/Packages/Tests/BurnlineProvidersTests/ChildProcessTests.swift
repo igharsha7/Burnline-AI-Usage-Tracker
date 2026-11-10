@@ -27,6 +27,16 @@ final class KeepingLauncher: ProcessLauncher, @unchecked Sendable {
     }
 }
 
+/// Lines a wait has read, kept for a failure's message.
+final class SeenLines: @unchecked Sendable {
+    // @unchecked: `kept` is only touched under `lock`.
+    private let lock = NSLock()
+    private var kept: [String] = []
+
+    var lines: [String] { lock.withLock { kept } }
+    func append(_ line: String) { lock.withLock { kept.append(line) } }
+}
+
 /// The quota readers against real child processes: fake `codex` scripts in a
 /// scratch directory. Each read must leave no process behind, however the
 /// tool behaves.
@@ -85,6 +95,21 @@ struct ChildProcessTests {
                 \(Self.holders(of: process.inputDescriptor))
                 """)
         } catch {}
+    }
+
+    /// Every process in process group `group`, from ps.
+    static func processes(inGroup group: Int32) -> String {
+        let ps = Process(), output = Pipe()
+        ps.executableURL = URL(filePath: "/bin/ps")
+        ps.arguments = ["-axo", "pid=,ppid=,pgid=,stat=,command="]
+        ps.standardOutput = output
+        guard (try? ps.run()) != nil else { return "ps did not run" }
+        let data = output.fileHandleForReading.readDataToEndOfFile()
+        ps.waitUntilExit()
+        let rows = String(decoding: data, as: UTF8.self).split(separator: "\n").filter { row in
+            row.split(separator: " ", omittingEmptySubsequences: true).dropFirst(2).first == "\(group)"
+        }
+        return rows.isEmpty ? "none alive" : rows.joined(separator: "\n")
     }
 
     /// A descriptor's file type, device and inode, or why it has none.
@@ -150,7 +175,22 @@ struct ChildProcessTests {
             trap 'exit 0' TERM
             \(exitsOnItsOwn ? "exit 0" : "wait \"$child\"")
             """], workingDirectory: directory)
-        let line = try #require(try await firstLine(of: process, within: Self.answerWithin) { $0.hasPrefix("ready ") })
+        let seen = SeenLines()
+        let ready = try? await firstLine(of: process, within: Self.answerWithin) { line in
+            seen.append(line)
+            return line.hasPrefix("ready ")
+        }
+        guard let line = ready else {
+            // This has failed on a CI runner and never on a Mac. Say what
+            // arrived and what was still alive, so the next time explains itself.
+            Issue.record("""
+                No "ready" line within \(Int(Self.answerWithin)) seconds. Lines seen: \(seen.lines). \
+                Script running: \(process.isRunning), exit status: \(process.terminationStatus.map(String.init) ?? "none yet").
+                Its process group:
+                \(Self.processes(inGroup: process.processIdentifier))
+                """)
+            return
+        }
         let child = try #require(Int32(line.dropFirst("ready ".count)))
         defer { kill(child, SIGKILL); process.terminate() }
         if exitsOnItsOwn { process.waitUntilExit() }
