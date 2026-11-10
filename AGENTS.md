@@ -74,9 +74,11 @@ user asks; [testing](docs/testing.md#opt-in-tests) lists them (`BURNLINE_SCALE`,
 `BURNLINE_REAL_HISTORY`, `BURNLINE_IMPORT_TIMING`, `BURNLINE_REAL_QUOTA`,
 `BURNLINE_DASHBOARD_DB`, `BURNLINE_LAUNCH_DB`) with the render tests
 (`BURNLINE_RENDER`, `BURNLINE_REVIEW_DIR`, `BURNLINE_STREAKS_RENDER`).
-The performance suites (`BURNLINE_PERF`) are the exception: they use
-synthetic data only and take under a minute, so run them whenever a change
-touches ingestion, the store or aggregation.
+Two are exceptions, because they use invented data only. The performance
+suites (`BURNLINE_PERF`) take under a minute; run them whenever a change
+touches ingestion, the store or aggregation. The demo store
+(`BURNLINE_DEMO_STORE`, run through `macos/scripts/demo.sh`) is for
+screenshots; never take a screenshot of the app on real data.
 
 **Running the app.** Never run a debug build against the real database in
 `~/Library/Application Support/Burnline/`: an unreleased migration would

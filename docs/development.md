@@ -66,6 +66,24 @@ open -n --env BURNLINE_STORE_DIR=/path/to/scratch \
 **Release builds ignore all three.** Provider history is still read from the
 real homes (`~/.claude`, `~/.codex`), read-only, as always.
 
+### A demo with invented data
+
+For screenshots, or to try the app without real history, run a debug build on
+a demo store:
+
+```sh
+macos/scripts/demo.sh /path/to/Debug/Burnline.app
+```
+
+It writes half a year of invented Claude Code and Codex use and a week of quota
+(`DemoStoreTests`, opt-in with `BURNLINE_DEMO_STORE`), then launches the app on
+it with `BURNLINE_DEMO_QUOTA`, which swaps every quota reader for invented
+limits in a debug build. The app runs under a sandbox profile that denies
+reading `~/.claude`, `~/.codex`, Xcode's coding-assistant homes and the real
+store, so nothing real can appear in a screenshot. The README's images come
+from it, in the window's default size, captured with
+`screencapture -x -o -l <window id>`.
+
 ## Where things go
 
 | You are adding | Put it in |
