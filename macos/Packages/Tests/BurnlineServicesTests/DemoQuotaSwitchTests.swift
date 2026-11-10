@@ -19,10 +19,14 @@ struct DemoQuotaSwitchTests {
         #expect(LiveIngestion.demoQuotaReaders(clock: clock, environment: [:]) == nil)
     }
 
+    // The demo reader exists only in debug builds; the performance job builds
+    // the tests in release.
+    #if DEBUG
     @Test func `with BURNLINE_DEMO_QUOTA every provider reads the demo file instead`() throws {
         let readers = try #require(LiveIngestion.demoQuotaReaders(
             clock: clock, environment: ["BURNLINE_DEMO_QUOTA": "/tmp/demo-quota.json"]))
         #expect(readers.map(\.provider) == [.claudeCode, .codex])
         #expect(readers.allSatisfy { $0 is DemoQuotaReader })
     }
+    #endif
 }

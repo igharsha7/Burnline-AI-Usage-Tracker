@@ -5,6 +5,9 @@
 //  Copyright (C) 2026 Challapalli Harshavardhan Reddy
 //  Licensed under the GNU Affero General Public License v3. See LICENSE and NOTICE.
 
+// The reader exists only in debug builds; the performance job builds the
+// tests in release.
+#if DEBUG
 import BurnlineCore
 @testable import BurnlineProviders
 import BurnlineTestSupport
@@ -56,3 +59,4 @@ struct DemoQuotaReaderTests {
         }
     }
 }
+#endif

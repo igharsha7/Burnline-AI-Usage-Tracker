@@ -115,7 +115,9 @@ jobs:
     runs-on: macos-26
     timeout-minutes: 60
     outputs:
-      perf: ${{ steps.gate.outcome }}
+      # The gate runs only when the build and measurements did, so a gate
+      # that did not succeed is a failure, never "not run".
+      perf: ${{ steps.gate.outcome == 'success' && 'success' || 'failure' }}
     env:
       PERF: ${{ github.workspace }}/perf
       BASE: ${{ github.workspace }}/../base
