@@ -256,6 +256,12 @@ branch or `nightly`, and on every push to `nightly`, in three jobs:
   summary page and uploads it as an artifact. Checks fails if either job did,
   and it is the status the branch rules require.
 
+`.github/workflows/ci-cache.yml` warms CI's caches each time `main`, a
+staging branch or `nightly` moves. A pull request can read caches saved on its
+own branch or its base, never another pull request's, so this is what lets a
+new pull request start with its dependencies built and its base's
+performance suites already compiled.
+
 `.github/workflows/ci-report.yml` posts that report on the pull request, as one
 comment it updates on every push. It is a separate workflow so that the pull
 request's code never runs with write access: `ci.yml` has a read-only token,
