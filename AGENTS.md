@@ -63,8 +63,8 @@ Before saying a change is done: the whole suite passes, the header check
 passes, the coverage check passes, and, if app-target code changed, the app
 builds. Say what you ran and what you could not check.
 
-CI runs the same four checks on every pull request and a bot posts the
-result as a comment on it: what failed, where, and which page to read. If
+CI runs the same checks, plus the performance gate, on every pull request,
+and a bot posts the result as a comment on it: what failed, where, and which page to read. If
 your user asks you to fix a failing pull request, read that comment first
 (`gh pr view <number> --comments`). See [CI](docs/development.md#ci).
 
@@ -74,6 +74,9 @@ user asks; [testing](docs/testing.md#opt-in-tests) lists them (`BURNLINE_SCALE`,
 `BURNLINE_REAL_HISTORY`, `BURNLINE_IMPORT_TIMING`, `BURNLINE_REAL_QUOTA`,
 `BURNLINE_DASHBOARD_DB`, `BURNLINE_LAUNCH_DB`) with the render tests
 (`BURNLINE_RENDER`, `BURNLINE_REVIEW_DIR`, `BURNLINE_STREAKS_RENDER`).
+The performance suites (`BURNLINE_PERF`) are the exception: they use
+synthetic data only and take under a minute, so run them whenever a change
+touches ingestion, the store or aggregation.
 
 **Running the app.** Never run a debug build against the real database in
 `~/Library/Application Support/Burnline/`: an unreleased migration would
@@ -169,7 +172,9 @@ budgets in [performance](docs/performance.md): any dashboard range warm in
 100 ms, an idle sync in 100 ms, negligible idle CPU, at most 300 bytes per
 stored event. No polling where a change can be pushed, no timers that wake an
 idle app, no animation running off screen. Measure before and after anything
-that could cost memory or energy, and report the numbers.
+that could cost memory or energy, and report the numbers. CI fails a pull
+request that is over a budget or slower than its base; run the same suites
+with `BURNLINE_PERF=/tmp/perf swift test --package-path macos/Packages -c release --no-parallel --filter PerformanceTests`.
 
 ## Locked decisions
 

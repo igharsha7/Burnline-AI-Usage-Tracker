@@ -4,12 +4,17 @@
 # Copyright (C) 2026 Challapalli Harshavardhan Reddy
 # Licensed under the GNU Affero General Public License v3. See LICENSE and NOTICE.
 #
-# The checks every pull request must pass: the test suite, license headers,
-# the coverage floor, and a build of the app. Each runs even when an earlier
-# one failed, so one report says everything that needs fixing. The report is
-# written to the job summary and uploaded for `ci-report.yml`, which posts it
-# on the pull request: this workflow runs the pull request's code, so it is
-# given no permission to write anything.
+# The checks every pull request must pass, in two jobs that run side by side:
+#
+# - Tests and build: the test suite, license headers, the coverage floor and a
+#   build of the app. Each step runs even when an earlier one failed, so one
+#   report says everything that needs fixing.
+# - Performance: the performance suites on the pull request and on its base
+#   branch, on the same runner, against the budgets in docs/performance.md.
+#
+# Then Checks, the status branch rules require, writes one report from both
+# and uploads it for `ci-report.yml`, which posts it on the pull request. This
+# workflow runs the pull request's code, so it is given no permission to write.
 
 name: CI
 
@@ -26,14 +31,20 @@ concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  PACKAGES: macos/Packages
+  LOGS: ${{ github.workspace }}/ci-logs
+
 jobs:
-  checks:
-    name: Checks
+  tests:
+    name: Tests and build
     runs-on: macos-26
     timeout-minutes: 60
-    env:
-      PACKAGES: macos/Packages
-      LOGS: ${{ github.workspace }}/ci-logs
+    outputs:
+      tests: ${{ steps.tests.outcome }}
+      headers: ${{ steps.headers.outcome }}
+      coverage: ${{ steps.coverage.outcome }}
+      app: ${{ steps.app.outcome }}
     steps:
       - uses: actions/checkout@v4
 
@@ -48,8 +59,8 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ${{ env.PACKAGES }}/.build
-          key: spm-${{ runner.os }}-${{ hashFiles('macos/Packages/Package.resolved', 'macos/Packages/Package.swift') }}
-          restore-keys: spm-${{ runner.os }}-
+          key: spm-debug-${{ runner.os }}-${{ hashFiles('macos/Packages/Package.resolved', 'macos/Packages/Package.swift') }}
+          restore-keys: spm-debug-${{ runner.os }}-
 
       - name: Test suite
         id: tests
@@ -83,45 +94,140 @@ jobs:
             | tee "$LOGS/app.log" | grep -E "error:|warning: .*deprecated|BUILD (SUCCEEDED|FAILED)" || true
           grep -q "BUILD SUCCEEDED" "$LOGS/app.log"
 
-      - name: Write the report
-        if: always()
-        env:
-          TESTS: ${{ steps.tests.outcome }}
-          HEADERS: ${{ steps.headers.outcome }}
-          COVERAGE: ${{ steps.coverage.outcome }}
-          APP: ${{ steps.app.outcome }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          BASE_REF: ${{ github.event.pull_request.base.ref || github.ref_name }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: |
-          mkdir -p ci-report
-          python3 .github/scripts/ci_report.py "$LOGS" ci-report
-          cat ci-report/report.md >> "$GITHUB_STEP_SUMMARY"
-
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ci-report
-          path: ci-report/
-          retention-days: 14
-
-      - uses: actions/upload-artifact@v4
-        if: failure() || steps.tests.outcome == 'failure' || steps.app.outcome == 'failure'
-        with:
-          name: ci-logs
+          name: logs-tests
           path: ci-logs/
           retention-days: 14
 
       - name: Fail if any check failed
         if: always()
         run: |
-          failed=""
-          for check in "tests:${{ steps.tests.outcome }}" "headers:${{ steps.headers.outcome }}" \
-                       "coverage:${{ steps.coverage.outcome }}" "app:${{ steps.app.outcome }}"; do
-            case "$check" in *:failure) failed="$failed ${check%%:*}" ;; esac
+          for outcome in "${{ steps.tests.outcome }}" "${{ steps.headers.outcome }}" \
+                         "${{ steps.coverage.outcome }}" "${{ steps.app.outcome }}"; do
+            [ "$outcome" = failure ] && exit 1
           done
-          if [ -n "$failed" ]; then
-            echo "::error::Failed:$failed. The report above, and on the pull request, says why."
-            exit 1
+          exit 0
+
+  performance:
+    name: Performance
+    runs-on: macos-26
+    timeout-minutes: 60
+    outputs:
+      perf: ${{ steps.gate.outcome }}
+    env:
+      PERF: ${{ github.workspace }}/perf
+      BASE: ${{ github.workspace }}/../base
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          xcode=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -n 1)
+          sudo xcode-select -s "$xcode"
+          mkdir -p "$LOGS"
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.PACKAGES }}/.build
+          key: spm-release-${{ runner.os }}-${{ hashFiles('macos/Packages/Package.resolved', 'macos/Packages/Package.swift') }}
+          restore-keys: spm-release-${{ runner.os }}-
+
+      - name: Check out the base branch
+        id: base
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --depth=1 origin "$BASE_SHA"
+          git worktree add --detach "$BASE" "$BASE_SHA"
+          # Compare only when the base has the suites; until then, budgets only.
+          if [ -f "$BASE/$PACKAGES/Tests/BurnlineStoreTests/StorePerformanceTests.swift" ]; then
+            echo "compare=true" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Build
+        run: |
+          # `swift test` builds with testing enabled, which the suites need;
+          # without BURNLINE_PERF they skip, so this only builds.
+          set -o pipefail
+          build() { swift test -c release --package-path "$1" --filter PerformanceTests 2>&1 | tail -n 20; }
+          build "$PACKAGES" | tee "$LOGS/perf-build.log"
+          if [ "${{ steps.base.outputs.compare }}" = true ]; then build "$BASE/$PACKAGES"; fi
+
+      - name: Measure
+        run: |
+          # Base and pull request take turns, twice, so a slow minute on the
+          # runner falls on both; the best run of each counts.
+          measure() {
+            BURNLINE_PERF="$PERF/$2" swift test -c release --skip-build --no-parallel \
+              --package-path "$1" --filter PerformanceTests 2>&1 | tee -a "$LOGS/perf.log" | grep -E "^PERF|✘" || true
+          }
+          for round in 1 2; do
+            if [ "${{ steps.base.outputs.compare }}" = true ]; then measure "$BASE/$PACKAGES" "base-$round"; fi
+            measure "$PACKAGES" "head-$round"
+          done
+
+      - name: Performance gate
+        id: gate
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          bases=$(ls -d "$PERF"/base-* 2>/dev/null || true)
+          python3 .github/scripts/perf_compare.py --head "$PERF"/head-* ${bases:+--base $bases} \
+            --out "$LOGS/perf-result.json" 2>&1 | tee "$LOGS/perf-gate.log"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: logs-perf
+          path: ci-logs/
+          retention-days: 14
+
+      - name: Fail if the gate failed
+        if: always()
+        run: test "${{ steps.gate.outcome }}" != failure
+
+  checks:
+    name: Checks
+    needs: [tests, performance]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/scripts
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: logs-*
+          path: ci-logs
+          merge-multiple: true
+
+      - name: Write the report
+        env:
+          # A job that never finished reports nothing; count that as a failure.
+          TESTS: ${{ needs.tests.outputs.tests || 'failure' }}
+          HEADERS: ${{ needs.tests.outputs.headers || 'failure' }}
+          COVERAGE: ${{ needs.tests.outputs.coverage || 'skipped' }}
+          APP: ${{ needs.tests.outputs.app || 'failure' }}
+          PERF: ${{ needs.performance.outputs.perf || 'failure' }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_REF: ${{ github.event.pull_request.base.ref || github.ref_name }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          mkdir -p ci-logs ci-report
+          python3 .github/scripts/ci_report.py ci-logs ci-report
+          cat ci-report/report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ci-report
+          path: ci-report/
+          retention-days: 14
+
+      - name: Fail if any check failed
+        run: |
+          test "${{ needs.tests.result }}" = success && test "${{ needs.performance.result }}" = success

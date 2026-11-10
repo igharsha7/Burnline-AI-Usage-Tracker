@@ -216,14 +216,18 @@ for the Windows version in progress, with language-neutral contracts in
 ## CI
 
 `.github/workflows/ci.yml` runs on every pull request to `main` or a staging
-branch, and on every push to `nightly`. One job, **Checks**, on a macOS runner
-with the newest Xcode 26, runs the test suite (with coverage), the license
-header check, the coverage floor and an unsigned app build. Each step runs
-even if an earlier one failed; the job fails at the end if any did.
+branch, and on every push to `nightly`, in three jobs:
 
-`.github/scripts/ci_report.py` turns the logs into a report: a table of the
-checks, then for each failure the failing tests or files and the page to read.
-It goes to the run's summary page and is uploaded as an artifact.
+- **Tests and build**, on a macOS runner with the newest Xcode 26: the test
+  suite (with coverage), the license header check, the coverage floor and an
+  unsigned app build. Each step runs even if an earlier one failed.
+- **Performance**, on a second macOS runner at the same time: the
+  [performance gate](performance.md#the-performance-gate).
+- **Checks**, once both finish: `.github/scripts/ci_report.py` turns their logs
+  into one report (a table of the checks, then for each failure the failing
+  tests, files or figures and the page to read), writes it to the run's
+  summary page and uploads it as an artifact. Checks fails if either job did,
+  and it is the status the branch rules require.
 
 `.github/workflows/ci-report.yml` posts that report on the pull request, as one
 comment it updates on every push. It is a separate workflow so that the pull

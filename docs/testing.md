@@ -201,6 +201,7 @@ repository root.
 
 | Command | What it does |
 |---|---|
+| `BURNLINE_PERF=/tmp/perf swift test --package-path macos/Packages -c release --no-parallel --filter PerformanceTests` | The [performance gate](performance.md#the-performance-gate)'s suites, which CI runs on every pull request. Synthetic data only; takes under a minute. |
 | `BURNLINE_SCALE=1 swift test --package-path macos/Packages -c release --filter ScaleTests` | Measures the store on a synthetic history. `BURNLINE_SCALE_EVENTS` sets its size (default one million). Ten million takes about 13 minutes and 2.5 GB. `BURNLINE_SCALE_KEEP` keeps the database afterwards. |
 | `BURNLINE_REAL_HISTORY=1 swift test --package-path macos/Packages --filter RealHistoryTests` | Imports this machine's real Claude Code and Codex history into a throwaway database and prints counts only |
 | `BURNLINE_IMPORT_TIMING=1 swift test --package-path macos/Packages -c release --filter ImportTimingTests` | Times a first import of this machine's history, split into reading and writing |

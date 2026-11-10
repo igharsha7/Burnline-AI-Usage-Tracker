@@ -22,3 +22,6 @@ Packages/*/.build/
 # Personal, never committed: Claude Code's local instructions and worktrees
 CLAUDE.local.md
 .claude/
+
+# Python
+__pycache__/
