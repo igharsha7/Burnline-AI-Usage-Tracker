@@ -1,0 +1,76 @@
+name: Bug report
+description: Something in Burnline is wrong, broken or misleading.
+labels: ["type: bug", "status: needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please search existing issues first.
+        **Security problems go privately**, never here: see "Reporting a vulnerability" in docs/privacy-and-security.md.
+        Never paste prompts, code, credentials or transcript contents.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. …
+        2. …
+    validations:
+      required: true
+  - type: dropdown
+    id: providers
+    attributes:
+      label: Providers you track
+      multiple: true
+      options:
+        - Claude Code
+        - Codex
+        - Neither
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where
+      options:
+        - Menu bar or popover
+        - Dashboard
+        - Limits or quota
+        - Costs or pricing
+        - Notifications
+        - Activity or achievements
+        - Onboarding or Settings
+        - Import or history
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Burnline version or commit
+      placeholder: 0.1.0, or a commit hash if built from source
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: "macOS 26.1"
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: Settings → Data → Copy Diagnostics, pasted here. It holds versions, counts and health, with no usage figures, project names or credentials.
+      render: text
+  - type: textarea
+    id: more
+    attributes:
+      label: Anything else
+      description: Screenshots (no real usage you would rather keep private), logs, how often it happens.

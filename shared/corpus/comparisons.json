@@ -1,0 +1,1681 @@
+{
+  "schemaVersion": 4,
+  "generated": "2026-11-09",
+  "notes": [
+    "A plain unit's line is a frame plus, outside the dry tone, one of the unit's own lines for that tone. Frames say what the figure is; lines are the punchline and never carry a count.",
+    "singles are for a figure between one and two of a unit, where a multiplier would read as noise.",
+    "Tone keys: dry | nerd | roast. The user picks one or a mix in Settings.",
+    "discrete: true means the unit is a countable object; the multiplier is floored to a whole number.",
+    "Token values are NOT stored. Units declare 'words', 'codeLines' or 'tokens'; the engine multiplies by conversions at load.",
+    "confidence: verified = natively denominated in the metric it claims. approx = derived through an assumed ratio. volatile = changes over time.",
+    "kind: unit = plain ratio. derived = formula over the input alone. composite = formula plus a reference unit the engine picks, gated on 'requires'. Derived and composite units carry 'templates', a list of sentences per tone.",
+    "Keep a finished line under about 130 characters so it fits the dashboard on two lines.",
+    "Frame slots: {label} is the unit as a noun phrase with its article ('the King James Bible'); {many} is its plural for counting ('copies of Dune', never 'Dunes'); {count} and {times} are the multiplier in words ('eight and a half', 'nearly nine times', 'twice', 'about 1,200 times'). A frame using {many} or {count} is used only for units that declare 'many'.",
+    "{lead} and {tail} place the period a figure covers: 'Today alone, ' at the start, ' today' inside the sentence. Both are empty when no period is given. With a period, only frames that carry one of them are used, so every line says which period it means.",
+    "facts: the dry tone's aside, built from a unit's own quantity so it can never disagree with the figure the comparison used."
+  ],
+  "conversions": {
+    "tokensPerWord": 1.3,
+    "tokensPerCodeLine": 9.0,
+    "note": "Claude Code's 'Dune' comparison implies words x ~1.3. Code averages ~9 tokens/line for C-family source. Both are English/Latin-script assumptions; adjust if you ever localise."
+  },
+  "frames": {
+    "tokens": [
+      "{lead}that's {label}, {times} over.",
+      "{lead}{times} as many tokens as {label}.",
+      "{lead}{times} the length of {label}.",
+      "In tokens, you've been through {label} {times}{tail}.",
+      "{lead}that's {count} {many}.",
+      "Enough tokens{tail} for {count} {many}.",
+      "Stack up {count} {many} and you're about there."
+    ],
+    "cost": [
+      "{lead}that's {count} {many}.",
+      "Enough{tail} for {count} {many}.",
+      "{lead}at API prices, that's {count} {many}.",
+      "What you spent{tail} would cover {count} {many}.",
+      "{lead}{times} the price of {label}."
+    ]
+  },
+  "singles": {
+    "tokens": [
+      "{lead}about as many tokens as {label}.",
+      "{lead}roughly the length of {label}."
+    ],
+    "cost": [
+      "{lead}about the price of {label}.",
+      "{lead}roughly what {label} costs."
+    ]
+  },
+  "units": [
+    {
+      "id": "lit.bee-movie",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "meme",
+      "label": "the Bee Movie script",
+      "words": 9800,
+      "basis": "~9,800 words x 1.3",
+      "confidence": "approx",
+      "many": "Bee Movie scripts",
+      "lines": {
+        "nerd": [
+          "According to all known laws of aviation, this should not be possible.",
+          "Ya like jazz?"
+        ],
+        "roast": [
+          "Not one of them was funny, either.",
+          "The bee, at least, knew what it was building."
+        ]
+      }
+    },
+    {
+      "id": "lit.communist-manifesto",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "The Communist Manifesto",
+      "words": 12000,
+      "basis": "~12,000 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of The Communist Manifesto",
+      "lines": {
+        "nerd": [
+          "You have nothing to lose but your quota.",
+          "A spectre is haunting your context window."
+        ],
+        "roast": [
+          "Paid for, naturally, with a monthly subscription.",
+          "The means of production, rented by the token."
+        ]
+      }
+    },
+    {
+      "id": "lit.hamlet",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "Hamlet",
+      "words": 30557,
+      "basis": "30,557 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of Hamlet",
+      "lines": {
+        "nerd": [
+          "To refactor, or not to refactor.",
+          "Something is rotten in the state of main."
+        ],
+        "roast": [
+          "And you still can't decide on a variable name.",
+          "Hamlet dithered for five acts. You dithered for a sprint."
+        ]
+      }
+    },
+    {
+      "id": "lit.animal-farm",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "Animal Farm",
+      "words": 29966,
+      "basis": "29,966 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of Animal Farm",
+      "lines": {
+        "nerd": [
+          "All tokens are equal, but some are more equal than others.",
+          "Orwell made his point in under 30,000 words."
+        ],
+        "roast": [
+          "Four legs good, four hours of debugging bad."
+        ]
+      }
+    },
+    {
+      "id": "lit.gatsby",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "The Great Gatsby",
+      "words": 47094,
+      "basis": "47,094 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of The Great Gatsby",
+      "lines": {
+        "nerd": [
+          "So we beat on, prompts against the context window."
+        ],
+        "roast": [
+          "The green light is still your rate limit.",
+          "Gatsby threw parties. You threw tokens."
+        ]
+      }
+    },
+    {
+      "id": "lit.hobbit",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "The Hobbit",
+      "words": 95356,
+      "basis": "95,356 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of The Hobbit",
+      "lines": {
+        "nerd": [
+          "There and back again, and again, and again."
+        ],
+        "roast": [
+          "All on what was supposed to be a quick fix.",
+          "Bilbo at least came home with treasure."
+        ]
+      }
+    },
+    {
+      "id": "lit.dune",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "Dune",
+      "words": 187240,
+      "basis": "187,240 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of Dune",
+      "lines": {
+        "nerd": [
+          "The spice must flow, and evidently so must the tokens.",
+          "Fear is the mind-killer. So is a full context window."
+        ],
+        "roast": [
+          "Herbert wrote it once. You regenerate it before lunch."
+        ]
+      }
+    },
+    {
+      "id": "lit.fellowship",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "The Fellowship of the Ring",
+      "words": 187790,
+      "basis": "187,790 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of The Fellowship of the Ring",
+      "lines": {
+        "nerd": [
+          "One does not simply walk into a rate limit."
+        ],
+        "roast": [
+          "Nine walked to Mordor. You couldn't walk to the docs."
+        ]
+      }
+    },
+    {
+      "id": "lit.moby-dick",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "Moby-Dick",
+      "words": 206052,
+      "basis": "206,052 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of Moby-Dick",
+      "lines": {
+        "nerd": [
+          "Call me Ishmael. Then call me again, and again."
+        ],
+        "roast": [
+          "All of it chasing one white whale of a race condition."
+        ]
+      }
+    },
+    {
+      "id": "lit.lotr-trilogy",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "the Lord of the Rings trilogy",
+      "words": 481103,
+      "basis": "481,103 words x 1.3",
+      "confidence": "approx",
+      "many": "Lord of the Rings trilogies",
+      "lines": {
+        "nerd": [
+          "Tolkien took twelve years. You took a sprint.",
+          "One prompt to rule them all.",
+          "Even the appendices."
+        ],
+        "roast": [
+          "And your pull request is still a draft.",
+          "Three books, one ring, and your build still won't pass."
+        ]
+      }
+    },
+    {
+      "id": "lit.infinite-jest",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "Infinite Jest",
+      "words": 543709,
+      "basis": "543,709 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of Infinite Jest",
+      "lines": {
+        "nerd": [
+          "Footnotes included."
+        ],
+        "roast": [
+          "Nobody finished those either."
+        ]
+      }
+    },
+    {
+      "id": "lit.war-and-peace",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "War and Peace",
+      "words": 587287,
+      "basis": "587,287 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of War and Peace",
+      "lines": {
+        "nerd": [
+          "Tolstoy, at least, stopped at one.",
+          "Over 500 characters, and none of them read the docs."
+        ],
+        "roast": [
+          "Mostly war. Mostly with your linter.",
+          "Napoleon's campaign had better planning."
+        ]
+      }
+    },
+    {
+      "id": "lit.kjv-bible",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "the King James Bible",
+      "words": 783137,
+      "basis": "783,137 words x 1.3",
+      "confidence": "approx",
+      "many": "King James Bibles",
+      "lines": {
+        "nerd": [
+          "In the beginning was the prompt.",
+          "Let there be tokens, and there were tokens."
+        ],
+        "roast": [
+          "And still no divine intervention on that bug.",
+          "Forty days in the desert would have been cheaper."
+        ]
+      }
+    },
+    {
+      "id": "lit.shakespeare",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "the complete works of Shakespeare",
+      "words": 884647,
+      "basis": "884,647 words x 1.3",
+      "confidence": "approx",
+      "many": "sets of Shakespeare's complete works",
+      "lines": {
+        "nerd": [
+          "The infinite monkeys have nothing on you.",
+          "All the world's a prompt."
+        ],
+        "roast": [
+          "And your commit message still says 'fix'.",
+          "Thirty-nine plays, and none of them were about your bug."
+        ]
+      }
+    },
+    {
+      "id": "lit.harry-potter",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "all seven Harry Potter books",
+      "words": 1084170,
+      "basis": "1,084,170 words x 1.3",
+      "confidence": "approx",
+      "many": "sets of all seven Harry Potter books",
+      "lines": {
+        "nerd": [
+          "Yer a token sink, Harry.",
+          "Mischief managed. Tokens, less so."
+        ],
+        "roast": [
+          "Someone cast Expelliarmus on your credit card.",
+          "Not even a Time-Turner could get those tokens back."
+        ]
+      }
+    },
+    {
+      "id": "lit.proust",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "In Search of Lost Time",
+      "words": 1267069,
+      "basis": "1,267,069 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of In Search of Lost Time",
+      "lines": {
+        "nerd": [
+          "Truly, a search for lost time.",
+          "One madeleine, several million tokens."
+        ],
+        "roast": [
+          "Fitting, given your afternoon.",
+          "Proust took thirteen years. You took a weekend."
+        ]
+      }
+    },
+    {
+      "id": "lit.asoiaf",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "the five published A Song of Ice and Fire books",
+      "words": 1770000,
+      "basis": "~1,770,000 words x 1.3",
+      "confidence": "approx",
+      "many": "sets of A Song of Ice and Fire",
+      "lines": {
+        "nerd": [
+          "In less time than book six is taking.",
+          "Winter is coming. So is the bill."
+        ],
+        "roast": [
+          "You out-shipped George R. R. Martin. Low bar, but still.",
+          "And just as many unresolved plot threads in your branch."
+        ]
+      }
+    },
+    {
+      "id": "lit.wheel-of-time",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "the entire Wheel of Time series",
+      "words": 4410000,
+      "basis": "~4,410,000 words x 1.3",
+      "confidence": "approx",
+      "many": "full runs of The Wheel of Time",
+      "lines": {
+        "nerd": [
+          "The Wheel weaves as the Wheel wills.",
+          "Fourteen books, and the ending still arrived before your PR review."
+        ],
+        "roast": [
+          "Both of you could have used an editor.",
+          "It took two authors. You used two models."
+        ]
+      }
+    },
+    {
+      "id": "meme.simpsons",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "meme",
+      "label": "every Simpsons script ever aired",
+      "words": 6320000,
+      "basis": "~790 episodes x ~8,000 words x 1.3",
+      "confidence": "approx",
+      "many": "complete runs of The Simpsons",
+      "lines": {
+        "nerd": [
+          "The Simpsons already did it.",
+          "D'oh, in token form."
+        ],
+        "roast": [
+          "Both declined after season nine.",
+          "And Homer would still have shipped sooner."
+        ]
+      }
+    },
+    {
+      "id": "code.blender",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "code",
+      "label": "the entire Blender source code",
+      "codeLines": 2700000,
+      "basis": "~2,700,000 lines x 9",
+      "confidence": "approx",
+      "many": "copies of the Blender source code",
+      "lines": {
+        "nerd": [
+          "A full 3D suite, renderer and all.",
+          "Modelling, rendering, and the default cube."
+        ],
+        "roast": [
+          "Blender is free, and nobody asked you to rewrite it.",
+          "Delete the default cube. Then the default tokens."
+        ]
+      }
+    },
+    {
+      "id": "lit.cfr",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "the US Code of Federal Regulations",
+      "words": 105000000,
+      "basis": "~105,000,000 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of the Code of Federal Regulations",
+      "lines": {
+        "nerd": [
+          "Every federal rule in force, cover to cover.",
+          "Every title, every part, every footnote."
+        ],
+        "roast": [
+          "Still less bureaucracy than your build pipeline.",
+          "Even the regulators would ask you to slow down."
+        ]
+      }
+    },
+    {
+      "id": "lit.britannica",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "the print Encyclopaedia Britannica",
+      "words": 44000000,
+      "basis": "~44,000,000 words x 1.3",
+      "confidence": "approx",
+      "many": "print Britannica sets",
+      "lines": {
+        "nerd": [
+          "All 32 volumes.",
+          "The last print edition, cover to cover."
+        ],
+        "roast": [
+          "All of it to produce a CRUD app.",
+          "Britannica stopped printing in 2012. You did not stop prompting."
+        ]
+      }
+    },
+    {
+      "id": "lit.wikipedia",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "all of English Wikipedia",
+      "words": 4700000000,
+      "basis": "~4.7B words x 1.3",
+      "confidence": "approx",
+      "many": "copies of English Wikipedia",
+      "lines": {
+        "nerd": [
+          "Citation needed.",
+          "Seven million articles, give or take."
+        ],
+        "roast": [
+          "Humanity's knowledge, spent on a nav bar.",
+          "And you still opened a new tab to search."
+        ]
+      }
+    },
+    {
+      "id": "code.apollo11",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "code",
+      "label": "the Apollo 11 guidance software",
+      "codeLines": 40000,
+      "basis": "~40,000 lines of AGC assembly x 9",
+      "confidence": "approx",
+      "many": "copies of the Apollo 11 guidance software",
+      "lines": {
+        "nerd": [
+          "It landed on the Moon with about 4 KB of memory."
+        ],
+        "roast": [
+          "That code landed on the Moon. You centred a div."
+        ]
+      }
+    },
+    {
+      "id": "code.doom",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "code",
+      "label": "the DOOM (1993) source code",
+      "codeLines": 39000,
+      "basis": "~39,000 lines x 9",
+      "confidence": "approx",
+      "many": "copies of the DOOM source code",
+      "lines": {
+        "nerd": [
+          "Rip and tear, until it is done."
+        ],
+        "roast": [
+          "DOOM runs on a pregnancy test. Does your app?"
+        ]
+      }
+    },
+    {
+      "id": "code.sqlite",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "code",
+      "label": "the SQLite source code",
+      "codeLines": 156000,
+      "basis": "~156,000 lines x 9",
+      "confidence": "approx",
+      "many": "copies of the SQLite source code",
+      "lines": {
+        "nerd": [
+          "Fittingly, that's where all of this is stored.",
+          "Public domain, and in every phone on Earth."
+        ],
+        "roast": [
+          "SQLite has 100% branch test coverage. Unlike yours.",
+          "Three developers maintain SQLite. You needed a model."
+        ]
+      }
+    },
+    {
+      "id": "code.curl",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "code",
+      "label": "the curl source code",
+      "codeLines": 160000,
+      "basis": "~160,000 lines x 9",
+      "confidence": "approx",
+      "many": "copies of the curl source code",
+      "lines": {
+        "nerd": [
+          "A quarter of a century of one maintainer's inbox."
+        ],
+        "roast": [
+          "And you still look up its flags."
+        ]
+      }
+    },
+    {
+      "id": "code.shuttle",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "code",
+      "label": "the Space Shuttle's flight software",
+      "codeLines": 400000,
+      "basis": "~400,000 lines x 9",
+      "confidence": "approx",
+      "many": "copies of the Shuttle's flight software",
+      "lines": {
+        "nerd": [
+          "Famous for its near-zero defect rate.",
+          "Written by a team famous for shipping almost no bugs."
+        ],
+        "roast": [
+          "It flew astronauts. You shipped a null pointer.",
+          "NASA reviewed every line. You reviewed none."
+        ]
+      }
+    },
+    {
+      "id": "code.linux",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "code",
+      "label": "the entire Linux kernel",
+      "codeLines": 40063856,
+      "basis": "40,063,856 lines x 9",
+      "confidence": "approx",
+      "many": "Linux kernels",
+      "lines": {
+        "nerd": [
+          "Forty million lines and three decades of patches.",
+          "Every driver, every architecture, every 'do not break userspace'."
+        ],
+        "roast": [
+          "Torvalds started with a terminal emulator.",
+          "Linus would have something to say about your commit messages."
+        ]
+      }
+    },
+    {
+      "id": "meme.navy-seal",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "meme",
+      "label": "the Navy Seal copypasta",
+      "words": 280,
+      "basis": "~280 words x 1.3",
+      "confidence": "approx",
+      "many": "Navy Seal copypastas",
+      "lines": {
+        "nerd": [
+          "You are nothing to me but just another prompt."
+        ],
+        "roast": [
+          "Gorilla warfare, indeed."
+        ]
+      }
+    },
+    {
+      "id": "meme.lorem-ipsum",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "meme",
+      "label": "the standard lorem ipsum passage",
+      "words": 69,
+      "basis": "~69 words x 1.3",
+      "confidence": "approx",
+      "many": "lorem ipsum passages",
+      "lines": {
+        "nerd": [
+          "Cicero would be baffled."
+        ],
+        "roast": [
+          "Which is also what your placeholder copy still says."
+        ]
+      }
+    },
+    {
+      "id": "meme.itunes-tos",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "meme",
+      "label": "the iTunes Terms and Conditions",
+      "words": 20000,
+      "basis": "~20,000 words x 1.3",
+      "confidence": "approx",
+      "many": "copies of the iTunes Terms and Conditions",
+      "lines": {
+        "nerd": [
+          "Nobody read those either."
+        ],
+        "roast": [
+          "You agreed to all of it, technically."
+        ]
+      }
+    },
+    {
+      "id": "meme.shrek",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "meme",
+      "label": "the Shrek screenplay",
+      "words": 9000,
+      "basis": "~9,000 words x 1.3",
+      "confidence": "approx",
+      "many": "Shrek screenplays",
+      "lines": {
+        "nerd": [
+          "Ogres are like onions. So is your context window."
+        ],
+        "roast": [
+          "Layers. Your codebase has those too."
+        ]
+      }
+    },
+    {
+      "id": "cost.coffee",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "everyday",
+      "label": "a flat white",
+      "dollars": 5.0,
+      "basis": "typical specialty coffee",
+      "confidence": "volatile",
+      "discrete": true,
+      "many": "flat whites",
+      "lines": {
+        "nerd": [
+          "Coffee in, code out. The classic pipeline.",
+          "Roughly one per prompt, by the look of it."
+        ],
+        "roast": [
+          "At least the coffee kept you awake.",
+          "You'd have been calmer on the coffee."
+        ]
+      }
+    },
+    {
+      "id": "cost.spotify",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "subscriptions",
+      "label": "a month of Spotify Premium",
+      "dollars": 11.99,
+      "basis": "Spotify Premium individual, US list",
+      "confidence": "volatile",
+      "many": "months of Spotify Premium",
+      "lines": {
+        "nerd": [
+          "Your Wrapped would be terrifying.",
+          "Enough playlists to code to for years."
+        ],
+        "roast": [
+          "All of it spent on autocomplete.",
+          "Lo-fi beats to burn tokens to."
+        ]
+      }
+    },
+    {
+      "id": "cost.claude-pro",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "subscriptions",
+      "label": "a month of Claude Pro",
+      "dollars": 20.0,
+      "basis": "Claude Pro monthly, US list",
+      "confidence": "volatile",
+      "many": "months of Claude Pro",
+      "lines": {
+        "nerd": [
+          "The subscription is, mathematically, a bargain.",
+          "Pro is the cheaper way to say this many words."
+        ],
+        "roast": [
+          "Good thing you're not paying per token.",
+          "Every one of those months, you'd have hit the limit anyway."
+        ]
+      }
+    },
+    {
+      "id": "cost.steam-aaa",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "everyday",
+      "label": "a full-price game",
+      "dollars": 69.99,
+      "basis": "typical AAA launch price",
+      "confidence": "volatile",
+      "discrete": true,
+      "many": "full-price games",
+      "lines": {
+        "nerd": [
+          "You'd have finished none of them anyway.",
+          "A whole shelf of open worlds."
+        ],
+        "roast": [
+          "This backlog compiles, at least.",
+          "Your backlog has fewer unfinished items than your TODO list."
+        ]
+      }
+    },
+    {
+      "id": "cost.keyboard",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "everyday",
+      "label": "a nice mechanical keyboard",
+      "dollars": 150.0,
+      "basis": "mid-range custom board",
+      "confidence": "volatile",
+      "discrete": true,
+      "many": "mechanical keyboards",
+      "lines": {
+        "nerd": [
+          "Ironic, given how little typing was involved.",
+          "Linear switches, tactile switches, all of them."
+        ],
+        "roast": [
+          "For a workflow that is mostly pressing Tab.",
+          "Mostly the Tab key, really."
+        ]
+      }
+    },
+    {
+      "id": "cost.macbook-air",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "everyday",
+      "label": "a MacBook Air",
+      "dollars": 999.0,
+      "basis": "base MacBook Air, US list",
+      "confidence": "volatile",
+      "discrete": true,
+      "many": "MacBook Airs",
+      "lines": {
+        "nerd": [
+          "Possibly including the one this is running on.",
+          "Fanless, like this bill is not."
+        ],
+        "roast": [
+          "You could have hired an intern.",
+          "One of them would have been enough to write it by hand."
+        ]
+      }
+    },
+    {
+      "id": "cost.rent-share",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "everyday",
+      "label": "a month of groceries",
+      "dollars": 400.0,
+      "basis": "single-person monthly grocery estimate; user-overridable",
+      "confidence": "volatile",
+      "many": "months of groceries",
+      "lines": {
+        "nerd": [
+          "Tokens are not, sadly, nutritious.",
+          "A lot of rice and beans."
+        ],
+        "roast": [
+          "All of it converted straight into boilerplate.",
+          "You could have eaten. You chose to prompt."
+        ]
+      }
+    },
+    {
+      "id": "human.age5",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "human",
+      "label": "everything a five-year-old has ever heard",
+      "tokens": 40000000,
+      "basis": "~40M tokens of language exposure by age 5",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "They learned to talk on that.",
+          "Five years of bedtime stories."
+        ],
+        "roast": [
+          "They got a vocabulary. You got a REST client.",
+          "A five-year-old learned a language on less."
+        ]
+      }
+    },
+    {
+      "id": "human.age20",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "human",
+      "label": "a 20-year-old's lifetime of language",
+      "tokens": 200000000,
+      "basis": "~200M tokens heard and read by age 20",
+      "confidence": "approx",
+      "many": "twenty-year lifetimes of language",
+      "lines": {
+        "nerd": [
+          "Every word they ever heard or read.",
+          "Two decades of conversations, lectures and group chats."
+        ],
+        "roast": [
+          "A whole life of reading and listening, for CRUD endpoints.",
+          "Twenty years to raise a person. One sprint to burn through it."
+        ]
+      }
+    },
+    {
+      "id": "lit.gutenberg",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "the entire Project Gutenberg library",
+      "words": 6000000000,
+      "basis": "~75,000 books x ~80,000 words x 1.3",
+      "confidence": "approx",
+      "many": "Project Gutenberg libraries",
+      "lines": {
+        "nerd": [
+          "Every public-domain book it holds.",
+          "Over seventy thousand free books, all of them."
+        ],
+        "roast": [
+          "Those books are free. You paid by the token.",
+          "Free books, and you still chose the paid tokens."
+        ]
+      }
+    },
+    {
+      "id": "lit.wikipedia-all",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "Wikipedia in every language",
+      "tokens": 18000000000,
+      "basis": "~3x English Wikipedia across all language editions",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "Over 300 languages of it."
+        ],
+        "roast": [
+          "And you still couldn't name your variables."
+        ]
+      }
+    },
+    {
+      "id": "lit.tv-archives",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "every word spoken on recorded television",
+      "tokens": 70000000000,
+      "basis": "~50B words of recorded television x 1.3",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "Every show, every channel."
+        ],
+        "roast": [
+          "Television, at least, had a writers' room."
+        ]
+      }
+    },
+    {
+      "id": "lit.patents",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "every patent ever filed",
+      "tokens": 200000000000,
+      "basis": "~150B words of patent text x 1.3",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "That's a lot of prior art."
+        ],
+        "roast": [
+          "And not one novel idea in yours."
+        ]
+      }
+    },
+    {
+      "id": "lit.academic",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "every academic paper ever published",
+      "tokens": 1000000000000,
+      "basis": "~800B words of academic literature x 1.3",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "Peer review not included."
+        ],
+        "roast": [
+          "Your docstrings are still empty."
+        ]
+      }
+    },
+    {
+      "id": "lit.every-book",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "every book ever written",
+      "tokens": 21000000000000,
+      "basis": "~16T words across every unique book x 1.3",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "Every one humanity has produced."
+        ],
+        "roast": [
+          "Consider reading one."
+        ]
+      }
+    },
+    {
+      "id": "lit.all-email",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "every email ever stored",
+      "tokens": 1200000000000000,
+      "basis": "~900T words of stored email x 1.3",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "Including the ones nobody opened."
+        ],
+        "roast": [
+          "Somehow yours is still unanswered."
+        ]
+      }
+    },
+    {
+      "id": "ml.bert",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "training",
+      "label": "BERT's training corpus",
+      "tokens": 3300000000,
+      "basis": "3.3B tokens, disclosed",
+      "confidence": "verified",
+      "lines": {
+        "nerd": [
+          "You out-read a language model.",
+          "BERT read Wikipedia and a pile of books. You read more."
+        ],
+        "roast": [
+          "And BERT still understands your code better.",
+          "BERT is from 2018 and still more efficient."
+        ]
+      }
+    },
+    {
+      "id": "ml.gpt3",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "training",
+      "label": "GPT-3's training corpus",
+      "tokens": 300000000000,
+      "basis": "300B tokens, disclosed in the GPT-3 paper",
+      "confidence": "verified",
+      "lines": {
+        "nerd": [
+          "One person, one laptop."
+        ],
+        "roast": [
+          "GPT-3 launched an industry. You launched a linter."
+        ]
+      }
+    },
+    {
+      "id": "ml.palm",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "training",
+      "label": "PaLM's training corpus",
+      "tokens": 780000000000,
+      "basis": "780B tokens, disclosed",
+      "confidence": "verified",
+      "lines": {
+        "nerd": [
+          "All 780 billion tokens of it."
+        ],
+        "roast": [
+          "All for a settings pane."
+        ]
+      }
+    },
+    {
+      "id": "ml.chinchilla",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "training",
+      "label": "Chinchilla's training corpus",
+      "tokens": 1400000000000,
+      "basis": "1.4T tokens, disclosed",
+      "confidence": "verified",
+      "lines": {
+        "nerd": [
+          "Compute-optimal, unlike your afternoon."
+        ],
+        "roast": [
+          "Scaling laws do not apply to you."
+        ]
+      }
+    },
+    {
+      "id": "ml.gpt4",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "training",
+      "label": "GPT-4's estimated training corpus",
+      "tokens": 13000000000000,
+      "basis": "~13T tokens, estimated",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "An estimate, but still."
+        ],
+        "roast": [
+          "GPT-4 has excuses. You don't."
+        ]
+      }
+    },
+    {
+      "id": "ml.llama3",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "training",
+      "label": "Llama 3's training corpus",
+      "tokens": 15000000000000,
+      "basis": "15T+ tokens, disclosed in the model card",
+      "confidence": "verified",
+      "lines": {
+        "nerd": [
+          "All fifteen trillion tokens of it."
+        ],
+        "roast": [
+          "Meta used 16,000 GPUs. You used Tab."
+        ]
+      }
+    },
+    {
+      "id": "ref.oed",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "literature",
+      "label": "the Oxford English Dictionary",
+      "many": "full sets of the Oxford English Dictionary",
+      "words": 59000000,
+      "basis": "Second edition (1989), 20 volumes, about 59 million words x 1.3",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "All twenty volumes, every sense of every word.",
+          "Over half a million words, defined."
+        ],
+        "roast": [
+          "Every word in English, and your variable is still called 'data'.",
+          "Sixty-two kilos of dictionary. You still wrote 'recieve'."
+        ]
+      }
+    },
+    {
+      "id": "human.talk-year",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "human",
+      "label": "everything a person says in a year",
+      "many": "years of talking",
+      "words": 5840000,
+      "basis": "About 16,000 spoken words a day (Mehl et al., Science, 2007) x 365 days x 1.3",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "People say about 16,000 words a day. You out-talked a year of that."
+        ],
+        "roast": [
+          "A year of talking, and most of it was 'try again'."
+        ]
+      }
+    },
+    {
+      "id": "human.talk-life",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "human",
+      "label": "everything a person says in a lifetime",
+      "many": "lifetimes of talking",
+      "words": 467200000,
+      "basis": "About 16,000 spoken words a day (Mehl et al., Science, 2007) x 80 years x 1.3",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "Eighty years of conversation, start to finish."
+        ],
+        "roast": [
+          "A whole life of talking, and none of it was small talk with your linter."
+        ]
+      }
+    },
+    {
+      "id": "code.chromium",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "code",
+      "label": "the Chromium source code",
+      "many": "copies of the Chromium source code",
+      "codeLines": 36000000,
+      "basis": "About 36 million lines, excluding comments and blanks (Wikipedia, Chromium), x 9",
+      "confidence": "volatile",
+      "lines": {
+        "nerd": [
+          "A whole browser engine, every tab of it."
+        ],
+        "roast": [
+          "Chromium eats your RAM. You ate this many tokens."
+        ]
+      }
+    },
+    {
+      "id": "code.windows-xp",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "code",
+      "label": "the Windows XP source code",
+      "many": "copies of the Windows XP source code",
+      "codeLines": 45000000,
+      "basis": "About 45 million lines (Wikipedia, Source lines of code), x 9",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "Forty-five million lines and one very green hill."
+        ],
+        "roast": [
+          "XP got over a decade of support. Your code got a TODO."
+        ]
+      }
+    },
+    {
+      "id": "code.mac-os-x",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "code",
+      "label": "the Mac OS X Tiger source code",
+      "many": "copies of the Mac OS X Tiger source code",
+      "codeLines": 86000000,
+      "basis": "About 86 million lines (Apple, WWDC 2006; Wikipedia, Source lines of code), x 9",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "Spotlight, Dashboard and all, the Tiger way."
+        ],
+        "roast": [
+          "Apple ported it to Intel. You ported a button."
+        ]
+      }
+    },
+    {
+      "id": "code.debian",
+      "kind": "unit",
+      "metric": "tokens",
+      "category": "code",
+      "label": "the entire Debian 7 distribution",
+      "many": "copies of the entire Debian 7 distribution",
+      "codeLines": 419000000,
+      "basis": "About 419 million lines across 17,000 packages (Bromberger, 2012), x 9",
+      "confidence": "approx",
+      "lines": {
+        "nerd": [
+          "Seventeen thousand packages, every one of them."
+        ],
+        "roast": [
+          "An entire operating system's worth, and you still can't exit vim."
+        ]
+      }
+    },
+    {
+      "id": "cost.iphone",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "everyday",
+      "label": "an iPhone 17",
+      "many": "iPhone 17s",
+      "dollars": 799.0,
+      "basis": "$799, US launch price (September 2025)",
+      "confidence": "volatile",
+      "discrete": true,
+      "lines": {
+        "nerd": [
+          "Which, to be fair, could also run a chatbot."
+        ],
+        "roast": [
+          "You could have bought a phone and asked it instead."
+        ]
+      }
+    },
+    {
+      "id": "cost.switch2",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "everyday",
+      "label": "a Nintendo Switch 2",
+      "many": "Nintendo Switch 2s",
+      "dollars": 449.99,
+      "basis": "$449.99, US launch price (June 2025)",
+      "confidence": "volatile",
+      "discrete": true,
+      "lines": {
+        "nerd": [
+          "Mario would have finished the level by now."
+        ],
+        "roast": [
+          "And you've played none of the games."
+        ]
+      }
+    },
+    {
+      "id": "cost.vision-pro",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "everyday",
+      "label": "an Apple Vision Pro",
+      "many": "Apple Vision Pros",
+      "dollars": 3499.0,
+      "basis": "$3,499, US price of the M5 model (October 2025)",
+      "confidence": "volatile",
+      "discrete": true,
+      "lines": {
+        "nerd": [
+          "Spatial computing, priced like it."
+        ],
+        "roast": [
+          "At least the headset would have stayed in its box quietly."
+        ]
+      }
+    },
+    {
+      "id": "cost.claude-max",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "subscriptions",
+      "label": "a month of Claude Max 20x",
+      "many": "months of Claude Max 20x",
+      "dollars": 200.0,
+      "basis": "$200 a month (Anthropic, Max 20x)",
+      "confidence": "volatile",
+      "lines": {
+        "nerd": [
+          "The top plan, by the month."
+        ],
+        "roast": [
+          "The plan exists precisely for people like you."
+        ]
+      }
+    },
+    {
+      "id": "cost.netflix",
+      "kind": "unit",
+      "metric": "cost",
+      "category": "subscriptions",
+      "label": "a month of Netflix Standard",
+      "many": "months of Netflix Standard",
+      "dollars": 19.99,
+      "basis": "$19.99 a month, US Standard plan (2026)",
+      "confidence": "volatile",
+      "lines": {
+        "nerd": [
+          "Are you still watching? You are still prompting."
+        ],
+        "roast": [
+          "You could have binged instead. You binged tokens."
+        ]
+      }
+    },
+    {
+      "id": "derived.read-aloud",
+      "kind": "derived",
+      "metric": "tokens",
+      "category": "physical",
+      "label": "reading aloud",
+      "formula": "durationSeconds = (tokens / 1.3) / 150 * 60",
+      "basis": "150 words per minute, spoken",
+      "confidence": "verified",
+      "templates": {
+        "dry": [
+          "Read aloud without a break, it would take about {duration}.",
+          "{lead}reading it all aloud would take about {duration}."
+        ],
+        "nerd": [
+          "Read aloud at 150 words a minute, that's {duration} of nonstop talking.",
+          "Reading it aloud would take {duration}. No breaks, no water."
+        ],
+        "roast": [
+          "{duration} of reading aloud, and nobody would listen to any of it."
+        ]
+      }
+    },
+    {
+      "id": "derived.typing",
+      "kind": "derived",
+      "metric": "tokens",
+      "category": "physical",
+      "label": "typing by hand",
+      "formula": "durationSeconds = (tokens / 1.3) / 60 * 60",
+      "basis": "60 words per minute, sustained typing",
+      "confidence": "verified",
+      "templates": {
+        "dry": [
+          "Typed by hand at 60 words a minute, that's about {duration}.",
+          "{lead}typing it all at 60 words a minute would take about {duration}."
+        ],
+        "nerd": [
+          "A fast typist would need {duration} to type it all, without a pause."
+        ],
+        "roast": [
+          "{duration} of typing, and you did it by pressing Tab."
+        ]
+      }
+    },
+    {
+      "id": "derived.novelist",
+      "kind": "derived",
+      "metric": "tokens",
+      "category": "physical",
+      "label": "a working novelist",
+      "formula": "days = (tokens / 1.3) / 1000; render as a duration",
+      "basis": "1,000 words per day, a common professional pace",
+      "confidence": "approx",
+      "templates": {
+        "dry": [
+          "A novelist writing 1,000 words a day would need about {span}.",
+          "{lead}that's about {span} of a novelist's output, at 1,000 words a day."
+        ],
+        "nerd": [
+          "That's {span} of a working novelist's output, at 1,000 words a day."
+        ],
+        "roast": [
+          "{span} of a novelist's output, and not one good sentence in it."
+        ]
+      }
+    },
+    {
+      "id": "derived.pages",
+      "kind": "derived",
+      "metric": "tokens",
+      "category": "physical",
+      "label": "printed pages",
+      "formula": "pages = (tokens / 1.3) / 500",
+      "basis": "500 words per printed page",
+      "confidence": "approx",
+      "templates": {
+        "dry": [
+          "Printed, that's about {pages} pages.",
+          "{lead}that's about {pages} printed pages."
+        ],
+        "nerd": [
+          "About {pages} printed pages, in a stack {stackHeight} tall."
+        ],
+        "roast": [
+          "About {pages} printed pages, all bound for the recycling."
+        ]
+      }
+    },
+    {
+      "id": "derived.paper-stack",
+      "kind": "derived",
+      "metric": "tokens",
+      "category": "physical",
+      "label": "a stack of paper",
+      "formula": "heightMeters = ((tokens / 1.3) / 500) * 0.0001",
+      "basis": "0.1 mm per sheet of 80gsm paper",
+      "confidence": "verified",
+      "landmarks": [
+        {
+          "name": "a person",
+          "meters": 1.75
+        },
+        {
+          "name": "the Statue of Liberty",
+          "meters": 93
+        },
+        {
+          "name": "the Eiffel Tower",
+          "meters": 330
+        },
+        {
+          "name": "the Burj Khalifa",
+          "meters": 828
+        },
+        {
+          "name": "Mount Everest",
+          "meters": 8849
+        },
+        {
+          "name": "the ISS orbit",
+          "meters": 408000
+        }
+      ],
+      "templates": {
+        "dry": [
+          "Printed and stacked, it would stand {height} tall.",
+          "{lead}printed and stacked, it would stand {height} tall."
+        ],
+        "nerd": [
+          "Printed, the stack would reach {landmarkComparison}."
+        ],
+        "roast": [
+          "{height} of printed paper. The trees would like a word."
+        ]
+      }
+    },
+    {
+      "id": "burn.dune-rate",
+      "kind": "composite",
+      "referenceMetric": "tokens",
+      "requires": [
+        "tokensPerHour"
+      ],
+      "category": "burn",
+      "label": "burn rate vs. a book",
+      "formula": "interval = unit.value / tokensPerHour",
+      "basis": "current tokens/hour against any tokens-metric unit",
+      "confidence": "verified",
+      "metric": "tokens",
+      "templates": {
+        "dry": [
+          "At this pace, you get through the tokens of {label} every {interval}."
+        ],
+        "nerd": [
+          "Current pace: {label}'s worth of tokens every {interval}, sustained."
+        ],
+        "roast": [
+          "The tokens of {label}, every {interval}. And you call it a quick fix."
+        ]
+      }
+    },
+    {
+      "id": "burn.quota-pace",
+      "kind": "composite",
+      "requires": [
+        "quotaPercentPerHour",
+        "exhaustionLeadTime"
+      ],
+      "category": "burn",
+      "label": "quota pace",
+      "formula": "projectedExhaustion vs resetTime",
+      "basis": "quota history",
+      "confidence": "verified",
+      "metric": "tokens",
+      "templates": {
+        "dry": [
+          "At {rate} an hour, you'll hit the limit {delta} before it resets."
+        ],
+        "nerd": [
+          "Burning {rate} an hour. The limit arrives {delta} ahead of the reset."
+        ],
+        "roast": [
+          "{rate} an hour. You'll run out {delta} early, and you know it."
+        ]
+      }
+    },
+    {
+      "id": "cache.savings-books",
+      "kind": "composite",
+      "referenceMetric": "tokens",
+      "requires": [
+        "cachedInputTokens"
+      ],
+      "category": "cache",
+      "label": "cache savings as re-reads",
+      "formula": "rereads = cachedInputTokens / unit.value",
+      "basis": "cached input tokens against any tokens-metric unit",
+      "confidence": "verified",
+      "metric": "tokens",
+      "templates": {
+        "dry": [
+          "Reads from the cache alone came to {label}, {times} over."
+        ],
+        "nerd": [
+          "The cache served up {label} {times}, at a fraction of the price."
+        ],
+        "roast": [
+          "The cache got through {label} {times}. It's the most efficient thing here."
+        ]
+      }
+    },
+    {
+      "id": "cache.savings-cost",
+      "kind": "composite",
+      "referenceMetric": "cost",
+      "requires": [
+        "cacheSavings"
+      ],
+      "category": "cache",
+      "label": "cache savings as money",
+      "formula": "saved = uncachedCost - actualCost",
+      "basis": "difference between cache-miss pricing and actual",
+      "confidence": "verified",
+      "metric": "cost",
+      "templates": {
+        "dry": [
+          "Caching saved {amount}, the price of {count} {many}."
+        ],
+        "nerd": [
+          "Cache hits saved {amount}. That's {count} {many} you didn't have to buy."
+        ],
+        "roast": [
+          "Caching saved {amount}, the one optimisation you didn't have to think about."
+        ]
+      }
+    }
+  ],
+  "milestones": [
+    {
+      "tokens": 100000,
+      "text": "Your first 100,000 tokens: {compare:lit.hobbit}."
+    },
+    {
+      "tokens": 1000000,
+      "text": "One million tokens: {compare:lit.kjv-bible}."
+    },
+    {
+      "tokens": 10000000,
+      "text": "Ten million tokens: {compare:lit.wheel-of-time}."
+    },
+    {
+      "tokens": 100000000,
+      "text": "One hundred million tokens: {compare:lit.britannica}."
+    },
+    {
+      "tokens": 1000000000,
+      "text": "A billion tokens: {compare:code.linux}."
+    }
+  ],
+  "scopes": {
+    "today": {
+      "lead": "Today alone, ",
+      "tail": " today"
+    },
+    "week": {
+      "lead": "In the last week, ",
+      "tail": " in the last week"
+    },
+    "month": {
+      "lead": "In the last 30 days, ",
+      "tail": " in the last 30 days"
+    },
+    "quarter": {
+      "lead": "Over the last 90 days, ",
+      "tail": " over the last 90 days"
+    },
+    "yearToDate": {
+      "lead": "So far this year, ",
+      "tail": " so far this year"
+    },
+    "year": {
+      "lead": "Over the past year, ",
+      "tail": " over the past year"
+    },
+    "allTime": {
+      "lead": "All told, ",
+      "tail": " all told"
+    }
+  },
+  "facts": {
+    "words": "For scale: {label}, about {amount} words.",
+    "codeLines": "For scale: {label}, about {amount} lines of code.",
+    "tokens": "For scale: {label}, about {amount} tokens.",
+    "dollars": "For reference, {label} costs {amount}."
+  }
+}

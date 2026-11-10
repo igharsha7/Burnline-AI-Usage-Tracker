@@ -1,0 +1,68 @@
+# ci-report.yml
+# Burnline
+#
+# Copyright (C) 2026 Challapalli Harshavardhan Reddy
+# Licensed under the GNU Affero General Public License v3. See LICENSE and NOTICE.
+#
+# Posts the CI report on the pull request it belongs to, as one comment that
+# each run updates. Kept apart from ci.yml so the pull request's code never
+# runs with permission to write: this workflow checks out nothing, reads only
+# the report artifact, and posts it as text. It runs from the default branch,
+# so changes to it take effect once merged into `main`.
+
+name: CI report
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  actions: read
+  pull-requests: write
+
+jobs:
+  comment:
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ci-report
+          path: ci-report
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const meta = JSON.parse(fs.readFileSync('ci-report/meta.json', 'utf8'));
+            const body = fs.readFileSync('ci-report/report.md', 'utf8');
+            const marker = '<!-- burnline-ci-report -->';
+            const run = context.payload.workflow_run;
+
+            // The artifact was written by the pull request's code, so trust
+            // nothing in it: the number must name an open pull request whose
+            // head is the commit this run tested.
+            if (!Number.isInteger(meta.pr) || !body.startsWith(marker)) {
+              core.setFailed('The report is malformed; nothing posted.');
+              return;
+            }
+            const { data: pr } = await github.rest.pulls.get({ ...context.repo, pull_number: meta.pr });
+            if (pr.head.sha !== run.head_sha) {
+              core.notice(`Pull request #${meta.pr} has moved on from ${run.head_sha}; a newer run will report.`);
+              return;
+            }
+
+            const comments = await github.paginate(github.rest.issues.listComments,
+              { ...context.repo, issue_number: meta.pr, per_page: 100 });
+            const mine = comments.find(c => c.user.type === 'Bot' && c.body.startsWith(marker));
+            if (mine) {
+              await github.rest.issues.updateComment({ ...context.repo, comment_id: mine.id, body });
+            } else {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: meta.pr, body });
+            }

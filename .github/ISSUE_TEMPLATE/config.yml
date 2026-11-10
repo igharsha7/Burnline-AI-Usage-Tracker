@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/igharsha7/Burnline-AI-Usage-Tracker/security/advisories/new
+    about: Report security issues privately, never in a public issue.
+  - name: Read the contribution guide
+    url: https://github.com/igharsha7/Burnline-AI-Usage-Tracker/blob/main/CONTRIBUTING.md
+    about: What we accept, and how to propose a change.

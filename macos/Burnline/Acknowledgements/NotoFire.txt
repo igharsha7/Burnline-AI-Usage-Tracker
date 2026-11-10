@@ -1,0 +1,10 @@
+Animated Noto Emoji: Fire (U+1F525)
+Copyright Google LLC
+
+From https://googlefonts.github.io/noto-emoji-animation/
+Licensed under the Creative Commons Attribution 4.0 International License
+(CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
+
+Changes made in Burnline: the colours of the animation's gradients are
+turned at run time to match each streak tier. The shapes and motion are
+unchanged.

@@ -1,0 +1,86 @@
+Burnline — AI coding usage, limits, and cost in one place.
+
+Copyright (C) 2026 Challapalli Harshavardhan Reddy
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public
+License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+The full license text is in the file LICENSE in this repository.
+
+
+--------------------------------------------------------------------------
+ADDITIONAL TERMS UNDER SECTION 7 OF THE GNU AGPL VERSION 3
+--------------------------------------------------------------------------
+
+As permitted by Section 7(b) of the GNU Affero General Public License
+version 3, the following additional term applies to this program and to all
+covered works based on it:
+
+  Any redistribution of this program, in source or object form, whether
+  modified or unmodified, and any work based on this program, must preserve
+  the following author attribution in its Appropriate Legal Notices:
+
+      Burnline
+      Originally created by Challapalli Harshavardhan Reddy
+      Source: https://github.com/igharsha7/Burnline-AI-Usage-Tracker
+
+  Where the covered work has an interactive user interface, this
+  attribution must be reachable from that interface — for example, in an
+  "About" window, a credits panel, or an equivalent legal notices surface.
+
+  This attribution must not be removed, obscured, or altered. It may be
+  presented alongside, but not replaced by, the attribution of any party
+  that modifies or redistributes the program.
+
+Removing or altering this attribution removes a term that Section 7 of the
+GNU AGPL version 3 expressly permits to be imposed, and is therefore a
+violation of the license.
+
+
+--------------------------------------------------------------------------
+COMMERCIAL LICENSING
+--------------------------------------------------------------------------
+
+The AGPL requires that any distributed or network-accessible derivative of
+this program be released in full under the same license.
+
+If you wish to incorporate this program, or any part of it, into a
+proprietary or closed-source product, the AGPL does not permit that. A
+separate commercial license may be negotiated with the copyright holder.
+
+Contact: challa.harshavardhan16@gmail.com
+
+
+--------------------------------------------------------------------------
+THIRD-PARTY MARKS
+--------------------------------------------------------------------------
+
+The provider logos in macos/Packages/Sources/BurnlineUI/ProviderLogos are
+not part of this program and are not covered by its license. Claude is a
+trademark of Anthropic, PBC; OpenAI is a trademark of OpenAI; Cursor is a
+trademark of Anysphere, Inc. They are used only to identify each provider,
+and their use implies no endorsement. The drawings come from Simple Icons
+(https://simpleicons.org) under CC0 1.0. See the README in that folder.
+
+
+--------------------------------------------------------------------------
+THIRD-PARTY ANIMATION
+--------------------------------------------------------------------------
+
+The fire animation in macos/Packages/Sources/BurnlineUI/Animations is not
+part of this program and is not covered by its license. It is the fire
+emoji from Animated Noto Emoji, copyright Google LLC
+(https://googlefonts.github.io/noto-emoji-animation/), licensed under
+Creative Commons Attribution 4.0 (https://creativecommons.org/licenses/by/4.0/).
+Burnline recolours it at run time for each streak tier; its shapes and
+motion are unchanged. See the README in that folder.

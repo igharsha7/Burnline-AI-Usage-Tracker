@@ -1,0 +1,36 @@
+name: Feature request
+description: Propose a feature or a change in behaviour.
+labels: ["type: feature", "status: needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Features need a maintainer's approval of direction and scope **before** a pull request. This issue is where that happens.
+        Burnline stays local-first, read-only toward providers, light while idle, and never nudges anyone to use AI tools more. Ideas that change those are very unlikely to be accepted; see docs/decisions.md.
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What you are trying to do, and what gets in the way today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you propose
+      description: How Burnline could solve it. Sketches welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Would you like to build it?
+      options:
+        - "Yes, once the approach is approved"
+        - "No, just suggesting"
+    validations:
+      required: true

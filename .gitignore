@@ -1,0 +1,24 @@
+.DS_Store
+**/.DS_Store
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+
+# SwiftPM
+.build/
+.swiftpm/
+Packages/*/.build/
+
+# Local
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Personal, never committed: Claude Code's local instructions and worktrees
+CLAUDE.local.md
+.claude/

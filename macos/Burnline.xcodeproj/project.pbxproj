@@ -1,0 +1,317 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B0B0B0B0B0B0B0B0B0B00020 /* BurnlineUI in Frameworks */ = {isa = PBXBuildFile; productRef = B0B0B0B0B0B0B0B0B0B00017 /* BurnlineUI */; };
+		B0B0B0B0B0B0B0B0B0B00021 /* BurnlineServices in Frameworks */ = {isa = PBXBuildFile; productRef = B0B0B0B0B0B0B0B0B0B00018 /* BurnlineServices */; };
+		B0B0B0B0B0B0B0B0B0B00024 /* schema in Resources */ = {isa = PBXBuildFile; fileRef = B0B0B0B0B0B0B0B0B0B00022 /* schema */; };
+		B0B0B0B0B0B0B0B0B0B00025 /* pricing in Resources */ = {isa = PBXBuildFile; fileRef = B0B0B0B0B0B0B0B0B0B00023 /* pricing */; };
+		B0B0B0B0B0B0B0B0B0B000F1 /* corpus in Resources */ = {isa = PBXBuildFile; fileRef = B0B0B0B0B0B0B0B0B0B000F0 /* corpus */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B0B0B0B0B0B0B0B0B0B00004 /* Burnline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Burnline.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0B0B0B0B0B0B0B0B0B00022 /* schema */ = {isa = PBXFileReference; lastKnownFileType = folder; name = schema; path = ../shared/schema; sourceTree = SOURCE_ROOT; };
+		B0B0B0B0B0B0B0B0B0B00023 /* pricing */ = {isa = PBXFileReference; lastKnownFileType = folder; name = pricing; path = ../shared/pricing; sourceTree = SOURCE_ROOT; };
+		B0B0B0B0B0B0B0B0B0B000F0 /* corpus */ = {isa = PBXFileReference; lastKnownFileType = folder; name = corpus; path = ../shared/corpus; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		B0B0B0B0B0B0B0B0B0B00003 /* Burnline */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Burnline;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B0B0B0B0B0B0B0B0B0B00007 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0B0B0B0B0B0B0B0B0B00020 /* BurnlineUI in Frameworks */,
+				B0B0B0B0B0B0B0B0B0B00021 /* BurnlineServices in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B0B0B0B0B0B0B0B0B0B00001 = {
+			isa = PBXGroup;
+			children = (
+				B0B0B0B0B0B0B0B0B0B00003 /* Burnline */,
+				B0B0B0B0B0B0B0B0B0B00026 /* Shared */,
+				B0B0B0B0B0B0B0B0B0B00002 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B0B0B0B0B0B0B0B0B0B00002 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0B0B0B0B0B0B0B0B0B00004 /* Burnline.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B0B0B0B0B0B0B0B0B0B00026 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				B0B0B0B0B0B0B0B0B0B00022 /* schema */,
+				B0B0B0B0B0B0B0B0B0B00023 /* pricing */,
+				B0B0B0B0B0B0B0B0B0B000F0 /* corpus */,
+			);
+			name = Shared;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B0B0B0B0B0B0B0B0B0B00005 /* Burnline */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0B0B0B0B0B0B0B0B0B00013 /* Build configuration list for PBXNativeTarget "Burnline" */;
+			buildPhases = (
+				B0B0B0B0B0B0B0B0B0B00009 /* Check License Headers */,
+				B0B0B0B0B0B0B0B0B0B00006 /* Sources */,
+				B0B0B0B0B0B0B0B0B0B00007 /* Frameworks */,
+				B0B0B0B0B0B0B0B0B0B00008 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B0B0B0B0B0B0B0B0B0B00003 /* Burnline */,
+			);
+			name = Burnline;
+			packageProductDependencies = (
+				B0B0B0B0B0B0B0B0B0B00017 /* BurnlineUI */,
+				B0B0B0B0B0B0B0B0B0B00018 /* BurnlineServices */,
+			);
+			productName = Burnline;
+			productReference = B0B0B0B0B0B0B0B0B0B00004 /* Burnline.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B0B0B0B0B0B0B0B0B0B00000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+			};
+			buildConfigurationList = B0B0B0B0B0B0B0B0B0B00010 /* Build configuration list for PBXProject "Burnline" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B0B0B0B0B0B0B0B0B0B00001;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B0B0B0B0B0B0B0B0B0B00016 /* XCLocalSwiftPackageReference "Packages" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B0B0B0B0B0B0B0B0B0B00002 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B0B0B0B0B0B0B0B0B0B00005 /* Burnline */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B0B0B0B0B0B0B0B0B0B00008 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0B0B0B0B0B0B0B0B0B00024 /* schema in Resources */,
+				B0B0B0B0B0B0B0B0B0B00025 /* pricing in Resources */,
+				B0B0B0B0B0B0B0B0B0B000F1 /* corpus in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B0B0B0B0B0B0B0B0B0B00009 /* Check License Headers */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Check License Headers";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/scripts/check-license-headers.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B0B0B0B0B0B0B0B0B0B00006 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B0B0B0B0B0B0B0B0B0B00011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B0B0B0B0B0B0B0B0B0B00012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		B0B0B0B0B0B0B0B0B0B00014 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Burnline;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright (C) 2026 Challapalli Harshavardhan Reddy. Licensed under the GNU AGPL v3.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.igharsha7.Burnline;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		B0B0B0B0B0B0B0B0B0B00015 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Burnline;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright (C) 2026 Challapalli Harshavardhan Reddy. Licensed under the GNU AGPL v3.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.igharsha7.Burnline;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B0B0B0B0B0B0B0B0B0B00010 /* Build configuration list for PBXProject "Burnline" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0B0B0B0B0B0B0B0B0B00011 /* Debug */,
+				B0B0B0B0B0B0B0B0B0B00012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0B0B0B0B0B0B0B0B0B00013 /* Build configuration list for PBXNativeTarget "Burnline" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0B0B0B0B0B0B0B0B0B00014 /* Debug */,
+				B0B0B0B0B0B0B0B0B0B00015 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		B0B0B0B0B0B0B0B0B0B00016 /* XCLocalSwiftPackageReference "Packages" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B0B0B0B0B0B0B0B0B0B00017 /* BurnlineUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BurnlineUI;
+		};
+		B0B0B0B0B0B0B0B0B0B00018 /* BurnlineServices */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BurnlineServices;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = B0B0B0B0B0B0B0B0B0B00000 /* Project object */;
+}

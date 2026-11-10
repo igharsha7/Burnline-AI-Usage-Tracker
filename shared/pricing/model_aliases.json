@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "providers": {
+    "claude_code": {
+      "models": [
+        { "canonical": "claude-opus-5-5",   "display": "Claude Opus 5.5",   "family": "opus" },
+        { "canonical": "claude-opus-5",     "display": "Claude Opus 5",     "family": "opus" },
+        { "canonical": "claude-sonnet-5-5", "display": "Claude Sonnet 5.5", "family": "sonnet" },
+        { "canonical": "claude-sonnet-5",   "display": "Claude Sonnet 5",   "family": "sonnet" },
+        { "canonical": "claude-haiku-5-5",  "display": "Claude Haiku 5.5",  "family": "haiku" },
+        { "canonical": "claude-haiku-4-5",  "display": "Claude Haiku 4.5",  "family": "haiku",
+          "aliases": [ { "raw": "claude-haiku-4-5-20251001" } ] }
+      ],
+      "nonModels": [ "<synthetic>" ]
+    },
+    "codex": {
+      "models": [],
+      "nonModels": [ "codex-auto-review" ]
+    }
+  }
+}

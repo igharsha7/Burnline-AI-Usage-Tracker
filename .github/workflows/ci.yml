@@ -1,0 +1,127 @@
+# ci.yml
+# Burnline
+#
+# Copyright (C) 2026 Challapalli Harshavardhan Reddy
+# Licensed under the GNU Affero General Public License v3. See LICENSE and NOTICE.
+#
+# The checks every pull request must pass: the test suite, license headers,
+# the coverage floor, and a build of the app. Each runs even when an earlier
+# one failed, so one report says everything that needs fixing. The report is
+# written to the job summary and uploaded for `ci-report.yml`, which posts it
+# on the pull request: this workflow runs the pull request's code, so it is
+# given no permission to write anything.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main, "staging-build-*"]
+  push:
+    branches: [nightly]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      PACKAGES: macos/Packages
+      LOGS: ${{ github.workspace }}/ci-logs
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          # The package needs Swift tools 6.2, which ship with Xcode 26.
+          xcode=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -n 1)
+          sudo xcode-select -s "$xcode"
+          mkdir -p "$LOGS"
+          { xcodebuild -version; swift --version; } | tee "$LOGS/toolchain.log"
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.PACKAGES }}/.build
+          key: spm-${{ runner.os }}-${{ hashFiles('macos/Packages/Package.resolved', 'macos/Packages/Package.swift') }}
+          restore-keys: spm-${{ runner.os }}-
+
+      - name: Test suite
+        id: tests
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          swift test --package-path "$PACKAGES" --enable-code-coverage 2>&1 | tee "$LOGS/tests.log"
+
+      - name: License headers
+        id: headers
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          macos/scripts/check-license-headers.sh 2>&1 | tee "$LOGS/headers.log"
+
+      - name: Coverage floor
+        id: coverage
+        if: steps.tests.outcome == 'success'
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          macos/scripts/coverage.sh --no-run --check 2>&1 | tee "$LOGS/coverage.log"
+
+      - name: App build
+        id: app
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          xcodebuild -project macos/Burnline.xcodeproj -scheme Burnline -configuration Debug \
+            -derivedDataPath "$RUNNER_TEMP/derived" CODE_SIGNING_ALLOWED=NO build 2>&1 \
+            | tee "$LOGS/app.log" | grep -E "error:|warning: .*deprecated|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" "$LOGS/app.log"
+
+      - name: Write the report
+        if: always()
+        env:
+          TESTS: ${{ steps.tests.outcome }}
+          HEADERS: ${{ steps.headers.outcome }}
+          COVERAGE: ${{ steps.coverage.outcome }}
+          APP: ${{ steps.app.outcome }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_REF: ${{ github.event.pull_request.base.ref || github.ref_name }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          mkdir -p ci-report
+          python3 .github/scripts/ci_report.py "$LOGS" ci-report
+          cat ci-report/report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ci-report
+          path: ci-report/
+          retention-days: 14
+
+      - uses: actions/upload-artifact@v4
+        if: failure() || steps.tests.outcome == 'failure' || steps.app.outcome == 'failure'
+        with:
+          name: ci-logs
+          path: ci-logs/
+          retention-days: 14
+
+      - name: Fail if any check failed
+        if: always()
+        run: |
+          failed=""
+          for check in "tests:${{ steps.tests.outcome }}" "headers:${{ steps.headers.outcome }}" \
+                       "coverage:${{ steps.coverage.outcome }}" "app:${{ steps.app.outcome }}"; do
+            case "$check" in *:failure) failed="$failed ${check%%:*}" ;; esac
+          done
+          if [ -n "$failed" ]; then
+            echo "::error::Failed:$failed. The report above, and on the pull request, says why."
+            exit 1
+          fi

@@ -1,0 +1,65 @@
+# update-pricing.yml
+# Burnline
+#
+# Copyright (C) 2026 Challapalli Harshavardhan Reddy
+# Licensed under the GNU Affero General Public License v3. See LICENSE and NOTICE.
+#
+# Appends LiteLLM's price changes to the published price history once a day.
+# The history lives on the data-only `pricing-data` branch, which the app
+# fetches; the copy bundled in `shared/pricing/pricing.json` is refreshed from
+# it before each release. Scheduled runs only happen from the default branch.
+
+name: Update pricing
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pricing-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Test the generator
+        working-directory: shared/pricing/tools
+        run: python -m unittest -v
+
+      - name: Check out the published history
+        run: |
+          if git fetch --depth=1 origin pricing-data; then
+            git worktree add --detach data FETCH_HEAD
+          else
+            # First run: start the branch from the bundled history.
+            git worktree add --orphan -b pricing-data data
+            mkdir -p data/shared/pricing
+            cp shared/pricing/pricing.json data/shared/pricing/pricing.json
+          fi
+
+      - name: Append LiteLLM's changes
+        run: python shared/pricing/tools/update_pricing.py --manifest data/shared/pricing/pricing.json
+
+      - name: Publish
+        working-directory: data
+        run: |
+          git add shared/pricing/pricing.json
+          if git diff --cached --quiet; then
+            echo "No price changes."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -m "Update prices from LiteLLM"
+          git push origin HEAD:refs/heads/pricing-data
