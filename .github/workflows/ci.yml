@@ -159,13 +159,13 @@ jobs:
 
       - name: Measure
         run: |
-          # Base and pull request take turns, twice, so a slow minute on the
+          # Base and pull request take turns, three times, so a slow minute on the
           # runner falls on both; the best run of each counts.
           measure() {
             BURNLINE_PERF="$PERF/$2" swift test -c release --skip-build --no-parallel \
               --package-path "$1" --filter PerformanceTests 2>&1 | tee -a "$LOGS/perf.log" | grep -E "^PERF|✘" || true
           }
-          for round in 1 2; do
+          for round in 1 2 3; do
             if [ "${{ steps.base.outputs.compare }}" = true ]; then measure "$BASE/$PACKAGES" "base-$round"; fi
             measure "$PACKAGES" "head-$round"
           done

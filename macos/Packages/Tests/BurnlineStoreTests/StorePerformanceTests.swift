@@ -28,11 +28,12 @@ struct StorePerformanceTests {
     /// How many warm runs each range gets; the fastest counts.
     static let runs = 5
 
-    /// The slowest insert rate allowed. Measured near 50,000 a second on the
-    /// reference Mac at this size; CI's shared runners are slower, so this
-    /// leaves room for them and catches only a real regression. The
-    /// comparison with the base branch catches smaller ones.
-    static let minimumInsertRate = 20_000.0
+    /// The slowest insert rate allowed: a floor against disaster, not the
+    /// target. Measured near 50,000 a second on the reference Mac at this
+    /// size, but from 19,700 to 27,200 on CI's shared runner for the same
+    /// code, so the comparison with the base branch, measured in turns on
+    /// the same runner, is what catches a real regression.
+    static let minimumInsertRate = 10_000.0
 
     static let names: [RangePreset: String] = [
         .today: "today", .last7Days: "7 days", .last30Days: "30 days", .last90Days: "90 days",
