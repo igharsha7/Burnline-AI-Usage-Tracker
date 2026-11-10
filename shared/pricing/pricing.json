@@ -1,0 +1,3238 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-10T12:48:27Z",
+ "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
+ "versions": [
+  {
+   "provider": "claude_code",
+   "model": "claude-fable-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "50",
+    "cachedInput": "1",
+    "cacheWrite": "12.5",
+    "cacheWriteOneHour": "20"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-fable-5-1",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "50",
+    "cachedInput": "0.25",
+    "cacheWrite": "12.5",
+    "cacheWriteOneHour": "20"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-fable-5-2",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "fast",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "16",
+    "output": "80",
+    "cachedInput": "0.4",
+    "cacheWrite": "20",
+    "cacheWriteOneHour": "32"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-fable-5-2",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "8",
+    "output": "40",
+    "cachedInput": "0.2",
+    "cacheWrite": "10",
+    "cacheWriteOneHour": "16"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-haiku-4-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1",
+    "output": "5",
+    "cachedInput": "0.1",
+    "cacheWrite": "1.25",
+    "cacheWriteOneHour": "2"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-haiku-4-5-20251001",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1",
+    "output": "5",
+    "cachedInput": "0.1",
+    "cacheWrite": "1.25",
+    "cacheWriteOneHour": "2"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-haiku-5-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.1",
+    "output": "0.5",
+    "cachedInput": "0.01",
+    "cacheWrite": "0.125",
+    "cacheWriteOneHour": "0.2"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-haiku-5-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 100000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.5",
+    "output": "2.5",
+    "cachedInput": "0.05",
+    "cacheWrite": "0.625"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-haiku-5-5",
+   "validFrom": "2026-11-10T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 100000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "0.5",
+    "output": "2.5",
+    "cachedInput": "0.05",
+    "cacheWrite": "0.625",
+    "cacheWriteOneHour": "1"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-mythos-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "50",
+    "cachedInput": "1",
+    "cacheWrite": "12.5",
+    "cacheWriteOneHour": "20"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-mythos-5-1",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "50",
+    "cachedInput": "0.25",
+    "cacheWrite": "12.5",
+    "cacheWriteOneHour": "20"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-mythos-preview",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "50",
+    "cachedInput": "1",
+    "cacheWrite": "12.5",
+    "cacheWriteOneHour": "20"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-4-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "25",
+    "cachedInput": "0.5",
+    "cacheWrite": "6.25",
+    "cacheWriteOneHour": "10"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-4-5-20251101",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "25",
+    "cachedInput": "0.5",
+    "cacheWrite": "6.25",
+    "cacheWriteOneHour": "10"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-4-6",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "25",
+    "cachedInput": "0.5",
+    "cacheWrite": "6.25",
+    "cacheWriteOneHour": "10"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-4-6-20260205",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "25",
+    "cachedInput": "0.5",
+    "cacheWrite": "6.25",
+    "cacheWriteOneHour": "10"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-4-7",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "25",
+    "cachedInput": "0.5",
+    "cacheWrite": "6.25",
+    "cacheWriteOneHour": "10"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-4-7-20260416",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "25",
+    "cachedInput": "0.5",
+    "cacheWrite": "6.25",
+    "cacheWriteOneHour": "10"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-4-8",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "fast",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "50",
+    "cachedInput": "1",
+    "cacheWrite": "12.5",
+    "cacheWriteOneHour": "20"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-4-8",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "25",
+    "cachedInput": "0.5",
+    "cacheWrite": "6.25",
+    "cacheWriteOneHour": "10"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "fast",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "50",
+    "cachedInput": "1",
+    "cacheWrite": "12.5",
+    "cacheWriteOneHour": "20"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "25",
+    "cachedInput": "0.5",
+    "cacheWrite": "6.25",
+    "cacheWriteOneHour": "10"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-5-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "fast",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "8",
+    "output": "40",
+    "cachedInput": "0.4",
+    "cacheWrite": "10",
+    "cacheWriteOneHour": "16"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-opus-5-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "20",
+    "cachedInput": "0.2",
+    "cacheWrite": "5",
+    "cacheWriteOneHour": "8"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-sonnet-4-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "3",
+    "output": "15",
+    "cachedInput": "0.3",
+    "cacheWrite": "3.75",
+    "cacheWriteOneHour": "6"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-sonnet-4-5-20250929",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "3",
+    "output": "15",
+    "cachedInput": "0.3",
+    "cacheWrite": "3.75",
+    "cacheWriteOneHour": "6"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-sonnet-4-6",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "3",
+    "output": "15",
+    "cachedInput": "0.3",
+    "cacheWrite": "3.75",
+    "cacheWriteOneHour": "6"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-sonnet-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "10",
+    "cachedInput": "0.2",
+    "cacheWrite": "2.5",
+    "cacheWriteOneHour": "4"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-sonnet-5-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "10",
+    "cachedInput": "0.1",
+    "cacheWrite": "2.5",
+    "cacheWriteOneHour": "4"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-3.5-turbo",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.5",
+    "output": "1.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-3.5-turbo-0125",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.5",
+    "output": "1.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-3.5-turbo-1106",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1",
+    "output": "2"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-3.5-turbo-16k",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "3",
+    "output": "4"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "30",
+    "output": "60"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4-0613",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "30",
+    "output": "60"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4-1106-preview",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "30"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4-turbo",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "30"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4-turbo-2024-04-09",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "30"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "3.5",
+    "output": "14",
+    "cachedInput": "0.875"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "8",
+    "cachedInput": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1-2025-04-14",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "3.5",
+    "output": "14",
+    "cachedInput": "0.875"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1-2025-04-14",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "8",
+    "cachedInput": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.7",
+    "output": "2.8",
+    "cachedInput": "0.175"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.4",
+    "output": "1.6",
+    "cachedInput": "0.1"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1-mini-2025-04-14",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.7",
+    "output": "2.8",
+    "cachedInput": "0.175"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1-mini-2025-04-14",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.4",
+    "output": "1.6",
+    "cachedInput": "0.1"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1-nano",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.2",
+    "output": "0.8",
+    "cachedInput": "0.05"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1-nano",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.1",
+    "output": "0.4",
+    "cachedInput": "0.025"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1-nano-2025-04-14",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.2",
+    "output": "0.8",
+    "cachedInput": "0.05"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4.1-nano-2025-04-14",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.1",
+    "output": "0.4",
+    "cachedInput": "0.025"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4.25",
+    "output": "17",
+    "cachedInput": "2.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "10",
+    "cachedInput": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-2024-05-13",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "8.75",
+    "output": "26.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-2024-05-13",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "15"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-2024-08-06",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4.25",
+    "output": "17",
+    "cachedInput": "2.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-2024-08-06",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "10",
+    "cachedInput": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-2024-11-20",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4.25",
+    "output": "17",
+    "cachedInput": "2.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-2024-11-20",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "10",
+    "cachedInput": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-audio-preview-2024-12-17",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-audio-preview-2025-06-03",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.25",
+    "output": "1",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.15",
+    "output": "0.6",
+    "cachedInput": "0.075"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-mini-2024-07-18",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.25",
+    "output": "1",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-mini-2024-07-18",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.15",
+    "output": "0.6",
+    "cachedInput": "0.075"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-mini-audio-preview-2024-12-17",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.15",
+    "output": "0.6"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-mini-search-preview",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.15",
+    "output": "0.6",
+    "cachedInput": "0.075"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-mini-search-preview-2025-03-11",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.15",
+    "output": "0.6",
+    "cachedInput": "0.075"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-search-preview",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "10",
+    "cachedInput": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-4o-search-preview-2025-03-11",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "10",
+    "cachedInput": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.625",
+    "output": "5",
+    "cachedInput": "0.0625"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "20",
+    "cachedInput": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-2025-08-07",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.625",
+    "output": "5",
+    "cachedInput": "0.0625"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-2025-08-07",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "20",
+    "cachedInput": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-2025-08-07",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-chat",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-chat-latest",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-codex",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.125",
+    "output": "1",
+    "cachedInput": "0.0125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.45",
+    "output": "3.6",
+    "cachedInput": "0.045"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.25",
+    "output": "2",
+    "cachedInput": "0.025"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-mini-2025-08-07",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.125",
+    "output": "1",
+    "cachedInput": "0.0125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-mini-2025-08-07",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.45",
+    "output": "3.6",
+    "cachedInput": "0.045"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-mini-2025-08-07",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.25",
+    "output": "2",
+    "cachedInput": "0.025"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-nano",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.025",
+    "output": "0.2",
+    "cachedInput": "0.0025"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-nano",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.05",
+    "output": "0.4",
+    "cachedInput": "0.005"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-nano-2025-08-07",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.025",
+    "output": "0.2",
+    "cachedInput": "0.0025"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-nano-2025-08-07",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.05",
+    "output": "0.4",
+    "cachedInput": "0.005"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-pro",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "15",
+    "output": "120"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-pro-2025-10-06",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "15",
+    "output": "120"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-search-api",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5-search-api-2025-10-14",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.1",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.625",
+    "output": "5",
+    "cachedInput": "0.0625"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.1",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "20",
+    "cachedInput": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.1",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.1-2025-11-13",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.625",
+    "output": "5",
+    "cachedInput": "0.0625"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.1-2025-11-13",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "20",
+    "cachedInput": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.1-2025-11-13",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.1-chat-latest",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.1-codex",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.1-codex-max",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "10",
+    "cachedInput": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.1-codex-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.25",
+    "output": "2",
+    "cachedInput": "0.025"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.2",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.875",
+    "output": "7",
+    "cachedInput": "0.0875"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.2",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "3.5",
+    "output": "28",
+    "cachedInput": "0.35"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.2",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.75",
+    "output": "14",
+    "cachedInput": "0.175"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.2-2025-12-11",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.875",
+    "output": "7",
+    "cachedInput": "0.0875"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.2-2025-12-11",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "3.5",
+    "output": "28",
+    "cachedInput": "0.35"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.2-2025-12-11",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.75",
+    "output": "14",
+    "cachedInput": "0.175"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.2-chat-latest",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.75",
+    "output": "14",
+    "cachedInput": "0.175"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.2-codex",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.75",
+    "output": "14",
+    "cachedInput": "0.175"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.2-pro",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "21",
+    "output": "168"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.2-pro-2025-12-11",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "21",
+    "output": "168"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.3-chat-latest",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.75",
+    "output": "14",
+    "cachedInput": "0.175"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.3-codex",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "3.5",
+    "output": "28",
+    "cachedInput": "0.35"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.3-codex",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.75",
+    "output": "14",
+    "cachedInput": "0.175"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "7.5",
+    "cachedInput": "0.13"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "11.25",
+    "cachedInput": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "30",
+    "cachedInput": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "15",
+    "cachedInput": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "22.5",
+    "cachedInput": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-2026-03-05",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.25",
+    "output": "7.5",
+    "cachedInput": "0.13"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-2026-03-05",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "11.25",
+    "cachedInput": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-2026-03-05",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "30",
+    "cachedInput": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-2026-03-05",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "15",
+    "cachedInput": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-2026-03-05",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "22.5",
+    "cachedInput": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.375",
+    "output": "2.25",
+    "cachedInput": "0.0375"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.5",
+    "output": "9",
+    "cachedInput": "0.15"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.75",
+    "output": "4.5",
+    "cachedInput": "0.075"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-mini-2026-03-17",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.375",
+    "output": "2.25",
+    "cachedInput": "0.0375"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-mini-2026-03-17",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1.5",
+    "output": "9",
+    "cachedInput": "0.15"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-mini-2026-03-17",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.75",
+    "output": "4.5",
+    "cachedInput": "0.075"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-nano",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.1",
+    "output": "0.625",
+    "cachedInput": "0.01"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-nano",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.2",
+    "output": "1.25",
+    "cachedInput": "0.02"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-nano-2026-03-17",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.1",
+    "output": "0.625",
+    "cachedInput": "0.01"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-nano-2026-03-17",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.2",
+    "output": "1.25",
+    "cachedInput": "0.02"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-pro",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "15",
+    "output": "90"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-pro",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "30",
+    "output": "135"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-pro",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "30",
+    "output": "180"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-pro",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "60",
+    "output": "270"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-pro-2026-03-05",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "15",
+    "output": "90"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-pro-2026-03-05",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "30",
+    "output": "135"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-pro-2026-03-05",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "30",
+    "output": "180"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.4-pro-2026-03-05",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "60",
+    "output": "270"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "15",
+    "cachedInput": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "22.5",
+    "cachedInput": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "12.5",
+    "output": "75",
+    "cachedInput": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "30",
+    "cachedInput": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "45",
+    "cachedInput": "1"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-2026-04-23",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "15",
+    "cachedInput": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-2026-04-23",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "22.5",
+    "cachedInput": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-2026-04-23",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "12.5",
+    "output": "75",
+    "cachedInput": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-2026-04-23",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "30",
+    "cachedInput": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-2026-04-23",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "45",
+    "cachedInput": "1"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-cyber",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "12.5",
+    "output": "75",
+    "cachedInput": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-cyber-preview",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "12.5",
+    "output": "75",
+    "cachedInput": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-pro",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "15",
+    "output": "90"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-pro",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "30",
+    "output": "180"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-pro",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "60",
+    "output": "270"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-pro-2026-04-23",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "15",
+    "output": "90"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-pro-2026-04-23",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "30",
+    "output": "180"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.5-pro-2026-04-23",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "60",
+    "output": "270"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "10",
+    "cachedInput": "0.2",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "15",
+    "cachedInput": "0.4",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "8",
+    "output": "40",
+    "cachedInput": "0.8",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "16",
+    "output": "60",
+    "cachedInput": "1.6",
+    "cacheWrite": "20"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "20",
+    "cachedInput": "0.4",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "8",
+    "output": "30",
+    "cachedInput": "0.8",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-cyber",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "12.5",
+    "output": "75",
+    "cachedInput": "1.25",
+    "cacheWrite": "15.625"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-cyber",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "25",
+    "output": "112.5",
+    "cachedInput": "2.5",
+    "cacheWrite": "31.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.1",
+    "output": "0.6",
+    "cachedInput": "0.01",
+    "cacheWrite": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.2",
+    "output": "0.9",
+    "cachedInput": "0.02",
+    "cacheWrite": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.4",
+    "output": "2.4",
+    "cachedInput": "0.04",
+    "cacheWrite": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.8",
+    "output": "3.6",
+    "cachedInput": "0.08",
+    "cacheWrite": "1"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.2",
+    "output": "1.2",
+    "cachedInput": "0.02",
+    "cacheWrite": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.4",
+    "output": "1.8",
+    "cachedInput": "0.04",
+    "cacheWrite": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "10",
+    "cachedInput": "0.2",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "15",
+    "cachedInput": "0.4",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "8",
+    "output": "40",
+    "cachedInput": "0.8",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "16",
+    "output": "60",
+    "cachedInput": "1.6",
+    "cacheWrite": "20"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "20",
+    "cachedInput": "0.4",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "8",
+    "output": "30",
+    "cachedInput": "0.8",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1",
+    "output": "6",
+    "cachedInput": "0.1",
+    "cacheWrite": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "9",
+    "cachedInput": "0.2",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "24",
+    "cachedInput": "0.4",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "8",
+    "output": "36",
+    "cachedInput": "0.8",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "12",
+    "cachedInput": "0.2",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-5.6-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "18",
+    "cachedInput": "0.4",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "25",
+    "cachedInput": "0.5",
+    "cacheWrite": "6.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "37.5",
+    "cachedInput": "1",
+    "cacheWrite": "12.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "20",
+    "output": "100",
+    "cachedInput": "2",
+    "cacheWrite": "25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "40",
+    "output": "150",
+    "cachedInput": "4",
+    "cacheWrite": "50"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "50",
+    "cachedInput": "1",
+    "cacheWrite": "12.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "20",
+    "output": "75",
+    "cachedInput": "2",
+    "cacheWrite": "25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "ultrafast",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "60",
+    "output": "300",
+    "cachedInput": "6",
+    "cacheWrite": "75"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "ultrafast",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "120",
+    "output": "450",
+    "cachedInput": "12",
+    "cacheWrite": "150"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra-law",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "10",
+    "output": "50",
+    "cachedInput": "1"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-cyber",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "20",
+    "output": "100",
+    "cachedInput": "2",
+    "cacheWrite": "25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-cyber",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "40",
+    "output": "150",
+    "cachedInput": "4",
+    "cacheWrite": "50"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.05",
+    "output": "0.25",
+    "cachedInput": "0.005",
+    "cacheWrite": "0.0625"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.1",
+    "output": "0.375",
+    "cachedInput": "0.01",
+    "cacheWrite": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.2",
+    "output": "1",
+    "cachedInput": "0.02",
+    "cacheWrite": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.4",
+    "output": "1.5",
+    "cachedInput": "0.04",
+    "cacheWrite": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.1",
+    "output": "0.5",
+    "cachedInput": "0.01",
+    "cacheWrite": "0.125"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-luna",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.2",
+    "output": "0.75",
+    "cachedInput": "0.02",
+    "cacheWrite": "0.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-rosalind",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "15",
+    "output": "75",
+    "cachedInput": "1.5",
+    "cacheWrite": "18.75"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-rosalind",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "30",
+    "output": "112.5",
+    "cachedInput": "3",
+    "cacheWrite": "37.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1",
+    "output": "5",
+    "cachedInput": "0.1",
+    "cacheWrite": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "7.5",
+    "cachedInput": "0.2",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "20",
+    "cachedInput": "0.4",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "8",
+    "output": "30",
+    "cachedInput": "0.8",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "10",
+    "cachedInput": "0.2",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "15",
+    "cachedInput": "0.4",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1",
+    "output": "5",
+    "cachedInput": "0.05",
+    "cacheWrite": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "7.5",
+    "cachedInput": "0.1",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "20",
+    "cachedInput": "0.2",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "8",
+    "output": "30",
+    "cachedInput": "0.4",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "10",
+    "cachedInput": "0.1",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "15",
+    "cachedInput": "0.2",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "ultrafast",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "12",
+    "output": "60",
+    "cachedInput": "0.6",
+    "cacheWrite": "15"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "ultrafast",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "24",
+    "output": "90",
+    "cachedInput": "1.2",
+    "cacheWrite": "30"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.5",
+    "output": "2.5",
+    "cachedInput": "0.025",
+    "cacheWrite": "0.625"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "flex",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1",
+    "output": "3.75",
+    "cachedInput": "0.05",
+    "cacheWrite": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "10",
+    "cachedInput": "0.1",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "15",
+    "cachedInput": "0.2",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "1",
+    "output": "5",
+    "cachedInput": "0.05",
+    "cacheWrite": "1.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-terra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2",
+    "output": "7.5",
+    "cachedInput": "0.1",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-audio",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-audio-1.5",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-audio-2025-08-28",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "2.5",
+    "output": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-audio-mini",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.6",
+    "output": "2.4"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-audio-mini-2025-10-06",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.6",
+    "output": "2.4"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-audio-mini-2025-12-15",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "0.6",
+    "output": "2.4"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-daybreak-blue-latest",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "4",
+    "output": "20",
+    "cachedInput": "0.4",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-daybreak-blue-latest",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "8",
+    "output": "30",
+    "cachedInput": "0.8",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-daybreak-red-latest",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "12.5",
+    "output": "75",
+    "cachedInput": "1.25",
+    "cacheWrite": "15.625"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-daybreak-red-latest",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "25",
+    "output": "112.5",
+    "cachedInput": "2.5",
+    "cacheWrite": "31.25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-rosalind-discovery",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "25",
+    "cachedInput": "0.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-rosalind-research",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "5",
+    "output": "25",
+    "cachedInput": "0.5"
+   }
+  }
+ ]
+}
