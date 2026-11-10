@@ -32,8 +32,13 @@ final class KeepingLauncher: ProcessLauncher, @unchecked Sendable {
 /// tool behaves.
 @Suite(.timeLimit(.minutes(1)))
 struct ChildProcessTests {
+    /// How long a real child may take to answer: a bound, not an expectation.
+    /// Answers take milliseconds here, but a shared CI runner, starved by the
+    /// whole suite running at once, once took over five seconds to start one.
+    static let answerWithin = 30.0
+
     /// A `codex` that runs `script`, and a reader that starts it.
-    static func reader(_ script: String, timeout: Double = 5) throws -> (CodexAppServerReader, KeepingLauncher) {
+    static func reader(_ script: String, timeout: Double = answerWithin) throws -> (CodexAppServerReader, KeepingLauncher) {
         let directory = TestDirectory.make("FakeCodex")
         let tool = directory.appending(path: "codex")
         try Data(("#!/bin/sh\n" + script).utf8).write(to: tool)
@@ -121,7 +126,7 @@ struct ChildProcessTests {
             while IFS= read -r line; do :; done
             wait "$child"
             """], workingDirectory: directory)
-        let line = try #require(try await firstLine(of: process, within: 5) { _ in true })
+        let line = try #require(try await firstLine(of: process, within: Self.answerWithin) { _ in true })
         let child = try #require(Int32(line))
         defer {
             if getpgid(child) == process.processIdentifier { kill(child, SIGKILL) }
@@ -143,10 +148,10 @@ struct ChildProcessTests {
             trap 'exit 0' TERM
             \(exitsOnItsOwn ? "exit 0" : "wait \"$child\"")
             """], workingDirectory: directory)
-        let line = try #require(try await firstLine(of: process, within: 5) { Int32($0) != nil })
+        let line = try #require(try await firstLine(of: process, within: Self.answerWithin) { Int32($0) != nil })
         let child = try #require(Int32(line))
         defer { kill(child, SIGKILL); process.terminate() }
-        #expect(try await firstLine(of: process, within: 5) { $0 == "ready" } == "ready")
+        #expect(try await firstLine(of: process, within: Self.answerWithin) { $0 == "ready" } == "ready")
         if exitsOnItsOwn { process.waitUntilExit() }
         process.terminate()
         process.waitUntilExit()
