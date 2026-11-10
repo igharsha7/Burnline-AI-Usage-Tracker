@@ -95,7 +95,7 @@ struct StoreFixture {
                                            schemaVersion: nil, offset: 0))
     }
 
-    /// Inserts a model row directly; model identity has its own phase.
+    /// Inserts a model row directly, for tests that are not about model identity.
     static func insertModel(_ name: String, kind: String = "model", into database: BurnlineDatabase) throws -> Int64 {
         try database.write { db in
             try db.execute(

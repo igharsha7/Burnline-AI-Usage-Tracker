@@ -54,7 +54,6 @@ writing code against it.
 |---|---|
 | **Platforms are directories, never branches** | `macos/` and `windows/`, which is in progress, share `shared/` and change together. Branches per platform would drift. |
 | **One package, five modules** | One `swift test` builds and tests everything without Xcode, and the import rule is checked by tests. |
-| **No MVP or phase split in the product** | The specification describes the whole product; build order is a dependency order, not a roadmap. |
 | **AGPL-3.0 with an attribution term** | No proprietary forks, while commercial use stays allowed. See [licensing](licensing.md). |
 | **Contributions under the AGPL, with no contributor agreement** (10 November 2026) | Burnline is a community project, not a commercial one, and asking contributors to sign their rights over would put people off. Each contributor keeps the copyright in what they write and licenses it under the project's terms. The cost is accepted: a different license for the whole project would need every contributor's agreement. See [licensing](licensing.md#contributions-and-copyright). |
 
