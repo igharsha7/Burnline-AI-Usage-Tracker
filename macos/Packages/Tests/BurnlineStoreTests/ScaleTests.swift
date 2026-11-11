@@ -11,7 +11,7 @@ import Foundation
 import GRDB
 import Testing
 
-/// The storage phase's measurements, on a synthetic history of
+/// The store's measurements, on a synthetic history of
 /// `BURNLINE_SCALE_EVENTS` events (one million by default). Slow, so opt-in,
 /// and measured in release. The database is removed with the run's scratch
 /// folder unless `BURNLINE_SCALE_KEEP` is set; ten million events take about
@@ -81,7 +81,7 @@ struct ScaleTests {
     static let maximumBytesPerEvent = 300
     static let minimumReclaimed = 0.8
 
-    /// The aggregation phase's interactive budget: a range preset's chart
+    /// The interactive budget: a range preset's chart
     /// and its breakdown, warm, in less than this.
     static let interactiveBudget = Duration.milliseconds(100)
     static let presets: [RangePreset] = [.today, .last7Days, .last30Days, .last90Days, .yearToDate, .lastYear, .all]

@@ -7,8 +7,8 @@
 
 import AppKit
 
-/// Whether Burnline shows in the Dock. The plan makes it a regular app with a
-/// Dock icon by default and offers an optional menu-bar-only mode, so the
+/// Whether Burnline shows in the Dock. It is a regular app with a Dock icon
+/// by default and offers an optional menu-bar-only mode, so the
 /// bundle does not set `LSUIElement`; the policy is switched at runtime instead.
 public enum DockPresence {
     public static let menuBarOnlyKey = "menuBarOnly"

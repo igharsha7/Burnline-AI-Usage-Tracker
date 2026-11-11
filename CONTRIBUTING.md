@@ -193,6 +193,7 @@ memory, CPU and wakeups as features.
   file watching.
 - **Measure, don't guess.** If your change touches ingestion, aggregation, a
   page's load, the menu bar or the popover, measure before and after with the
+  [performance suites](docs/performance.md#the-performance-gate), the
   [opt-in timing tests](docs/testing.md#opt-in-tests) and Activity Monitor or
   Instruments, and put both numbers in the pull request.
 - **Don't bloat the app.** No large assets, frameworks or dependencies for a
@@ -267,7 +268,7 @@ Commit messages follow the same style (see [commits](docs/development.md#commits
 ## CI
 
 Every pull request runs through continuous integration on **GitHub Actions**,
-on a macOS runner. It runs four checks, and runs all four even when one fails,
+on a macOS runner. It runs five checks, and runs them all even when one fails,
 so you learn everything at once:
 
 | Check | What it runs | Read |
@@ -276,8 +277,11 @@ so you learn everything at once:
 | License headers | `macos/scripts/check-license-headers.sh` | [license headers](docs/development.md#license-headers) |
 | Coverage floor | `macos/scripts/coverage.sh --check` | [coverage](docs/testing.md#coverage) |
 | App build | `xcodebuild` on the app target, unsigned | [where things go](docs/development.md#where-things-go) |
+| Performance | The performance suites, on your branch and on the one you target | [the performance gate](docs/performance.md#the-performance-gate) |
 
-A performance check against the [budgets](docs/performance.md) will join them.
+**A pull request that is slower than its target branch, or outside a
+[budget](docs/performance.md#budgets), does not merge.** The check measures both
+branches on the same machine, so a slow runner does not count against you.
 
 **A bot comments on your pull request with the result**: which checks failed,
 the failing tests or files, and the page to read to fix each one. It keeps one

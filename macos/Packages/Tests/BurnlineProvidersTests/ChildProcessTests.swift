@@ -27,13 +27,31 @@ final class KeepingLauncher: ProcessLauncher, @unchecked Sendable {
     }
 }
 
+/// Lines a wait has read, kept for a failure's message.
+final class SeenLines: @unchecked Sendable {
+    // @unchecked: `kept` is only touched under `lock`.
+    private let lock = NSLock()
+    private var kept: [String] = []
+
+    var lines: [String] { lock.withLock { kept } }
+    func append(_ line: String) { lock.withLock { kept.append(line) } }
+}
+
 /// The quota readers against real child processes: fake `codex` scripts in a
 /// scratch directory. Each read must leave no process behind, however the
 /// tool behaves.
-@Suite(.timeLimit(.minutes(1)))
+// One at a time: these start real processes and kill whole process groups,
+// and on CI's three-core runner, cases running side by side failed together
+// in ways a lone run never showed.
+@Suite(.serialized, .timeLimit(.minutes(1)))
 struct ChildProcessTests {
+    /// How long a real child may take to answer: a bound, not an expectation.
+    /// Answers take milliseconds here, but a shared CI runner, starved by the
+    /// whole suite running at once, once took over five seconds to start one.
+    static let answerWithin = 30.0
+
     /// A `codex` that runs `script`, and a reader that starts it.
-    static func reader(_ script: String, timeout: Double = 5) throws -> (CodexAppServerReader, KeepingLauncher) {
+    static func reader(_ script: String, timeout: Double = answerWithin) throws -> (CodexAppServerReader, KeepingLauncher) {
         let directory = TestDirectory.make("FakeCodex")
         let tool = directory.appending(path: "codex")
         try Data(("#!/bin/sh\n" + script).utf8).write(to: tool)
@@ -46,8 +64,10 @@ struct ChildProcessTests {
     }
 
     /// `launcher` started the tool, and every process it started has exited.
-    static func allExited(_ launcher: KeepingLauncher) -> Bool {
-        for process in launcher.launched { process.waitUntilExit() }
+    static func allExited(_ launcher: KeepingLauncher) async -> Bool {
+        for process in launcher.launched {
+            guard await process.exited(within: answerWithin) else { return false }
+        }
         return !launcher.launched.isEmpty && launcher.launched.allSatisfy { kill($0.processIdentifier, 0) != 0 }
     }
 
@@ -61,12 +81,69 @@ struct ChildProcessTests {
         return kill(pid, 0) != 0
     }
 
-    @Test func `sending after a child exits throws instead of terminating Burnline`() throws {
+    @Test func `sending after a child exits throws instead of terminating Burnline`() async throws {
         let directory = TestDirectory.make("ExitedChild")
         let process = try RunningProcess(URL(filePath: "/bin/sh"), arguments: ["-c", "exit 0"],
                                          workingDirectory: directory)
-        process.waitUntilExit()
-        #expect(throws: (any Error).self) { try process.send("request") }
+        let launched = Self.identity(of: process.inputDescriptor)
+        try #require(await process.exited(within: Self.answerWithin))
+        do {
+            try process.send("request")
+            // This once passed on a busy CI runner. Say what the pipe was, so
+            // the next time explains itself.
+            Issue.record("""
+                The send to an exited child succeeded. Running: \(process.isRunning), \
+                exit status: \(process.terminationStatus.map(String.init) ?? "none yet"), descriptor \(process.inputDescriptor) \
+                at launch: \(launched), now: \(Self.identity(of: process.inputDescriptor)), \
+                flags: \(fcntl(process.inputDescriptor, F_GETFD)), status flags: \(fcntl(process.inputDescriptor, F_GETFL)).
+                Holders of this pipe:
+                \(Self.holders(of: process.inputDescriptor))
+                """)
+        } catch {}
+    }
+
+    /// Every process in process group `group`, from ps.
+    static func processes(inGroup group: Int32) -> String {
+        let ps = Process(), output = Pipe()
+        ps.executableURL = URL(filePath: "/bin/ps")
+        ps.arguments = ["-axo", "pid=,ppid=,pgid=,stat=,command="]
+        ps.standardOutput = output
+        guard (try? ps.run()) != nil else { return "ps did not run" }
+        let data = output.fileHandleForReading.readDataToEndOfFile()
+        ps.waitUntilExit()
+        let rows = String(decoding: data, as: UTF8.self).split(separator: "\n").filter { row in
+            row.split(separator: " ", omittingEmptySubsequences: true).dropFirst(2).first == "\(group)"
+        }
+        return rows.isEmpty ? "none alive" : rows.joined(separator: "\n")
+    }
+
+    /// A descriptor's file type, device and inode, or why it has none.
+    static func identity(of descriptor: Int32) -> String {
+        var info = stat()
+        guard fstat(descriptor, &info) == 0 else { return "fstat failed, errno \(errno)" }
+        let type = info.st_mode & S_IFMT == S_IFIFO ? "pipe" : "type \(info.st_mode & S_IFMT)"
+        return "\(type) dev \(info.st_dev) inode \(info.st_ino)"
+    }
+
+    /// Every process holding either end of the pipe behind `descriptor`, from
+    /// lsof: this process's line names the pipe, and each holder's line names it too.
+    static func holders(of descriptor: Int32) -> String {
+        func lsof(_ arguments: [String]) -> String {
+            let process = Process(), output = Pipe()
+            process.executableURL = URL(filePath: "/usr/sbin/lsof")
+            process.arguments = arguments
+            process.standardOutput = output
+            process.standardError = FileHandle.nullDevice
+            guard (try? process.run()) != nil else { return "" }
+            let data = output.fileHandleForReading.readDataToEndOfFile()
+            process.waitUntilExit()
+            return String(decoding: data, as: UTF8.self)
+        }
+        let own = lsof(["-n", "-a", "-p", "\(getpid())", "-d", "\(descriptor)"])
+        let addresses = own.matches(of: /0x[0-9a-f]+/).map { String($0.output) }
+        guard !addresses.isEmpty else { return own.isEmpty ? "lsof found nothing" : own }
+        return lsof(["-n"]).split(separator: "\n").filter { line in addresses.contains { line.contains($0) } }
+            .joined(separator: "\n")
     }
 
     @Test func `a tool ignoring SIGTERM cannot leave its stdout-holding child behind`() async throws {
@@ -79,14 +156,14 @@ struct ChildProcessTests {
             while IFS= read -r line; do :; done
             wait "$child"
             """], workingDirectory: directory)
-        let line = try #require(try await firstLine(of: process, within: 5) { _ in true })
+        let line = try #require(try await firstLine(of: process, within: Self.answerWithin) { _ in true })
         let child = try #require(Int32(line))
         defer {
             if getpgid(child) == process.processIdentifier { kill(child, SIGKILL) }
             process.terminate()
         }
         process.terminate()
-        process.waitUntilExit()
+        try #require(await process.exited(within: RunningProcess.killGrace + Self.answerWithin))
         #expect(try await firstLine(of: process, within: RunningProcess.killGrace + 3) { _ in true } == nil)
         #expect(await Self.gone(child))
     }
@@ -94,21 +171,54 @@ struct ChildProcessTests {
     @Test(arguments: [false, true])
     func `an exited tool cannot leave a SIGTERM-ignoring helper holding stdout`(exitsOnItsOwn: Bool) async throws {
         let directory = TestDirectory.make("ExitedToolDescendant")
+        // The helper says it is ready and its own id on one line, the id it
+        // keeps through exec: two lines from two processes can come in either
+        // order, and a wait for one skips the other.
         let process = try RunningProcess(URL(filePath: "/bin/sh"), arguments: ["-c", """
-            /bin/sh -c 'trap "" TERM; echo ready; exec /bin/sleep 30' &
+            /bin/sh -c 'trap "" TERM; echo "ready $$"; exec /bin/sleep 30' &
             child=$!
-            echo "$child"
             trap 'exit 0' TERM
             \(exitsOnItsOwn ? "exit 0" : "wait \"$child\"")
             """], workingDirectory: directory)
-        let line = try #require(try await firstLine(of: process, within: 5) { Int32($0) != nil })
-        let child = try #require(Int32(line))
+        let seen = SeenLines()
+        let ready = try? await firstLine(of: process, within: Self.answerWithin) { line in
+            seen.append(line)
+            return line.hasPrefix("ready ")
+        }
+        guard let line = ready else {
+            // This has failed on a CI runner and never on a Mac. Say what
+            // arrived and what was still alive, so the next time explains itself.
+            Issue.record("""
+                No "ready" line within \(Int(Self.answerWithin)) seconds. Lines seen: \(seen.lines). \
+                Script running: \(process.isRunning), exit status: \(process.terminationStatus.map(String.init) ?? "none yet").
+                Its process group:
+                \(Self.processes(inGroup: process.processIdentifier))
+                """)
+            return
+        }
+        let child = try #require(Int32(line.dropFirst("ready ".count)))
         defer { kill(child, SIGKILL); process.terminate() }
-        #expect(try await firstLine(of: process, within: 5) { $0 == "ready" } == "ready")
-        if exitsOnItsOwn { process.waitUntilExit() }
+        if exitsOnItsOwn { try #require(await process.exited(within: Self.answerWithin)) }
         process.terminate()
-        process.waitUntilExit()
-        #expect(try await firstLine(of: process, within: RunningProcess.killGrace + 3) { _ in true } == nil)
+        try #require(await process.exited(within: RunningProcess.killGrace + Self.answerWithin))
+        let after = SeenLines()
+        do {
+            let line = try await firstLine(of: process, within: RunningProcess.killGrace + 3) { line in
+                after.append(line)
+                return true
+            }
+            #expect(line == nil)
+        } catch {
+            // Output did not end after the group was killed. Say who still holds it.
+            Issue.record("""
+                Output did not end within \(Int(RunningProcess.killGrace + 3)) seconds of stopping. \
+                Lines after stopping: \(after.lines). Helper \(child) alive: \(kill(child, 0) == 0).
+                Script's group:
+                \(Self.processes(inGroup: process.processIdentifier))
+                Helper's group:
+                \(Self.processes(inGroup: getpgid(child)))
+                """)
+        }
         #expect(await Self.gone(child))
     }
 
@@ -124,19 +234,20 @@ struct ChildProcessTests {
             """#)
         let reading = try await reader.read()
         #expect(reading.windows.map(\.key) == ["five_hour"])
-        #expect(launcher.launched.count == 1 && Self.allExited(launcher))
+        let exited = await Self.allExited(launcher)
+        #expect(launcher.launched.count == 1 && exited)
     }
 
     @Test func `EC-Q3 a tool that never answers is stopped when the read times out`() async throws {
         let (reader, launcher) = try Self.reader("while IFS= read -r line; do :; done\n", timeout: 1)
         await #expect(throws: QuotaReadError.unreachable("no answer within 1 seconds")) { try await reader.read() }
-        #expect(Self.allExited(launcher))
+        #expect(await Self.allExited(launcher))
     }
 
     @Test func `a tool that ignores the request to stop is killed`() async throws {
         // Never answers, never reads, and ignores SIGTERM.
         let (reader, launcher) = try Self.reader("trap '' TERM\nwhile :; do sleep 1; done\n", timeout: 1)
         await #expect(throws: QuotaReadError.self) { try await reader.read() }
-        #expect(Self.allExited(launcher))
+        #expect(await Self.allExited(launcher))
     }
 }

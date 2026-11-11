@@ -16,9 +16,14 @@ macOS 26 and later draw the `.icon` itself, adding the glass, edge light and
 shadow, and offer it in the Default, Dark, Clear and Tinted appearances.
 Xcode builds flat icons for macOS 14 and 15 from the same document.
 
-    python3 macos/scripts/generate-icon.py [output.icon]
+Nightly builds have their own icon, so the two can sit side by side and
+never be mistaken: the same mark under a night sky, deep blue into purple,
+with a crescent moon and a few stars the flame burns beneath.
 
-The default output is the app target's `macos/Burnline/AppIcon.icon`. To look
+    python3 macos/scripts/generate-icon.py [--nightly] [output.icon]
+
+The default output is the app target's `macos/Burnline/AppIcon.icon`, or
+`AppIcon-Nightly.icon` with `--nightly`. To look
 at the result as macOS renders it, use Icon Composer's `ictool`:
 
     ictool AppIcon.icon --export-image --output-file icon.png --platform macOS \\
@@ -38,6 +43,15 @@ SILVER_DARK, SILVER_LIGHT = "#8E929A", "#E6E8EC"
 RING_DARK, RING_LIGHT = "#B9BEC6", "#E6E8EC"
 GLOW = "#FF7A33"
 GRAPHITE = "display-p3:0.11,0.11,0.12,1.0"
+
+# The nightly sky, from the zenith down to the horizon, and its moon and stars.
+SKY_TOP, SKY_BOTTOM = "display-p3:0.05,0.07,0.22,1.0", "display-p3:0.27,0.13,0.45,1.0"
+MOONLIGHT = "#EEEBFF"
+# The crescent: the moon's centre and radius, and the offset of the shadow
+# that bites it, all clear of the ring and the flame's tip.
+MOON_X, MOON_Y, MOON_RADIUS, MOON_BITE = 200, 186, 84, (38, -28)
+# Stars: centre and radius, scattered where nothing else is drawn.
+STARS = [(372, 120, 9), (120, 420, 6), (812, 150, 11), (900, 300, 6), (705, 92, 5), (860, 470, 5), (90, 250, 4)]
 
 # The flame: its base centre, height and half-width.
 FLAME_X, FLAME_BASE, FLAME_HEIGHT, FLAME_HALF_WIDTH = 512, 880, 770, 270
@@ -136,7 +150,17 @@ def radial(name, stops, cx=0.5, cy=0.5, r=0.5):
     return f'<radialGradient id="{name}" cx="{cx}" cy="{cy}" r="{r}">{body}</radialGradient>'
 
 
-def groups():
+def sky():
+    """The nightly sky's moon and stars, as one layer of light."""
+    bite_x, bite_y = MOON_X + MOON_BITE[0], MOON_Y + MOON_BITE[1]
+    moon = (f'<mask id="m"><rect width="{CANVAS}" height="{CANVAS}" fill="white"/>'
+            f'<circle cx="{bite_x}" cy="{bite_y}" r="{MOON_RADIUS * 0.86:.1f}" fill="black"/></mask>')
+    stars = "".join(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{MOONLIGHT}"/>' for x, y, r in STARS)
+    return svg(f'<circle cx="{MOON_X}" cy="{MOON_Y}" r="{MOON_RADIUS}" fill="{MOONLIGHT}" mask="url(#m)"/>{stars}',
+               moon)
+
+
+def groups(nightly=False):
     """The icon's groups, front first: each its layers' SVGs, front first,
     and how the group is drawn. An icon allows at most four groups."""
     core = svg(f'<path d="{path(CORE_START, CORE_CURVES)}" fill="url(#c)"/>',
@@ -164,11 +188,11 @@ def groups():
         ([("core", core, True), ("flame", flame, True)], solid),
         ([("bars", bars, True)], {}),
         ([("ring", ring, False)], {}),
-        ([("glow", glow, False)], light),
+        ([("glow", glow, False)] + ([("sky", sky(), False)] if nightly else []), light),
     ]
 
 
-def write(output):
+def write(output, nightly=False):
     polygon = outline(FLAME_START, FLAME_CURVES)
     for angle in (RING_FROM, RING_TO):
         if not hidden(polygon, angle):
@@ -180,14 +204,14 @@ def write(output):
     assets = output / "Assets"
     assets.mkdir(parents=True, exist_ok=True)
     drawn = []
-    for members, effects in groups():
+    for members, effects in groups(nightly):
         group = {"layers": [], "shadow": {"kind": "layer-color", "opacity": 0.5},
                  "translucency": {"enabled": True, "value": 0.35}, "specular": True}
         for name, art, glass in members:
             (assets / f"{name}.svg").write_text(art)
             layer = {"image-name": f"{name}.svg", "name": name, "glass": glass,
                      "position": {"scale": 1, "translation-in-points": [0, 0]}}
-            if name == "glow":
+            if name in ("glow", "sky"):
                 layer["blend-mode"] = "plus-lighter"
             group["layers"].append(layer)
         for key, value in effects.items():
@@ -196,11 +220,16 @@ def write(output):
             else:
                 group[key] = value
         drawn.append(group)
-    icon = {"fill": {"automatic-gradient": GRAPHITE}, "groups": drawn,
+    fill = {"linear-gradient": [SKY_TOP, SKY_BOTTOM]} if nightly else {"automatic-gradient": GRAPHITE}
+    icon = {"fill": fill, "groups": drawn,
             "supported-platforms": {"circles": ["watchOS"], "squares": "shared"}}
     (output / "icon.json").write_text(json.dumps(icon, indent=2) + "\n")
 
 
 if __name__ == "__main__":
-    default = Path(__file__).resolve().parent.parent / "Burnline" / "AppIcon.icon"
-    write(Path(sys.argv[1]) if len(sys.argv) > 1 else default)
+    arguments = sys.argv[1:]
+    nightly = "--nightly" in arguments
+    paths = [a for a in arguments if a != "--nightly"]
+    name = "AppIcon-Nightly.icon" if nightly else "AppIcon.icon"
+    default = Path(__file__).resolve().parent.parent / "Burnline" / name
+    write(Path(paths[0]) if paths else default, nightly)

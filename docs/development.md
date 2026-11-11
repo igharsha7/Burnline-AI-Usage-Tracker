@@ -37,7 +37,7 @@ only" removes the Dock icon. Run debug builds against a scratch store (below).
 | `macos/scripts/check-license-headers.sh` | Fails if a source file lacks the AGPL header. Also runs as an Xcode build phase. |
 | `python3 shared/pricing/tools/update_pricing.py` | Appends LiteLLM's price changes to `shared/pricing/pricing.json` |
 | `python3 -m unittest -v` (in `shared/pricing/tools`) | The pricing generator's tests |
-| `python3 macos/scripts/generate-icon.py` | Redraws the app icon, `macos/Burnline/AppIcon.icon` |
+| `python3 macos/scripts/generate-icon.py` | Redraws the app icon, `macos/Burnline/AppIcon.icon`; with `--nightly`, the nightly one, `AppIcon-Nightly.icon` |
 
 The opt-in tests that read real data or measure performance are listed in
 [testing](testing.md#opt-in-tests).
@@ -65,6 +65,26 @@ open -n --env BURNLINE_STORE_DIR=/path/to/scratch \
 
 **Release builds ignore all three.** Provider history is still read from the
 real homes (`~/.claude`, `~/.codex`), read-only, as always.
+
+### A demo with invented data
+
+For screenshots, or to try the app without real history, run a debug build on
+a demo store:
+
+```sh
+macos/scripts/demo.sh /path/to/Debug/Burnline.app
+```
+
+It writes half a year of invented Claude Code and Codex use and a week of quota
+(`DemoStoreTests`, opt-in with `BURNLINE_DEMO_STORE`), then launches the app on
+it with `BURNLINE_DEMO_QUOTA`, which swaps every quota reader for invented
+limits in a debug build. The app runs under a sandbox profile that denies
+reading `~/.claude`, `~/.codex`, Xcode's coding-assistant homes and the real
+store, so nothing real can appear in a screenshot. The README's images come
+from it, in the window's default size, captured with
+`screencapture -x -o -l <window id>`. To see the nightly look or the update
+button, add `BURNLINE_CHANNEL=nightly` or `BURNLINE_DEMO_UPDATE=0.2.0` in
+front of the command; see [updates](updates.md#trying-it-in-a-debug-build).
 
 ## Where things go
 
@@ -147,7 +167,9 @@ See [pricing](pricing.md) for the manifest format and how the app uses it.
 
 `macos/Burnline/AppIcon.icon` is a layered Icon Composer document written by
 `macos/scripts/generate-icon.py` from named measurements. Change the
-measurements in the script and run it again; never edit the `.icon` by hand.
+measurements in the script and run it again, with and without `--nightly`;
+never edit either `.icon` by hand. The nightly icon is the same mark under a
+night sky, chosen by the `BURNLINE_CHANNEL` build setting.
 `macos/design/README.md` explains the layers and how to preview the icon with
 Icon Composer's `ictool`.
 
@@ -194,6 +216,7 @@ phase of the app, so a missing header fails the build. See
 flowchart LR
     C["contributor branches"] -->|pull request| M["main"]
     D["dev/Harsha"] -->|pull request| S["staging-build-vN"]
+    S -->|pull request| N["nightly"]
     S -->|pull request, version N released| M
 ```
 
@@ -203,9 +226,10 @@ flowchart LR
   each time a staging branch is merged to `main`.
 - `dev/Harsha` is the maintainer's day-to-day line. The staging branches are
   the maintainer's release line too.
-- `nightly` is the maintainer's branch for nightly builds *(to build)*: work
-  in progress toward the next release, built each night it changes (see
-  [channels](releasing.md#channels-to-build)).
+- `nightly` is what nightly builds are made from: the current staging branch,
+  brought over by pull request, so a nightly carries only work that passed
+  CI. It is built each night it changed *(to build)*; see
+  [updates](updates.md#channels).
 - Contributors branch from `main` and open their pull request against `main`,
   never against a staging branch.
 
@@ -215,15 +239,31 @@ for the Windows version in progress, with language-neutral contracts in
 
 ## CI
 
-`.github/workflows/ci.yml` runs on every pull request to `main` or a staging
-branch, and on every push to `nightly`. One job, **Checks**, on a macOS runner
-with the newest Xcode 26, runs the test suite (with coverage), the license
-header check, the coverage floor and an unsigned app build. Each step runs
-even if an earlier one failed; the job fails at the end if any did.
+`.github/workflows/ci.yml` runs on every pull request to `main`, a staging
+branch or `nightly`, and on every push to `nightly`, in three jobs:
 
-`.github/scripts/ci_report.py` turns the logs into a report: a table of the
-checks, then for each failure the failing tests or files and the page to read.
-It goes to the run's summary page and is uploaded as an artifact.
+- **Tests and build**, on a macOS runner with the newest Xcode 26: the test
+  suite (with coverage), the license header check, the coverage floor and an
+  unsigned app build. Each step runs even if an earlier one failed. The suite
+  runs at most six tests at once (`SWT_EXPERIMENTAL_MAXIMUM_PARALLELIZATION_WIDTH`):
+  on the runner's three cores, all of them at once starved the
+  timing-sensitive ones. It runs under `.github/scripts/watch_tests.sh`: a
+  run that prints nothing for five minutes has hung, so it is stopped, the
+  report names the tests still running, and a stack sample of the test
+  process is kept in the `logs-tests` artifact.
+- **Performance**, on a second macOS runner at the same time: the
+  [performance gate](performance.md#the-performance-gate).
+- **Checks**, once both finish: `.github/scripts/ci_report.py` turns their logs
+  into one report (a table of the checks, then for each failure the failing
+  tests, files or figures and the page to read), writes it to the run's
+  summary page and uploads it as an artifact. Checks fails if either job did,
+  and it is the status the branch rules require.
+
+`.github/workflows/ci-cache.yml` warms CI's caches each time `main`, a
+staging branch or `nightly` moves. A pull request can read caches saved on its
+own branch or its base, never another pull request's, so this is what lets a
+new pull request start with its dependencies built and its base's
+performance suites already compiled.
 
 `.github/workflows/ci-report.yml` posts that report on the pull request, as one
 comment it updates on every push. It is a separate workflow so that the pull
@@ -235,7 +275,7 @@ under `pull_request_target`.
 
 Two branch rulesets enforce the result:
 
-- **Checks before merging**, on `main` and `staging-build-*`: changes arrive
+- **Checks before merging**, on `main`, `staging-build-*` and `nightly`: changes arrive
   only by pull request, **Checks** must pass, and the branch cannot be
   force-pushed or deleted. Nobody can bypass it.
 - **Maintainer approval on main**: a pull request into `main` needs an

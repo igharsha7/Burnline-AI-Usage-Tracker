@@ -233,13 +233,14 @@ extension DashboardModel {
 /// something under its name only when it is not up to date, so a quiet
 /// sidebar means all is well, and one that is not detected says so without
 /// being opened. A provider not yet tracked is added from the end of
-/// the group.
+/// the group. Its foot says what this build is and offers updates.
 private struct Sidebar: View {
     @Bindable var model: DashboardModel
     @AppStorage("sidebar.providersExpanded") private var expanded = true
     @State private var adding = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(SettingsModel.self) private var settings: SettingsModel?
+    @Environment(UpdateModel.self) private var updates: UpdateModel?
 
     private var tracked: Set<ProviderKey> { settings?.tracked ?? Set(ProviderKey.trackable) }
 
@@ -300,6 +301,9 @@ private struct Sidebar: View {
             }
         }
         .listStyle(.sidebar)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if let updates { SidebarUpdateFooter(updates: updates) }
+        }
         .sheet(isPresented: $adding) {
             if let settings { AddProviderSheet(settings: settings) { model.refresh() } }
         }
