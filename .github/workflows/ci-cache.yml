@@ -83,19 +83,9 @@ jobs:
           key: spm-release-${{ runner.os }}-${{ hashFiles('macos/Packages/Package.resolved', 'macos/Packages/Package.swift') }}
           restore-keys: spm-release-${{ runner.os }}-
 
-      - name: Build this commit as a base
-        # In the worktree path the Performance job restores from, and after
-        # the release cache, so its dependencies are not built again.
-        run: |
-          git worktree add --detach "$BASE" HEAD
-          if [ -d "$PACKAGES/.build" ]; then cp -R "$PACKAGES/.build" "$BASE/$PACKAGES/.build"; fi
-          swift test -c release --package-path "$BASE/$PACKAGES" --filter WarmTheCacheOnly
-
-      - name: Keep the release build
+      - name: Build for the performance suites
         if: steps.release.outputs.cache-hit != 'true'
-        run: |
-          rm -rf "$PACKAGES/.build"
-          cp -R "$BASE/$PACKAGES/.build" "$PACKAGES/.build"
+        run: swift test -c release --package-path "$PACKAGES" --filter WarmTheCacheOnly
 
       - name: Save the release build
         if: steps.release.outputs.cache-hit != 'true'
@@ -103,6 +93,14 @@ jobs:
         with:
           path: ${{ env.PACKAGES }}/.build
           key: spm-release-${{ runner.os }}-${{ hashFiles('macos/Packages/Package.resolved', 'macos/Packages/Package.swift') }}
+
+      - name: Build this commit as a base
+        # In the worktree path the Performance job restores from, with a
+        # .build of its own: SwiftPM records absolute paths in a build
+        # directory, so one copied between paths points back at the other.
+        run: |
+          git worktree add --detach "$BASE" HEAD
+          swift test -c release --package-path "$BASE/$PACKAGES" --filter WarmTheCacheOnly
 
       - name: Keep this commit's suites as a base
         uses: actions/cache/save@v4
