@@ -118,8 +118,17 @@ final class RunningProcess: LineProcess, @unchecked Sendable {
 
     var processIdentifier: Int32 { process.processIdentifier }
 
-    /// Blocks until the process has exited, for tests.
-    func waitUntilExit() { process.waitUntilExit() }
+    /// Whether the process exits within `seconds`, for tests. It never
+    /// blocks a thread: a test blocked on a child that does not exit cannot
+    /// be stopped by its time limit, and holds up every test after it.
+    func exited(within seconds: Double) async -> Bool {
+        let deadline = ContinuousClock.now + .seconds(seconds)
+        while process.isRunning {
+            guard ContinuousClock.now < deadline else { return false }
+            try? await Task.sleep(for: .milliseconds(20))
+        }
+        return true
+    }
 
     /// For tests that need to say why a send behaved as it did.
     var isRunning: Bool { process.isRunning }

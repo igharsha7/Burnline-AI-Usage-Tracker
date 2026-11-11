@@ -90,6 +90,12 @@ def tests_section(log: str, outcome: str) -> tuple[str, list[str]]:
                   f"How tests are written: [testing]({doc('docs/testing.md')})."]
         return f"{len(issues)} failing", detail
 
+    if "printed nothing for" in log:
+        stuck = [safe(line.strip(), 150) for line in log.split("did not finish:", 1)[-1].splitlines() if line.strip()]
+        detail = ["**The test run hung and was stopped.** Tests still running:", *listed(stuck), "",
+                  "A stack sample of the test process and the process table are in the `logs-tests` artifact."]
+        return "hung", detail
+
     errors = sorted({line.strip() for line in log.splitlines() if re.search(r"\berror:", line)})
     if errors:
         detail = ["**The package did not build:**", *listed([safe(e) for e in errors]),

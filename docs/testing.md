@@ -38,7 +38,9 @@ check to run before every commit, along with the license-header script (see
   suite behaves the same on any Mac and in CI.
 - **Fail, never hang.** Every wait for something asynchronous is bounded (see
   [waiting](#time-and-waiting)), so a change that never comes fails its test in
-  seconds instead of stalling the run.
+  seconds instead of stalling the run. That includes waiting for a child
+  process to exit: never `waitUntilExit()`, which blocks a thread no time
+  limit can free, but `RunningProcess.exited(within:)`.
 - **Assert the value, not that there is one.** Check the exact cost, the exact
   row or the exact sequence. `!= nil`, a count alone or "any array" passes
   while the result is wrong.

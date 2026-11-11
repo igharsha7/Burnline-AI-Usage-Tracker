@@ -64,8 +64,10 @@ struct ChildProcessTests {
     }
 
     /// `launcher` started the tool, and every process it started has exited.
-    static func allExited(_ launcher: KeepingLauncher) -> Bool {
-        for process in launcher.launched { process.waitUntilExit() }
+    static func allExited(_ launcher: KeepingLauncher) async -> Bool {
+        for process in launcher.launched {
+            guard await process.exited(within: answerWithin) else { return false }
+        }
         return !launcher.launched.isEmpty && launcher.launched.allSatisfy { kill($0.processIdentifier, 0) != 0 }
     }
 
@@ -79,12 +81,12 @@ struct ChildProcessTests {
         return kill(pid, 0) != 0
     }
 
-    @Test func `sending after a child exits throws instead of terminating Burnline`() throws {
+    @Test func `sending after a child exits throws instead of terminating Burnline`() async throws {
         let directory = TestDirectory.make("ExitedChild")
         let process = try RunningProcess(URL(filePath: "/bin/sh"), arguments: ["-c", "exit 0"],
                                          workingDirectory: directory)
         let launched = Self.identity(of: process.inputDescriptor)
-        process.waitUntilExit()
+        try #require(await process.exited(within: Self.answerWithin))
         do {
             try process.send("request")
             // This once passed on a busy CI runner. Say what the pipe was, so
@@ -161,7 +163,7 @@ struct ChildProcessTests {
             process.terminate()
         }
         process.terminate()
-        process.waitUntilExit()
+        try #require(await process.exited(within: RunningProcess.killGrace + Self.answerWithin))
         #expect(try await firstLine(of: process, within: RunningProcess.killGrace + 3) { _ in true } == nil)
         #expect(await Self.gone(child))
     }
@@ -196,9 +198,9 @@ struct ChildProcessTests {
         }
         let child = try #require(Int32(line.dropFirst("ready ".count)))
         defer { kill(child, SIGKILL); process.terminate() }
-        if exitsOnItsOwn { process.waitUntilExit() }
+        if exitsOnItsOwn { try #require(await process.exited(within: Self.answerWithin)) }
         process.terminate()
-        process.waitUntilExit()
+        try #require(await process.exited(within: RunningProcess.killGrace + Self.answerWithin))
         let after = SeenLines()
         do {
             let line = try await firstLine(of: process, within: RunningProcess.killGrace + 3) { line in
@@ -232,19 +234,20 @@ struct ChildProcessTests {
             """#)
         let reading = try await reader.read()
         #expect(reading.windows.map(\.key) == ["five_hour"])
-        #expect(launcher.launched.count == 1 && Self.allExited(launcher))
+        let exited = await Self.allExited(launcher)
+        #expect(launcher.launched.count == 1 && exited)
     }
 
     @Test func `EC-Q3 a tool that never answers is stopped when the read times out`() async throws {
         let (reader, launcher) = try Self.reader("while IFS= read -r line; do :; done\n", timeout: 1)
         await #expect(throws: QuotaReadError.unreachable("no answer within 1 seconds")) { try await reader.read() }
-        #expect(Self.allExited(launcher))
+        #expect(await Self.allExited(launcher))
     }
 
     @Test func `a tool that ignores the request to stop is killed`() async throws {
         // Never answers, never reads, and ignores SIGTERM.
         let (reader, launcher) = try Self.reader("trap '' TERM\nwhile :; do sleep 1; done\n", timeout: 1)
         await #expect(throws: QuotaReadError.self) { try await reader.read() }
-        #expect(Self.allExited(launcher))
+        #expect(await Self.allExited(launcher))
     }
 }
