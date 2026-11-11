@@ -40,7 +40,10 @@ final class SeenLines: @unchecked Sendable {
 /// The quota readers against real child processes: fake `codex` scripts in a
 /// scratch directory. Each read must leave no process behind, however the
 /// tool behaves.
-@Suite(.timeLimit(.minutes(1)))
+// One at a time: these start real processes and kill whole process groups,
+// and on CI's three-core runner, cases running side by side failed together
+// in ways a lone run never showed.
+@Suite(.serialized, .timeLimit(.minutes(1)))
 struct ChildProcessTests {
     /// How long a real child may take to answer: a bound, not an expectation.
     /// Answers take milliseconds here, but a shared CI runner, starved by the
@@ -196,7 +199,24 @@ struct ChildProcessTests {
         if exitsOnItsOwn { process.waitUntilExit() }
         process.terminate()
         process.waitUntilExit()
-        #expect(try await firstLine(of: process, within: RunningProcess.killGrace + 3) { _ in true } == nil)
+        let after = SeenLines()
+        do {
+            let line = try await firstLine(of: process, within: RunningProcess.killGrace + 3) { line in
+                after.append(line)
+                return true
+            }
+            #expect(line == nil)
+        } catch {
+            // Output did not end after the group was killed. Say who still holds it.
+            Issue.record("""
+                Output did not end within \(Int(RunningProcess.killGrace + 3)) seconds of stopping. \
+                Lines after stopping: \(after.lines). Helper \(child) alive: \(kill(child, 0) == 0).
+                Script's group:
+                \(Self.processes(inGroup: process.processIdentifier))
+                Helper's group:
+                \(Self.processes(inGroup: getpgid(child)))
+                """)
+        }
         #expect(await Self.gone(child))
     }
 
