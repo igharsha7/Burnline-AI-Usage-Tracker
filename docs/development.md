@@ -247,7 +247,10 @@ branch or `nightly`, and on every push to `nightly`, in three jobs:
   unsigned app build. Each step runs even if an earlier one failed. The suite
   runs at most six tests at once (`SWT_EXPERIMENTAL_MAXIMUM_PARALLELIZATION_WIDTH`):
   on the runner's three cores, all of them at once starved the
-  timing-sensitive ones.
+  timing-sensitive ones. It runs under `.github/scripts/watch_tests.sh`: a
+  run that prints nothing for five minutes has hung, so it is stopped, the
+  report names the tests still running, and a stack sample of the test
+  process is kept in the `logs-tests` artifact.
 - **Performance**, on a second macOS runner at the same time: the
   [performance gate](performance.md#the-performance-gate).
 - **Checks**, once both finish: `.github/scripts/ci_report.py` turns their logs

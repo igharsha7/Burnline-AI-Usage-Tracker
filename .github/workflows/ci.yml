@@ -70,9 +70,11 @@ jobs:
           # unbounded, every test is in flight together and timing-sensitive
           # ones starve: tests taking milliseconds took thirty seconds.
           SWT_EXPERIMENTAL_MAXIMUM_PARALLELIZATION_WIDTH: 6
-        run: |
-          set -o pipefail
-          swift test --package-path "$PACKAGES" --enable-code-coverage 2>&1 | tee "$LOGS/tests.log"
+          # A run that prints nothing this long has hung: it is sampled and
+          # stopped, rather than waiting out the job's limit.
+          STALL_SECONDS: 300
+        timeout-minutes: 20
+        run: .github/scripts/watch_tests.sh "$LOGS/tests.log" swift test --package-path "$PACKAGES" --enable-code-coverage
 
       - name: License headers
         id: headers
