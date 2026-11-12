@@ -67,9 +67,55 @@ every build, so macOS treats each update as a different app, and permissions
 granted to the previous one (such as Keychain access to Claude Code's login)
 are asked for again.
 
-A release is signed with a **stable self-signed identity** *(to build)*: one
-certificate, kept by the maintainer and reused for every release, so the
-signature stays the same from one version to the next.
+A release is signed with a **stable self-signed identity**, "Burnline
+Release": one certificate, kept by the maintainer and reused for every
+release, so the signature, and the requirement macOS checks it against, stays
+the same from one version to the next. Make it once:
+
+```sh
+macos/scripts/make-signing-identity.sh
+```
+
+It creates the certificate and its private key, imports them into the login
+keychain, prints nothing secret, and refuses to make a second one. The
+certificate is valid for twenty years. Losing it means the next release is
+signed differently, so macOS asks again for what Burnline was allowed; back
+up the identity from Keychain Access with the Sparkle key.
+
+## Building a release
+
+```sh
+macos/scripts/build-release.sh                       # stable, at the app target's version
+macos/scripts/build-release.sh --nightly --version 0.2.0-nightly.20261112 --build 8
+```
+
+It builds the Release configuration, then signs it with the release identity
+from the inside out: Sparkle's helpers and framework first, keeping their
+entitlements, then the app. An identity given to `xcodebuild` would reach
+the packages' resource bundles too, which then demand a development team. The
+script checks that every nested piece verifies and that the signature names
+the certificate, then packs the app into a signed `.dmg` in `build/release/`.
+
+The `.dmg` is made by [dmgbuild](https://github.com/dmgbuild/dmgbuild) (MIT),
+installed at a pinned version into a private environment under
+`build/release/`. It is a build tool only and never ships. It writes the
+window's layout directly, without driving Finder, so a CI runner makes the
+same image as a Mac.
+
+The window is drawn by `macos/scripts/dmg/background.swift`: the burn line. A
+usage chart runs from Burnline to Applications, and its trend line is a lit
+fuse, its burnt bars glowing behind the spark and the rest waiting ahead, so
+the way to drag reads at a glance. Below it are the first-open steps. A
+nightly's window has the same layout under its night sky. Two details come
+from Finder:
+
+- **Icon names sit on light tags.** Finder writes them in dark grey over any
+  background image, in either appearance.
+- **The window is taller than the background** by its title bar, and the
+  bottom of the background is left empty for the path bar Finder may add.
+
+`settings.py` beside it places the icons, at the centres `background.swift`
+draws around.
 
 ## Checklist
 
@@ -93,11 +139,12 @@ signature stays the same from one version to the next.
 5. **Bump the versions** in the app target.
 6. **Merge** the staging branch into `main` by pull request, and tag the merge
    commit `vX.Y.Z`.
-7. **Archive** a Release build in Xcode and sign it with the release identity
-   *(to build)*.
-8. **Package** it as a `.dmg` with `create-dmg` *(to build)*: the app beside
-   an Applications link on a custom background, so installing is one drag.
-   Sign the `.dmg` with the same identity.
+7. **Build and package** it with `macos/scripts/build-release.sh`: the app
+   signed with the release identity, in a signed `.dmg` beside an
+   Applications link, so installing is one drag. See
+   [building a release](#building-a-release).
+8. **Open the `.dmg`** and check the window: the icons on the fuse's ends,
+   both names readable, the steps uncut.
 9. **Publish** a GitHub Release with the `.dmg`, its SHA-256, release notes, and
    the Gatekeeper instructions below.
 10. **Update the tap's cask** with the new version and checksum *(to build)*.

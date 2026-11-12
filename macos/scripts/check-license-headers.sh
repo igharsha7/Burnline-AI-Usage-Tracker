@@ -23,7 +23,7 @@ HEADER_LINES=20
 repo_root=$(cd "$(dirname "$0")/../.." && pwd)
 failures=$(
     find "$repo_root" \
-        \( -name .git -o -name .build -o -name DerivedData -o -name '*.xcodeproj' \) -prune -o \
+        \( -name .git -o -name .build -o -name DerivedData -o -name '*.xcodeproj' -o -path "$repo_root/build" \) -prune -o \
         -type f \( -name '*.swift' -o -name '*.sql' -o -name '*.sh' -o -name '*.py' \) -print |
     while IFS= read -r file; do
         top=$(head -n "$HEADER_LINES" "$file")
