@@ -18,6 +18,9 @@
 # checks. The build number is this workflow's run number, which rises across
 # both channels, as Sparkle compares it.
 #
+# A stable release also updates the Homebrew cask in igharsha7/homebrew-tap,
+# from .github/homebrew/burnline.rb.
+#
 # The secrets are in the `release` environment, which only main, nightly,
 # tags v* and release-dry-run can use.
 
@@ -40,6 +43,7 @@ env:
   OUT: build/release
   SPARKLE_BIN: build/release/DerivedData/SourcePackages/artifacts/sparkle/Sparkle/bin
   NIGHTLY_TAG: nightly-build
+  TAP_REPOSITORY: igharsha7/homebrew-tap
 
 jobs:
   release:
@@ -121,6 +125,7 @@ jobs:
           dmg=$(macos/scripts/build-release.sh "${flags[@]}" | tail -n 1)
           echo "dmg=$dmg" >> "$GITHUB_OUTPUT"
           echo "name=$(basename "$dmg")" >> "$GITHUB_OUTPUT"
+          echo "sha256=$(shasum -a 256 "$dmg" | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
           echo "minimum=$(/usr/libexec/PlistBuddy -c 'Print :LSMinimumSystemVersion' "$OUT/stage/Burnline.app/Contents/Info.plist")" >> "$GITHUB_OUTPUT"
           shasum -a 256 "$dmg"
 
@@ -221,6 +226,26 @@ jobs:
               -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
               commit -q -m "Add Burnline ${{ steps.plan.outputs.version }} (${{ steps.plan.outputs.build }})"
           git push origin HEAD:refs/heads/appcast
+
+      - name: Update the Homebrew tap
+        # Stable releases only: the cask installs the newest release, and
+        # Sparkle updates it from then on.
+        if: steps.plan.outputs.publish == 'true' && steps.plan.outputs.channel == 'stable'
+        env:
+          TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          VERSION: ${{ steps.plan.outputs.version }}
+          SHA256: ${{ steps.build.outputs.sha256 }}
+        run: |
+          tap="$RUNNER_TEMP/tap"
+          git clone -q --depth 1 "https://x-access-token:$TAP_TOKEN@github.com/$TAP_REPOSITORY.git" "$tap"
+          mkdir -p "$tap/Casks"
+          sed -e "s/{{VERSION}}/$VERSION/" -e "s/{{SHA256}}/$SHA256/" .github/homebrew/burnline.rb > "$tap/Casks/burnline.rb"
+          cd "$tap"
+          git add Casks/burnline.rb
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "Update Burnline to $VERSION"
+          git push -q origin HEAD
 
       - name: Remove older nightlies
         # After the appcast points at the new one, so a download never misses.

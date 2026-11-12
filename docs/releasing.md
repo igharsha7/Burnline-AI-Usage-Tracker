@@ -3,16 +3,15 @@
 How a Burnline release is made and distributed.
 
 > **Status.** No release has been published yet; Burnline is built from
-> source today. This page is the plan the first release follows, and the
-> checklist every later one reuses. Steps marked *(to build)* do not exist
-> yet.
+> source today. Everything the first release needs is in place: this page is
+> the checklist it follows, and every later one reuses.
 
 ## Distribution
 
 | Route | For | Gatekeeper |
 |---|---|---|
 | **`.dmg` on GitHub Releases** | Everyone: open it and drag Burnline to Applications | Blocked on first open until allowed in System Settings, once |
-| **Homebrew tap** *(to build)* | People who use Homebrew | The same first-open step, unless the cask can clear the quarantine flag itself (to test). Homebrew 5.0 removed `--no-quarantine`. |
+| **Homebrew tap** | People who use Homebrew | The same first-open step: the cask keeps the quarantine, and says what to do after installing |
 | **Build from source** | Contributors | None |
 
 Without notarization, which needs the paid Apple Developer Program, no route
@@ -153,6 +152,7 @@ only `main`, `nightly`, tags `v*` and `release-dry-run` may use:
 | `RELEASE_CERTIFICATE_P12` | The release certificate and its private key, exported from Keychain Access as `.p12`, base64-encoded |
 | `RELEASE_CERTIFICATE_PASSWORD` | That export's password |
 | `SPARKLE_PRIVATE_KEY` | Sparkle's EdDSA private key, as `generate_keys -x` writes it |
+| `HOMEBREW_TAP_TOKEN` | A fine-grained token with write access to `igharsha7/homebrew-tap`'s contents, and nothing else |
 
 The certificate is imported into a temporary keychain that the run deletes,
 and the Sparkle key is read from standard input, never written to disk.
@@ -187,7 +187,8 @@ and the Sparkle key is read from standard input, never written to disk.
    following stable is offered it within a day.
 9. **Read the published release**: its notes, the first-open steps, the
    `.dmg` and its SHA-256.
-10. **Update the tap's cask** with the new version and checksum *(to build)*.
+10. **Check the tap**: the workflow pushed `Casks/burnline.rb` with the new
+    version and checksum to `igharsha7/homebrew-tap`.
 11. **Try both routes** on a clean user account: install from the tap, and
     from the `.dmg` through the Gatekeeper steps. Check onboarding, a first
     import and the About surface.
@@ -197,19 +198,31 @@ and the Sparkle key is read from standard input, never written to disk.
 Start on a personal tap. The official `homebrew/cask` repository has
 notability requirements a new project will not meet.
 
-The tap is a public repository of its own, `igharsha7/homebrew-tap` *(to
-build)*; its cask installs the `.dmg` from the GitHub Release and checks its
-SHA-256:
+The tap is a public repository of its own, `igharsha7/homebrew-tap`; its
+cask installs the `.dmg` from the GitHub Release and checks its SHA-256:
 
 ```sh
 brew install --cask igharsha7/tap/burnline
 ```
 
-Homebrew 5.0 deprecated `--no-quarantine`, and the official cask repository
-no longer accepts apps that fail Gatekeeper, so a personal tap is the only
-Homebrew route for an un-notarized app. Whether its cask may clear the
-quarantine flag after installing is to be tested on current Homebrew before
-the README promises it.
+The cask's source is `.github/homebrew/burnline.rb` in this repository, so it
+is reviewed like everything else. Each stable release, the release workflow
+fills in the version and checksum and pushes it to the tap; the tap is never
+edited by hand. The cask:
+
+- declares `auto_updates`, so Homebrew leaves upgrades to Sparkle;
+- requires macOS 14;
+- removes Burnline's data, preferences and caches with `brew uninstall --zap`,
+  and only then;
+- keeps the quarantine, and after installing shows the first-open steps.
+
+Homebrew 5.0 removed `--no-quarantine`, and the official cask repository no
+longer accepts apps that fail Gatekeeper, so a personal tap is the only
+Homebrew route for an un-notarized app. Its cask could clear the quarantine
+after installing, and deliberately does not: whoever installs Burnline
+allows it once, the same way as from the `.dmg`. Installing from a local
+copy of the tap showed the result: the app keeps its quarantine, verifies,
+and Gatekeeper asks once, naming `Burnline Release` as its origin.
 
 ## Opening an un-notarized app
 
