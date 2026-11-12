@@ -1,0 +1,248 @@
+# release.yml
+# Burnline
+#
+# Copyright (C) 2026 Challapalli Harshavardhan Reddy
+# Licensed under the GNU Affero General Public License v3. See LICENSE and NOTICE.
+#
+# Builds, signs and publishes Burnline. See docs/releasing.md.
+#
+# - A tag vX.Y.Z on main publishes that stable release.
+# - Each push to the nightly branch, which is each merge into it, publishes
+#   it as the rolling pre-release `nightly-build`. Run the workflow by hand
+#   to publish the nightly branch again.
+# - A push to `release-dry-run` rehearses a nightly: it builds, signs and
+#   writes the appcast, and keeps them as an artifact, publishing nothing.
+#
+# Each build is signed with the release certificate, its .dmg with Sparkle's
+# EdDSA key, and added to the appcast on the `appcast` branch, which the app
+# checks. The build number is this workflow's run number, which rises across
+# both channels, as Sparkle compares it.
+#
+# The secrets are in the `release` environment, which only main, nightly,
+# tags v* and release-dry-run can use.
+
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+    branches: [nightly, release-dry-run]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+env:
+  OUT: build/release
+  SPARKLE_BIN: build/release/DerivedData/SourcePackages/artifacts/sparkle/Sparkle/bin
+  NIGHTLY_TAG: nightly-build
+
+jobs:
+  release:
+    name: Release
+    runs-on: macos-26
+    timeout-minutes: 60
+    environment: release
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Decide what to build
+        id: plan
+        env:
+          EVENT: ${{ github.event_name }}
+          BUILD: ${{ github.run_number }}
+        run: |
+          version_at() {
+            git show "$1:macos/Burnline.xcodeproj/project.pbxproj" \
+              | sed -nE 's/.*MARKETING_VERSION = ([0-9.]+);.*/\1/p' | head -n 1
+          }
+          if [ "$GITHUB_REF_TYPE" = tag ]; then
+            channel=stable
+            commit=$GITHUB_SHA
+            version=${GITHUB_REF_NAME#v}
+            git fetch origin main
+            if ! git merge-base --is-ancestor "$commit" origin/main; then
+              echo "::error::$GITHUB_REF_NAME is not on main. Releases are tagged on main."; exit 1
+            fi
+            if [ "$(version_at "$commit")" != "$version" ]; then
+              echo "::error::$GITHUB_REF_NAME does not match the app target's version, $(version_at "$commit")."; exit 1
+            fi
+            previous=$(git describe --tags --abbrev=0 --match 'v*' "$commit^" 2>/dev/null || true)
+          else
+            channel=nightly
+            if [ "$EVENT" = push ]; then commit=$GITHUB_SHA; else git fetch origin nightly; commit=$(git rev-parse FETCH_HEAD); fi
+            git fetch --force origin "refs/tags/$NIGHTLY_TAG:refs/tags/$NIGHTLY_TAG" 2>/dev/null || true
+            previous=$(git rev-parse -q --verify "refs/tags/$NIGHTLY_TAG^{commit}" || true)
+            version="$(version_at "$commit")-nightly.$(date -u +%Y%m%d)"
+          fi
+          {
+            echo "channel=$channel"; echo "commit=$commit"; echo "version=$version"
+            echo "build=$BUILD"; echo "previous=$previous"
+            echo "publish=$([ "$GITHUB_REF_NAME" = release-dry-run ] && echo false || echo true)"
+          } >> "$GITHUB_OUTPUT"
+          echo "Building $channel $version, build $BUILD, from $commit."
+
+      - name: Check out the build
+        run: git checkout --detach "${{ steps.plan.outputs.commit }}"
+
+      - name: Select Xcode
+        run: |
+          xcode=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -n 1)
+          sudo xcode-select -s "$xcode"
+
+      - name: Import the release certificate
+        env:
+          CERTIFICATE: ${{ secrets.RELEASE_CERTIFICATE_P12 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.RELEASE_CERTIFICATE_PASSWORD }}
+        run: |
+          keychain="$RUNNER_TEMP/release.keychain-db"
+          password=$(openssl rand -hex 24)
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 3600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          (umask 077; printf '%s' "$CERTIFICATE" | base64 --decode > "$RUNNER_TEMP/release.p12")
+          security import "$RUNNER_TEMP/release.p12" -k "$keychain" -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign > /dev/null
+          rm -f "$RUNNER_TEMP/release.p12"
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$password" "$keychain" > /dev/null
+          security list-keychains -d user -s "$keychain" $(security list-keychains -d user | tr -d '"')
+          echo "KEYCHAIN=$keychain" >> "$GITHUB_ENV"
+
+      - name: Build and package
+        id: build
+        run: |
+          flags=(--version "${{ steps.plan.outputs.version }}" --build "${{ steps.plan.outputs.build }}" --keychain "$KEYCHAIN")
+          [ "${{ steps.plan.outputs.channel }}" = nightly ] && flags+=(--nightly)
+          dmg=$(macos/scripts/build-release.sh "${flags[@]}" | tail -n 1)
+          echo "dmg=$dmg" >> "$GITHUB_OUTPUT"
+          echo "name=$(basename "$dmg")" >> "$GITHUB_OUTPUT"
+          echo "minimum=$(/usr/libexec/PlistBuddy -c 'Print :LSMinimumSystemVersion' "$OUT/stage/Burnline.app/Contents/Info.plist")" >> "$GITHUB_OUTPUT"
+          shasum -a 256 "$dmg"
+
+      - name: Sign the update
+        id: sign
+        env:
+          SPARKLE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          signature=$(printf '%s' "$SPARKLE_KEY" | "$SPARKLE_BIN/sign_update" --ed-key-file - "${{ steps.build.outputs.dmg }}")
+          echo "signature=$signature" >> "$GITHUB_OUTPUT"
+
+      - name: Write the notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIOUS: ${{ steps.plan.outputs.previous }}
+          COMMIT: ${{ steps.plan.outputs.commit }}
+        run: |
+          if [ "${{ steps.plan.outputs.channel }}" = stable ]; then
+            gh api "repos/$GITHUB_REPOSITORY/releases/generate-notes" -f tag_name="$GITHUB_REF_NAME" \
+              ${PREVIOUS:+-f previous_tag_name="$PREVIOUS"} --jq .body > "$RUNNER_TEMP/notes.md"
+          else
+            {
+              echo "## Changes"
+              echo
+              if [ -n "$PREVIOUS" ]; then range="$PREVIOUS..$COMMIT"; else range="$COMMIT"; fi
+              git log --no-merges --max-count=30 --format='- %s' "$range"
+            } > "$RUNNER_TEMP/notes.md"
+          fi
+          # The release page also says how to open an un-notarized app the first time.
+          {
+            cat "$RUNNER_TEMP/notes.md"
+            echo
+            echo "## Opening Burnline the first time"
+            echo
+            echo "Burnline is not notarized, so macOS stops it once:"
+            echo
+            echo "1. Open Burnline. When macOS says it cannot verify the developer, choose **Done**."
+            echo "2. Open **System Settings → Privacy & Security**."
+            echo "3. Choose **Open Anyway** beside Burnline, and confirm."
+            echo
+            echo "Updates installed from within Burnline open straight away."
+            echo
+            echo "SHA-256 of \`${{ steps.build.outputs.name }}\`: \`$(shasum -a 256 "${{ steps.build.outputs.dmg }}" | cut -d ' ' -f 1)\`"
+          } > "$RUNNER_TEMP/release-notes.md"
+
+      - name: Publish the release
+        if: steps.plan.outputs.publish == 'true'
+        id: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.plan.outputs.version }}
+          DMG: ${{ steps.build.outputs.dmg }}
+          NAME: ${{ steps.build.outputs.name }}
+        run: |
+          if [ "${{ steps.plan.outputs.channel }}" = stable ]; then
+            tag=$GITHUB_REF_NAME
+            gh release create "$tag" "$DMG" --verify-tag --title "Burnline $VERSION" --notes-file "$RUNNER_TEMP/release-notes.md"
+          else
+            tag=$NIGHTLY_TAG
+            git push --force origin "${{ steps.plan.outputs.commit }}:refs/tags/$tag"
+            if gh release view "$tag" > /dev/null 2>&1; then
+              gh release edit "$tag" --prerelease --title "Burnline Nightly $VERSION" --notes-file "$RUNNER_TEMP/release-notes.md"
+              gh release upload "$tag" "$DMG" --clobber
+            else
+              gh release create "$tag" "$DMG" --prerelease --title "Burnline Nightly $VERSION" \
+                --notes-file "$RUNNER_TEMP/release-notes.md"
+            fi
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "url=https://github.com/$GITHUB_REPOSITORY/releases/download/$tag/$NAME" >> "$GITHUB_OUTPUT"
+          echo "link=https://github.com/$GITHUB_REPOSITORY/releases/tag/$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Add it to the appcast
+        env:
+          PUBLISH: ${{ steps.plan.outputs.publish }}
+          SIGNATURE: ${{ steps.sign.outputs.signature }}
+        run: |
+          if git fetch --depth=1 origin appcast 2>/dev/null; then
+            git worktree add --detach "$RUNNER_TEMP/appcast" FETCH_HEAD
+          else
+            git worktree add --orphan -b appcast "$RUNNER_TEMP/appcast"
+          fi
+          url="${{ steps.publish.outputs.url }}"; link="${{ steps.publish.outputs.link }}"
+          if [ "$PUBLISH" != true ]; then
+            url="https://example.invalid/${{ steps.build.outputs.name }}"; link="https://example.invalid/dry-run"
+          fi
+          python3 .github/scripts/appcast.py "$RUNNER_TEMP/appcast/appcast.xml" \
+            --channel "${{ steps.plan.outputs.channel }}" --version "${{ steps.plan.outputs.version }}" \
+            --build "${{ steps.plan.outputs.build }}" --url "$url" --link "$link" \
+            --signature "$SIGNATURE" --notes "$RUNNER_TEMP/notes.md" \
+            --minimum-system "${{ steps.build.outputs.minimum }}"
+          if [ "$PUBLISH" != true ]; then
+            cp "$RUNNER_TEMP/appcast/appcast.xml" "$OUT/appcast.xml"; exit 0
+          fi
+          cd "$RUNNER_TEMP/appcast"
+          git add appcast.xml
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "Add Burnline ${{ steps.plan.outputs.version }} (${{ steps.plan.outputs.build }})"
+          git push origin HEAD:refs/heads/appcast
+
+      - name: Remove older nightlies
+        # After the appcast points at the new one, so a download never misses.
+        if: steps.plan.outputs.publish == 'true' && steps.plan.outputs.channel == 'nightly'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NAME: ${{ steps.build.outputs.name }}
+        run: |
+          gh release view "$NIGHTLY_TAG" --json assets --jq '.assets[].name' | while read -r asset; do
+            [ "$asset" = "$NAME" ] || gh release delete-asset "$NIGHTLY_TAG" "$asset" --yes
+          done
+
+      - name: Keep the rehearsal
+        if: steps.plan.outputs.publish != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-dry-run
+          path: |
+            build/release/*.dmg
+            build/release/appcast.xml
+          retention-days: 7
+
+      - name: Remove the keychain
+        if: always() && env.KEYCHAIN != ''
+        run: security delete-keychain "$KEYCHAIN"

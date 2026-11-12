@@ -45,7 +45,9 @@ fi
 rm -rf "$out/Burnline.app" "$out/stage"
 mkdir -p "$out/stage"
 
-settings=(BURNLINE_CHANNEL="$channel")
+# Stripped, as an Xcode archive is: debug symbols more than double the
+# executable, and a release has no use for them.
+settings=(BURNLINE_CHANNEL="$channel" DEPLOYMENT_POSTPROCESSING=YES)
 [ -n "$version" ] && settings+=(MARKETING_VERSION="$version")
 [ -n "$build" ] && settings+=(CURRENT_PROJECT_VERSION="$build")
 
@@ -98,5 +100,14 @@ echo "Packing $name.dmg…"
     "$volume" "$dmg" > /dev/null
 codesign --sign "$identity" ${keychain:+--keychain "$keychain"} "$dmg"
 codesign --verify "$dmg"
+
+# The app as it will be installed, from the image: packing must not have
+# touched it, or macOS may call the installed app damaged.
+mount=$(mktemp -d)
+hdiutil attach -quiet -nobrowse -readonly -mountpoint "$mount" "$dmg"
+verified=0
+codesign --verify --deep --strict "$mount/Burnline.app" && verified=1
+hdiutil detach -quiet "$mount"
+[ "$verified" = 1 ] || { echo "The app inside $name.dmg does not verify." >&2; exit 1; }
 
 echo "$dmg"

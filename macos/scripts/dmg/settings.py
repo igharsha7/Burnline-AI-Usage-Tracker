@@ -27,7 +27,6 @@ icon_locations = {
     os.path.basename(app): (165, 172),
     "Applications": (495, 172),
 }
-hide_extensions = [os.path.basename(app)]
 icon_size = 112
 text_size = 13
 

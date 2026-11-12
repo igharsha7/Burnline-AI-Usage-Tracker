@@ -8,7 +8,7 @@
 import Foundation
 
 /// A release channel. Stable is every release; nightly adds a build of the
-/// newest work each night it changed. See docs/updates.md.
+/// newest work each time it is merged. See docs/updates.md.
 public enum UpdateChannel: String, CaseIterable, Sendable {
     case stable
     case nightly
