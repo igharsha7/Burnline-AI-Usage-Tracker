@@ -71,6 +71,19 @@ struct AggregationServiceTests {
         #expect(compacted.buckets.map(\.total.events).reduce(0, +) == 3)
     }
 
+    @Test func `a range ending minutes into a day judges that day to the second, not to its quarter hour`() throws {
+        // Midnight in India on 1 November is 13.5 hours before `now`.
+        let midnight = Self.now.adding(seconds: -48_600)
+        // The last day's only event is at 00:06:40, after the range ends at
+        // 00:05 but inside the same quarter hour's rollup.
+        let (service, _) = try Self.service(eventsSecondsAgo: [86_400 * 2, 48_600 - 400])
+        let range = RangePreset.custom(TimeWindow(start: Self.now.adding(seconds: -86_400 * 3),
+                                                 end: midnight.adding(seconds: 300)))
+        let summary = try service.summary(range)
+        #expect(summary.totals.events == 1)
+        #expect(summary.activeDays == 1)
+    }
+
     @Test func `EC-U1 custom summary counts active days only inside its range`() throws {
         let (service, _) = try Self.service(eventsSecondsAgo: [60, 86_400])
         let range = RangePreset.custom(TimeWindow(start: Self.now.adding(seconds: -86_300),
