@@ -32,7 +32,7 @@ Updates installed this way are not quarantined, so macOS does not ask for
 | Channel | What it receives | Who for |
 |---|---|---|
 | **Stable** | Each release, `vX.Y.Z` | Everyone, by default |
-| **Nightly** | A build of the newest work each night it changed, and every stable release | People who want new work first and accept rough edges |
+| **Nightly** | A build of the newest work each time it is merged, and every stable release | People who want new work first and accept rough edges |
 
 Both live in one appcast. A nightly item carries
 `<sparkle:channel>nightly</sparkle:channel>`; a stable item carries no
@@ -101,15 +101,19 @@ the generated one.
 The appcast is `appcast.xml` on the repository's `appcast` branch, served
 from `raw.githubusercontent.com` like the price list. Each release's `.dmg`
 is a GitHub Release asset; the appcast item points at it, with its EdDSA
-signature and length.
+signature and length. The release workflow publishes both; see
+[releasing](releasing.md#the-release-workflow).
 
 - **The private key** is the maintainer's alone. It is made once with
   Sparkle's `generate_keys`, kept in the maintainer's Keychain and as a
-  repository secret for the release workflow, and never committed. Losing it
-  means no existing install can update again, so it is backed up.
-- **The appcast** is written by Sparkle's `generate_appcast`, which signs each
-  archive. Nightly items are tagged with the nightly channel.
-- **Release notes** are the GitHub Release's notes, linked from each item.
+  secret of the release workflow, and never committed. Losing it means no
+  existing install can update again, so it is backed up.
+- **The appcast** is written by `.github/scripts/appcast.py`. It keeps every
+  stable release and only the newest nightly, tagged with the nightly
+  channel: a nightly's download is replaced by the next one, so an older item
+  would point at a file its signature no longer matches.
+- **Release notes** are shown above Install, and each item links to its
+  GitHub Release.
 
 ## Trying it in a debug build
 

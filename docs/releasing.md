@@ -47,7 +47,7 @@ Burnline uses semantic versions, `MAJOR.MINOR.PATCH`:
 | Channel | Built from | Version | For |
 |---|---|---|---|
 | **Stable** | A release tag `vX.Y.Z` on `main` | `0.1.0` | Everyone, by default |
-| **Nightly** | The `nightly` branch, each night it changed | The next version with a pre-release suffix, such as `0.2.0-nightly.20261111` | People who want the newest work and accept rough edges |
+| **Nightly** | The `nightly` branch, each time work is merged into it | The next version with a pre-release suffix, such as `0.2.0-nightly.20261111` | People who want the newest work and accept rough edges |
 
 - Both are GitHub Releases: each stable version its own release, nightly one
   rolling pre-release.
@@ -117,6 +117,46 @@ from Finder:
 `settings.py` beside it places the icons, at the centres `background.swift`
 draws around.
 
+## The release workflow
+
+`.github/workflows/release.yml` builds, signs and publishes every release, so
+no release is built on a personal Mac:
+
+| Trigger | Publishes |
+|---|---|
+| A tag `vX.Y.Z` on `main` | That stable release, as a GitHub Release `vX.Y.Z`. The tag must match the app target's version. |
+| A push to `nightly`, which is each merge into it | The `nightly` branch, as the rolling pre-release `nightly-build` |
+| Running it by hand | The `nightly` branch again |
+| A push to `release-dry-run` | Nothing: a rehearsal that builds, signs and writes the appcast, and keeps them as the run's artifact |
+
+Each run builds with `build-release.sh`, signs the `.dmg` with Sparkle's
+EdDSA key, and adds it to `appcast.xml` on the `appcast` branch with
+`.github/scripts/appcast.py`, which keeps every stable release and only the
+newest nightly. The build number is the workflow's run number, which rises
+across both channels, as Sparkle compares it. The rolling nightly's tag is
+`nightly-build`, not `nightly`, which is the branch.
+
+The release notes are GitHub's generated notes for a stable release, and the
+commits since the last nightly for a nightly. Both pages add the first-open
+steps and the `.dmg`'s SHA-256; the updater shows the notes alone.
+
+A nightly runs only when `nightly` moves, so nothing runs while it is idle.
+Running it by hand uses the workflow as it is on `main`.
+
+### Secrets
+
+The workflow's secrets live in the repository's `release` environment, which
+only `main`, `nightly`, tags `v*` and `release-dry-run` may use:
+
+| Secret | Holds |
+|---|---|
+| `RELEASE_CERTIFICATE_P12` | The release certificate and its private key, exported from Keychain Access as `.p12`, base64-encoded |
+| `RELEASE_CERTIFICATE_PASSWORD` | That export's password |
+| `SPARKLE_PRIVATE_KEY` | Sparkle's EdDSA private key, as `generate_keys -x` writes it |
+
+The certificate is imported into a temporary keychain that the run deletes,
+and the Sparkle key is read from standard input, never written to disk.
+
 ## Checklist
 
 1. **Refresh the bundled prices.** Copy `shared/pricing/pricing.json` from the
@@ -136,17 +176,17 @@ draws around.
 4. **Check the notices.** Every dependency and third-party asset in the build
    appears in `THIRD-PARTY-NOTICES` and `macos/Burnline/Acknowledgements/`, and
    the About surface reaches them.
-5. **Bump the versions** in the app target.
-6. **Merge** the staging branch into `main` by pull request, and tag the merge
-   commit `vX.Y.Z`.
-7. **Build and package** it with `macos/scripts/build-release.sh`: the app
-   signed with the release identity, in a signed `.dmg` beside an
-   Applications link, so installing is one drag. See
-   [building a release](#building-a-release).
-8. **Open the `.dmg`** and check the window: the icons on the fuse's ends,
-   both names readable, the steps uncut.
-9. **Publish** a GitHub Release with the `.dmg`, its SHA-256, release notes, and
-   the Gatekeeper instructions below.
+5. **Bump the versions** in the app target. The build number is set by the
+   release workflow; only `MARKETING_VERSION` changes by hand.
+6. **Rehearse** by pushing the release commit to `release-dry-run`, and open
+   the `.dmg` the run keeps: the icons on the fuse's ends, both names
+   readable, the steps uncut. See [the release workflow](#the-release-workflow).
+7. **Merge** the staging branch into `main` by pull request.
+8. **Tag** the merge commit `vX.Y.Z` and push the tag. The release workflow
+   builds, signs and publishes it, and adds it to the appcast; every install
+   following stable is offered it within a day.
+9. **Read the published release**: its notes, the first-open steps, the
+   `.dmg` and its SHA-256.
 10. **Update the tap's cask** with the new version and checksum *(to build)*.
 11. **Try both routes** on a clean user account: install from the tap, and
     from the `.dmg` through the Gatekeeper steps. Check onboarding, a first

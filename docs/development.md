@@ -228,8 +228,8 @@ flowchart LR
   the maintainer's release line too.
 - `nightly` is what nightly builds are made from: the current staging branch,
   brought over by pull request, so a nightly carries only work that passed
-  CI. It is built each night it changed *(to build)*; see
-  [updates](updates.md#channels).
+  CI. Each merge into it is built and published by the release workflow; see
+  [releasing](releasing.md#the-release-workflow).
 - Contributors branch from `main` and open their pull request against `main`,
   never against a staging branch.
 
@@ -258,6 +258,9 @@ branch or `nightly`, and on every push to `nightly`, in three jobs:
   tests, files or figures and the page to read), writes it to the run's
   summary page and uploads it as an artifact. Checks fails if either job did,
   and it is the status the branch rules require.
+
+`.github/workflows/release.yml` builds, signs and publishes releases and
+nightlies; see [releasing](releasing.md#the-release-workflow).
 
 `.github/workflows/ci-cache.yml` warms CI's caches each time `main`, a
 staging branch or `nightly` moves. A pull request can read caches saved on its
