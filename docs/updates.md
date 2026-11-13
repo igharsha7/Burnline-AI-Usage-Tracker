@@ -51,7 +51,9 @@ compares them, never the version text.
   so when the choice is made.
 
 A nightly build follows the nightly channel until told otherwise; a stable
-build, stable.
+build, stable. The channel is saved on the first run, so it belongs to the
+copy, not the build: a nightly that updates to a stable release keeps
+following nightly, and is offered the next nightly built after it.
 
 ## The nightly look
 

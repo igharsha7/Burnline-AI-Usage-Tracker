@@ -55,6 +55,20 @@ struct UpdateTests {
         #expect(UpdateModel(build: Self.nightly(), defaults: defaults, updater: FakeUpdater()).channel == .stable)
     }
 
+    @Test func `a nightly copy that updates to a stable release keeps following nightly`() {
+        let (defaults, _) = SettingsTests.defaults()
+        _ = UpdateModel(build: Self.nightly(), defaults: defaults, updater: FakeUpdater())
+
+        let updated = UpdateModel(build: Self.stable, defaults: defaults, updater: FakeUpdater())
+        #expect(updated.channel == .nightly && updated.allowedFeedChannels == ["nightly"])
+    }
+
+    @Test func `a stable copy follows stable from its first run`() {
+        let (defaults, _) = SettingsTests.defaults()
+        _ = UpdateModel(build: Self.stable, defaults: defaults, updater: FakeUpdater())
+        #expect(UpdateModel(build: Self.nightly(), defaults: defaults, updater: FakeUpdater()).channel == .stable)
+    }
+
     @Test func `only a stable build moving onto nightly is asked to confirm`() {
         let (defaults, _) = SettingsTests.defaults()
         let stable = UpdateModel(build: Self.stable, defaults: defaults, updater: FakeUpdater())
@@ -72,6 +86,15 @@ struct UpdateTests {
         let model = UpdateModel(build: Self.nightly(), defaults: defaults, updater: FakeUpdater())
         model.channel = .stable
         #expect(model.channelNote?.hasPrefix("This nightly stays until a stable release is newer.") == true)
+    }
+
+    @Test func `a stable build following nightly says it is stable until the next nightly is built`() {
+        let (defaults, _) = SettingsTests.defaults()
+        let model = UpdateModel(build: Self.stable, defaults: defaults, updater: FakeUpdater())
+        model.channel = .nightly
+        #expect(model.channelNote == "You're running a stable release, so it looks like one. The next nightly is "
+            + "offered once one is built newer than this. Nightly builds carry the newest work before a release, "
+            + "and can change the database in ways a stable release does not yet read.")
     }
 
     @Test func `an update found is offered until a check finds nothing`() {

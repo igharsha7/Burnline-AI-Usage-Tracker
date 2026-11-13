@@ -34,7 +34,8 @@ public final class UpdateModel {
     public let unavailableReason: String?
     public private(set) var lastCheck: Date?
 
-    /// The channel followed. A nightly build follows nightly until told otherwise.
+    /// The channel followed. A nightly build follows nightly until told
+    /// otherwise, and keeps following it after it updates to a stable release.
     public var channel: UpdateChannel {
         didSet { defaults.set(channel.rawValue, forKey: Self.channelKey) }
     }
@@ -52,7 +53,12 @@ public final class UpdateModel {
         self.defaults = defaults
         self.updater = updater
         self.unavailableReason = updater == nil ? unavailableReason ?? "This build cannot update itself." : nil
-        channel = defaults.string(forKey: Self.channelKey).flatMap(UpdateChannel.init(rawValue:)) ?? build.channel
+        let saved = defaults.string(forKey: Self.channelKey).flatMap(UpdateChannel.init(rawValue:))
+        // Kept from the first run, so the channel a copy started on outlives
+        // the build: a nightly that updates to a stable release, which is a
+        // stable build, still follows nightly.
+        if saved == nil { defaults.set(build.channel.rawValue, forKey: Self.channelKey) }
+        channel = saved ?? build.channel
         automaticallyChecks = updater?.automaticallyChecks ?? false
         lastCheck = updater?.lastCheck
         updater?.start(reporting: self)
@@ -73,15 +79,20 @@ public final class UpdateModel {
         next == .nightly && build.channel == .stable && channel == .stable
     }
 
+    private static let nightlyWarning = "Nightly builds carry the newest work before a release, and can change "
+        + "the database in ways a stable release does not yet read."
+
     /// What following `channel` means for this build, when it is not obvious.
     var channelNote: String? {
         switch (build.channel, channel) {
         case (.nightly, .stable):
             "This nightly stays until a stable release is newer. To go back to an older stable version, restore a backup "
                 + "taken before the nightly."
-        case (_, .nightly):
-            "Nightly builds carry the newest work before a release, and can change the database in ways a stable "
-                + "release does not yet read."
+        case (.stable, .nightly):
+            "You're running a stable release, so it looks like one. The next nightly is offered once one is built "
+                + "newer than this. " + Self.nightlyWarning
+        case (.nightly, .nightly):
+            Self.nightlyWarning
         default: nil
         }
     }
