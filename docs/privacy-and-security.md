@@ -78,6 +78,11 @@ access token, for the usage endpoint.
   token is reported, and Claude Code renews it the next time it runs.
 - The first read shows macOS's Keychain prompt. Declining stops Burnline asking
   for the rest of the session; quota then comes through Claude Code itself.
+- The prompt returns after each update. "Always Allow" is filed under the
+  developer's Apple team, and a self-signed build has none, so macOS treats
+  each version as a new app. A Developer ID certificate would end it; see
+  [releasing](releasing.md#signing). Claude Code can also rewrite the item
+  when it renews its login, which may bring the prompt back between updates.
 - Codex's login is never seen: Codex's app-server makes its own request.
 - A test sends a sentinel token through a full refresh and checks that neither
   the database files nor any printed state contain it.
