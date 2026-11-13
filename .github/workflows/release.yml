@@ -160,11 +160,11 @@ jobs:
             echo
             echo "## Opening Burnline the first time"
             echo
-            echo "Burnline is not notarized, so macOS stops it once:"
+            echo "Burnline is not notarized (that needs Apple's \$99-a-year developer program, and Burnline is free), so macOS asks once:"
             echo
             echo "1. Open Burnline. When macOS says it cannot verify the developer, choose **Done**."
-            echo "2. Open **System Settings → Privacy & Security**."
-            echo "3. Choose **Open Anyway** beside Burnline, and confirm."
+            echo "2. Open **System Settings → Privacy & Security** and scroll to Security."
+            echo "3. Choose **Open Anyway** beside Burnline, then confirm with your password or Touch ID."
             echo
             echo "Updates installed from within Burnline open straight away."
             echo

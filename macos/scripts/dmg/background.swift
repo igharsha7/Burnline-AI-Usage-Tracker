@@ -9,7 +9,8 @@
 // runs from Burnline to Applications, and its trend line is a lit fuse: the
 // bars it has burnt past glow, the ones ahead wait, and the spark travels
 // toward Applications, the way to drag. Below, the one first-open step an
-// un-notarized app needs. A nightly's window is the same under its night sky.
+// un-notarized app needs, and why, large enough to follow without squinting.
+// A nightly's window is the same under its night sky.
 //
 //   swift macos/scripts/dmg/background.swift <output.png> <scale> [--nightly]
 //
@@ -19,13 +20,14 @@
 import AppKit
 
 enum Layout {
-    static let size = CGSize(width: 660, height: 440)
+    static let size = CGSize(width: 720, height: 540)
     /// Centres of Burnline's icon and the Applications link, as settings.py places them.
-    static let app = CGPoint(x: 165, y: 172)
-    static let applications = CGPoint(x: 495, y: 172)
+    static let app = CGPoint(x: 180, y: 172)
+    static let applications = CGPoint(x: 540, y: 172)
     static let iconRadius: CGFloat = 60
     static let chartBase: CGFloat = 262
-    static let panel = CGRect(x: 24, y: 284, width: 612, height: 112)
+    /// Ends well clear of the bottom edge, where Finder may draw a path bar.
+    static let panel = CGRect(x: 28, y: 288, width: 664, height: 214)
     /// Finder writes each icon's name in dark grey whatever lies behind it,
     /// so each name sits on a light tag of its own, centred this far down.
     static let labelY: CGFloat = 246
@@ -140,7 +142,7 @@ if nightly {
         context.fillEllipse(in: CGRect(x: star.x, y: star.y, width: size, height: size))
     }
     // A crescent, as on the nightly icon: a disc with a disc cut away.
-    let moon = CGPoint(x: 598, y: 52)
+    let moon = CGPoint(x: bounds.width - 62, y: 52)
     glow(at: moon, radius: 54, color: Palette.moonlight, alpha: 0.22)
     context.saveGState()
     let disc = CGRect(x: moon.x - 17, y: moon.y - 17, width: 34, height: 34)
@@ -156,7 +158,7 @@ if nightly {
     context.setFillColor(Palette.background.cgColor)
     context.fill(bounds)
     // The flame lights the graphite around the spark, and nothing else.
-    glow(at: CGPoint(x: 330, y: 190), radius: 330, color: Palette.hex(0x1C1C1C), alpha: 1)
+    glow(at: CGPoint(x: bounds.midX, y: 190), radius: 360, color: Palette.hex(0x1C1C1C), alpha: 1)
 }
 
 // A faint chart grid behind it all.
@@ -292,26 +294,30 @@ context.setStrokeColor(nightly ? Palette.moonlight.withAlphaComponent(0.18).cgCo
 context.setLineWidth(1)
 context.strokePath()
 
-let inset: CGFloat = 18
-draw("Opening it the first time", at: CGPoint(x: Layout.panel.minX + inset, y: Layout.panel.minY + 14), size: 12,
-     weight: .semibold, color: Palette.textPrimary)
-draw("Once only. Updates open straight away.",
-     at: CGPoint(x: Layout.panel.minX + inset, y: Layout.panel.minY + 14), size: 11, weight: .regular,
-     color: Palette.textSecondary, width: Layout.panel.width - inset * 2, alignment: .right)
-let steps = ["Open Burnline. When macOS says it can’t verify the developer, choose Done.",
-             "Open System Settings, then Privacy & Security.",
-             "Choose Open Anyway beside Burnline, and confirm."]
-let column = (Layout.panel.width - inset * 2 - 24) / 3
+let inset: CGFloat = 22
+let accent = nightly ? Palette.moonlight : Palette.ember
+let textWidth = Layout.panel.width - inset * 2
+draw("Opening Burnline the first time", at: CGPoint(x: Layout.panel.minX + inset, y: Layout.panel.minY + 18),
+     size: 16, weight: .semibold, color: Palette.textPrimary)
+draw("Once only", at: CGPoint(x: Layout.panel.minX + inset, y: Layout.panel.minY + 21), size: 12, weight: .semibold,
+     color: accent, width: textWidth, alignment: .right)
+draw("macOS asks once because Burnline isn’t notarized: that takes a paid Apple developer account, and Burnline "
+     + "is free and open source. Updates from within Burnline open straight away.",
+     at: CGPoint(x: Layout.panel.minX + inset, y: Layout.panel.minY + 46), size: 12, weight: .regular,
+     color: Palette.textSecondary, width: textWidth)
+let steps = ["Open Burnline from Applications. When macOS can’t verify the developer, choose Done.",
+             "Open System Settings, then Privacy & Security, and scroll down to Security.",
+             "Choose Open Anyway beside Burnline, then confirm with your password or Touch ID."]
 for (index, step) in steps.enumerated() {
-    let x = Layout.panel.minX + inset + CGFloat(index) * (column + 12)
-    let y = Layout.panel.minY + 44
-    let badge = CGRect(x: x, y: y, width: 18, height: 18)
-    context.setFillColor((nightly ? Palette.moonlight : Palette.ember).withAlphaComponent(0.16).cgColor)
+    let x = Layout.panel.minX + inset
+    let y = Layout.panel.minY + 98 + CGFloat(index) * 38
+    let badge = CGRect(x: x, y: y, width: 24, height: 24)
+    context.setFillColor(accent.withAlphaComponent(0.16).cgColor)
     context.fillEllipse(in: badge)
-    draw("\(index + 1)", at: CGPoint(x: badge.minX, y: badge.minY + 2), size: 11, weight: .bold,
-         color: nightly ? Palette.moonlight : Palette.ember, width: badge.width, alignment: .center)
-    draw(step, at: CGPoint(x: x + 26, y: y + 1), size: 11.5, weight: .regular,
-         color: Palette.textPrimary.withAlphaComponent(0.88), width: column - 26)
+    draw("\(index + 1)", at: CGPoint(x: badge.minX, y: badge.minY + 3.5), size: 13, weight: .bold,
+         color: accent, width: badge.width, alignment: .center)
+    draw(step, at: CGPoint(x: x + 36, y: y + 3), size: 14, weight: .regular,
+         color: Palette.textPrimary.withAlphaComponent(0.92), width: textWidth - 36)
 }
 
 NSGraphicsContext.current = nil
