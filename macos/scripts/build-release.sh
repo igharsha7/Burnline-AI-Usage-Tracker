@@ -7,7 +7,7 @@
 # Licensed under the GNU Affero General Public License v3. See LICENSE and NOTICE.
 #
 # Builds a release: the app, signed with the release identity, packed in a
-# signed .dmg with the burn-line background. See docs/releasing.md.
+# .dmg with the burn-line background. See docs/releasing.md.
 #
 #   macos/scripts/build-release.sh [--nightly] [--version 0.1.0] [--build 7] [--keychain path]
 #
@@ -98,8 +98,8 @@ rm -f "$dmg"
 echo "Packing $name.dmg…"
 "$out/venv/bin/dmgbuild" -s "$scripts/dmg/settings.py" -D app="$app" -D background="$background.tiff" \
     "$volume" "$dmg" > /dev/null
-codesign --sign "$identity" ${keychain:+--keychain "$keychain"} "$dmg"
-codesign --verify "$dmg"
+# The image stays unsigned. macOS assesses a signed image as it opens, and a
+# self-signed one would raise a warning of its own before the app's.
 
 # The app as it will be installed, from the image: packing must not have
 # touched it, or macOS may call the installed app damaged.
