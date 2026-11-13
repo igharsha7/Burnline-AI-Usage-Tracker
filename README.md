@@ -125,7 +125,7 @@ tone in Settings, **dry**, **nerd** or **roast**, or turn comparisons off.
 
 Burnline needs **macOS 14 or later**, and Claude Code, Codex, or both.
 
-> **The first release is on its way.** A signed `.dmg` and a Homebrew tap
+> **The first release is on its way.** A `.dmg` and a Homebrew tap
 > arrive with v0.1.0. Until then, build it from source; it takes a minute.
 
 ```sh
@@ -138,18 +138,34 @@ Choose the **Burnline** scheme and press Run. It needs Xcode 26 or later. On
 first launch, pick the tools to track; Burnline imports their history and
 settles into the menu bar. It can drop its Dock icon in Settings.
 
-<details>
-<summary>Opening a downloaded release for the first time</summary>
+### Opening it the first time
 
-Burnline is not notarized by Apple (that needs a paid developer account), so
-macOS asks once before opening a downloaded copy:
+**A downloaded Burnline asks for permission once.** It is the same for the
+`.dmg` and for Homebrew:
 
-1. Open Burnline. macOS says it cannot verify the developer; choose **Done**.
-2. Open **System Settings → Privacy & Security**.
-3. Find the message about Burnline and choose **Open Anyway**, then confirm.
+1. **Drag Burnline into Applications** (Homebrew does this for you) and open
+   it from there.
+2. **macOS says it cannot verify the developer. Choose Done**, not Move to
+   Trash.
+3. **Open System Settings → Privacy & Security** and scroll down to the
+   Security section.
+4. **Choose Open Anyway beside the message about Burnline**, then confirm
+   with your password or Touch ID.
 
-You only do this once. See [releasing](docs/releasing.md#opening-an-un-notarized-app).
-</details>
+That's it. Burnline opens, and it never asks again: updates installed from
+within Burnline open straight away.
+
+**Why does macOS ask?** Apple only lets an app open without asking once it is
+*notarized*: signed by a member of the Apple Developer Program and scanned by
+Apple. Membership costs $99 a year. Burnline is free, open source and has no
+backend that earns anything, so we'd end up asking you to fund us so we could
+pay Apple to stop warning you about us. One click in Settings seemed the
+better deal. The app is still signed with the same certificate in every
+release, so macOS can tell an update came from the same place, and each
+release lists its SHA-256 so you can check your download. Since macOS 15, the
+old Control-click → Open shortcut no longer works for apps like this, so
+Settings is the way. More in
+[releasing](docs/releasing.md#opening-an-un-notarized-app).
 
 ## Privacy
 
