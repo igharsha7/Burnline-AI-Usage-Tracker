@@ -47,5 +47,5 @@ not be named, you will be credited in the advisory and the release notes.
 
 ## Supported versions
 
-Burnline has not had a release yet. Until it does, fixes go to `main`. After
-the first release, security fixes go into the latest release only.
+Security fixes go into the latest release only. Update from within
+Burnline, or download the latest release, to get them.

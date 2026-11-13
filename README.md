@@ -133,8 +133,14 @@ open it, and drag Burnline into Applications.
 **Or with Homebrew:**
 
 ```sh
+brew tap igharsha7/tap
+brew trust --cask igharsha7/tap/burnline
 brew install --cask igharsha7/tap/burnline
 ```
+
+Homebrew 7 loads a cask from someone else's tap only once you trust it, which
+is what the middle line does, for Burnline's cask alone. On older Homebrew,
+skip it.
 
 Either way, macOS asks once the first time Burnline opens; the steps are just
 below. On first launch, pick the tools to track: Burnline imports their
