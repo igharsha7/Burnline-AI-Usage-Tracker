@@ -215,8 +215,12 @@
 		B0B0B0B0B0B0B0B0B0B00014 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(BURNLINE_APP_ICON_$(BURNLINE_CHANNEL))";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BURNLINE_APPCAST_URL = "https://raw.githubusercontent.com/igharsha7/Burnline-AI-Usage-Tracker/appcast/appcast.xml";
+				BURNLINE_APP_ICON_nightly = "AppIcon-Nightly";
+				BURNLINE_APP_ICON_stable = AppIcon;
+				BURNLINE_CHANNEL = stable;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -225,6 +229,7 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Burnline;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright (C) 2026 Challapalli Harshavardhan Reddy. Licensed under the GNU AGPL v3.";
@@ -238,6 +243,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SPARKLE_PUBLIC_KEY = "97k0oVllhkSBIhENg9frMIOLyeDAiHN5Sg4eRs2Zm7c=";
 				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
@@ -245,8 +251,12 @@
 		B0B0B0B0B0B0B0B0B0B00015 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(BURNLINE_APP_ICON_$(BURNLINE_CHANNEL))";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BURNLINE_APPCAST_URL = "https://raw.githubusercontent.com/igharsha7/Burnline-AI-Usage-Tracker/appcast/appcast.xml";
+				BURNLINE_APP_ICON_nightly = "AppIcon-Nightly";
+				BURNLINE_APP_ICON_stable = AppIcon;
+				BURNLINE_CHANNEL = stable;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -255,6 +265,7 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Burnline;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright (C) 2026 Challapalli Harshavardhan Reddy. Licensed under the GNU AGPL v3.";
@@ -268,6 +279,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SPARKLE_PUBLIC_KEY = "97k0oVllhkSBIhENg9frMIOLyeDAiHN5Sg4eRs2Zm7c=";
 				SWIFT_VERSION = 6.0;
 			};
 			name = Release;

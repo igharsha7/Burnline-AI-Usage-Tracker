@@ -47,6 +47,12 @@ enum Palette {
     /// A streak freeze held: ice, the one cold colour beside the flame.
     static let ice = token(0x6CC4FF, contrast: 0x9AD8FF)
 
+    /// A nightly build's sky, deep blue into purple, and its moonlight. Only
+    /// ever on the nightly marks, never a surface or a figure.
+    static let nightTop = token(0x0D1238, contrast: 0x141A4A)
+    static let nightBottom = token(0x45216F, contrast: 0x58308A)
+    static let moonlight = token(0xC9BEFF, contrast: 0xE2DBFF)
+
     static let accentClaude = token(0xCC7C5E, contrast: 0xE89A7C)
     /// A cool silver rather than the reference's white, which was the
     /// colour of text, so a Codex line never reads as a label.

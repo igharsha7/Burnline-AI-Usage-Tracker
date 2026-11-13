@@ -14,6 +14,7 @@ import SwiftUI
 /// title the user chose.
 public struct MenuBarLabel: View {
     let model: StatusModel
+    @Environment(UpdateModel.self) private var updates: UpdateModel?
     @AppStorage(MenuBarTitleMode.storageKey) private var mode = MenuBarTitleMode.default
     @Environment(\.openWindow) private var openWindow
 
@@ -45,14 +46,17 @@ public struct MenuBarLabel: View {
     /// The flame burns with the work: an outline when nothing is running,
     /// filled while it is, in ember once busy and red at a peak. It changes
     /// only when the stage does, never animates, so it costs nothing idle.
-    /// A store that cannot save is the one thing louder.
+    /// A store that cannot save is the one thing louder. A nightly build's
+    /// flame burns in moonlight until it is hot, so it is told apart from a
+    /// release at a glance.
     @ViewBuilder private var icon: some View {
+        let nightly = updates?.build.isNightly == true
         if model.storeFailure != nil {
             Image(systemName: "exclamationmark.triangle")
         } else {
             switch model.heatStage {
-            case .idle: Image(systemName: "flame")
-            case .warm: Image(systemName: "flame.fill")
+            case .idle: nightly ? Image(nsImage: Self.flame(Palette.moonlight, symbol: "flame")) : Image(systemName: "flame")
+            case .warm: nightly ? Image(nsImage: Self.flame(Palette.moonlight)) : Image(systemName: "flame.fill")
             case .hot: Image(nsImage: Self.flame(Palette.ember))
             case .blazing: Image(nsImage: Self.flame(Palette.critical))
             }
@@ -61,10 +65,10 @@ public struct MenuBarLabel: View {
 
     /// A coloured flame. The menu bar draws a template image in its own ink,
     /// so colour needs an image that is not one.
-    private static func flame(_ color: Color) -> NSImage {
+    private static func flame(_ color: Color, symbol: String = "flame.fill") -> NSImage {
         let configuration = NSImage.SymbolConfiguration(pointSize: 14, weight: .regular)
             .applying(NSImage.SymbolConfiguration(paletteColors: [NSColor(color)]))
-        let image = NSImage(systemSymbolName: "flame.fill", accessibilityDescription: nil)?
+        let image = NSImage(systemSymbolName: symbol, accessibilityDescription: nil)?
             .withSymbolConfiguration(configuration) ?? NSImage()
         image.isTemplate = false
         return image
@@ -80,6 +84,7 @@ public struct PopoverView: View {
     let model: StatusModel
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismiss) private var dismiss
+    @Environment(UpdateModel.self) private var updates: UpdateModel?
 
     /// Wide enough for a reset countdown beside a usable bar, and for two
     /// windows side by side in a compact provider row.
@@ -161,6 +166,7 @@ public struct PopoverView: View {
             .buttonStyle(.pressable)
             .keyboardShortcut("d")
             Spacer()
+            if let updates { PopoverUpdateItems(updates: updates, dismiss: dismiss) }
             Button {
                 Task { await model.refresh() }
             } label: {

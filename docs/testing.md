@@ -38,7 +38,9 @@ check to run before every commit, along with the license-header script (see
   suite behaves the same on any Mac and in CI.
 - **Fail, never hang.** Every wait for something asynchronous is bounded (see
   [waiting](#time-and-waiting)), so a change that never comes fails its test in
-  seconds instead of stalling the run.
+  seconds instead of stalling the run. That includes waiting for a child
+  process to exit: never `waitUntilExit()`, which blocks a thread no time
+  limit can free, but `RunningProcess.exited(within:)`.
 - **Assert the value, not that there is one.** Check the exact cost, the exact
   row or the exact sequence. `!= nil`, a count alone or "any array" passes
   while the result is wrong.
@@ -201,6 +203,8 @@ repository root.
 
 | Command | What it does |
 |---|---|
+| `BURNLINE_PERF=/tmp/perf swift test --package-path macos/Packages -c release --no-parallel --filter PerformanceTests` | The [performance gate](performance.md#the-performance-gate)'s suites, which CI runs on every pull request. Synthetic data only; takes under a minute. |
+| `BURNLINE_DEMO_STORE=/dir BURNLINE_DEMO_END=$(date +%s) swift test --package-path macos/Packages --filter DemoStoreTests` | Writes a demo store of invented usage to `/dir`; `macos/scripts/demo.sh` runs the app on it. See [development](development.md#a-demo-with-invented-data). |
 | `BURNLINE_SCALE=1 swift test --package-path macos/Packages -c release --filter ScaleTests` | Measures the store on a synthetic history. `BURNLINE_SCALE_EVENTS` sets its size (default one million). Ten million takes about 13 minutes and 2.5 GB. `BURNLINE_SCALE_KEEP` keeps the database afterwards. |
 | `BURNLINE_REAL_HISTORY=1 swift test --package-path macos/Packages --filter RealHistoryTests` | Imports this machine's real Claude Code and Codex history into a throwaway database and prints counts only |
 | `BURNLINE_IMPORT_TIMING=1 swift test --package-path macos/Packages -c release --filter ImportTimingTests` | Times a first import of this machine's history, split into reading and writing |

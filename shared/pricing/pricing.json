@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "generatedAt": "2026-11-01T04:19:54Z",
+ "generatedAt": "2026-11-11T11:54:58Z",
  "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
  "versions": [
   {
@@ -31,6 +31,36 @@
     "cachedInput": "0.25",
     "cacheWrite": "12.5",
     "cacheWriteOneHour": "20"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-fable-5-2",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "fast",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "16",
+    "output": "80",
+    "cachedInput": "0.4",
+    "cacheWrite": "20",
+    "cacheWriteOneHour": "32"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-fable-5-2",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "8",
+    "output": "40",
+    "cachedInput": "0.2",
+    "cacheWrite": "10",
+    "cacheWriteOneHour": "16"
    }
   },
   {
@@ -95,6 +125,22 @@
   },
   {
    "provider": "claude_code",
+   "model": "claude-haiku-5-5",
+   "validFrom": "2026-11-10T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 100000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "0.5",
+    "output": "2.5",
+    "cachedInput": "0.05",
+    "cacheWrite": "0.625",
+    "cacheWriteOneHour": "1"
+   }
+  },
+  {
+   "provider": "claude_code",
    "model": "claude-mythos-5",
    "validFrom": "1970-01-01T00:00:00Z",
    "tier": "standard",
@@ -121,6 +167,36 @@
     "cachedInput": "0.25",
     "cacheWrite": "12.5",
     "cacheWriteOneHour": "20"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-mythos-5-2",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "fast",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "16",
+    "output": "80",
+    "cachedInput": "0.4",
+    "cacheWrite": "20",
+    "cacheWriteOneHour": "32"
+   }
+  },
+  {
+   "provider": "claude_code",
+   "model": "claude-mythos-5-2",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "8",
+    "output": "40",
+    "cachedInput": "0.2",
+    "cacheWrite": "10",
+    "cacheWriteOneHour": "16"
    }
   },
   {
@@ -2595,6 +2671,35 @@
     "input": "10",
     "output": "50",
     "cachedInput": "1"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-cyber",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "20",
+    "output": "100",
+    "cachedInput": "2",
+    "cacheWrite": "25"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-cyber",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "40",
+    "output": "150",
+    "cachedInput": "4",
+    "cacheWrite": "50"
    }
   },
   {

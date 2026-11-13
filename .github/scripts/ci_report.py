@@ -12,7 +12,8 @@
 #   python3 .github/scripts/ci_report.py <logs-dir> <out-dir>
 #
 # Reads each check's outcome from the environment (TESTS, HEADERS, COVERAGE,
-# APP: success, failure or skipped) and writes <out-dir>/report.md and
+# APP, PERF: success, failure or skipped, and PERF also unaffected when the
+# pull request changes nothing that affects speed) and writes <out-dir>/report.md and
 # <out-dir>/meta.json. Everything quoted from the logs comes from the pull
 # request's own code, so it is shown only inside code spans, with mentions
 # and markup made harmless.
@@ -30,7 +31,7 @@ LISTED = 10
 # GitHub refuses comments longer than 65,536 characters; stay well inside.
 MAX_REPORT = 60_000
 
-ICON = {"success": "✅", "failure": "❌", "skipped": "⏭️", "cancelled": "⏹️", "": "⏭️"}
+ICON = {"success": "✅", "failure": "❌", "skipped": "⏭️", "unaffected": "⏭️", "cancelled": "⏹️", "": "⏭️"}
 
 
 def safe(text: str, limit: int = 300) -> str:
@@ -42,6 +43,14 @@ def safe(text: str, limit: int = 300) -> str:
     text = " ".join(text.split())[:limit]
     text = text.replace("`", "'").replace("@", "@​")
     return f"`{text}`" if text else "``"
+
+
+def plain(text: str, limit: int = 80) -> str:
+    """Text from the pull request shown as is when it is only letters, digits
+    and plain punctuation, which cannot mention, link or format anything;
+    otherwise as a code span."""
+    text = " ".join(text.split())[:limit]
+    return text if re.fullmatch(r"[A-Za-z0-9 ,.()/%-]+", text) else safe(text, limit)
 
 
 def read(logs: Path, name: str) -> str:
@@ -80,6 +89,12 @@ def tests_section(log: str, outcome: str) -> tuple[str, list[str]]:
                   f"Run `swift test --package-path macos/Packages --filter \"<test name>\"` to reproduce. "
                   f"How tests are written: [testing]({doc('docs/testing.md')})."]
         return f"{len(issues)} failing", detail
+
+    if "printed nothing for" in log:
+        stuck = [safe(line.strip(), 150) for line in log.split("did not finish:", 1)[-1].splitlines() if line.strip()]
+        detail = ["**The test run hung and was stopped.** Tests still running:", *listed(stuck), "",
+                  "A stack sample of the test process and the process table are in the `logs-tests` artifact."]
+        return "hung", detail
 
     errors = sorted({line.strip() for line in log.splitlines() if re.search(r"\berror:", line)})
     if errors:
@@ -128,6 +143,63 @@ def app_section(log: str, outcome: str) -> tuple[str, list[str]]:
     return "did not build", detail
 
 
+def number(value) -> str:
+    """A figure from the performance results, which the pull request's code wrote."""
+    if not isinstance(value, (int, float)):
+        return "?"
+    return f"{value:,.0f}" if abs(value) >= 100 else f"{value:.2f}"
+
+
+def perf_section(text: str, outcome: str) -> tuple[str, list[str]]:
+    if outcome == "unaffected":
+        return "not measured: nothing that affects speed changed", []
+    if outcome in ("skipped", ""):
+        return "not run", []
+    try:
+        result = json.loads(text)
+        rows = [r for r in result.get("rows", []) if isinstance(r, dict)]
+    except (ValueError, AttributeError):
+        result, rows = {}, []
+    reproduce = ("Reproduce with `BURNLINE_PERF=/tmp/perf swift test --package-path macos/Packages -c release "
+                 "--no-parallel --filter PerformanceTests`, before and after your change.")
+    if not result.get("ran"):
+        return "did not run", ["The performance suites wrote no figures, which usually means they did not build "
+                               "or a test crashed. See the full log.", "", reproduce]
+
+    def line(row: dict) -> str:
+        base = row.get("base")
+        change = row.get("change")
+        compared = (f"; base {number(base)}" + (f", {change:+.0%}" if isinstance(change, (int, float)) else "")
+                    if isinstance(base, (int, float)) else "")
+        return (f"{plain(str(row.get('title', '?')))}: {number(row.get('value'))} {plain(str(row.get('unit', '')), 20)} "
+                f"(budget {number(row.get('budget'))}{compared})")
+
+    failing = [r for r in rows if r.get("status") != "ok"]
+    table = ["<details><summary>Every figure</summary>", "", "| Measure | This PR | Base | Budget |", "|---|---|---|---|",
+             *[f"| {plain(str(r.get('title', '?')))} | {number(r.get('value'))} {plain(str(r.get('unit', '')), 20)} | "
+               f"{number(r.get('base')) if r.get('base') is not None else '–'} | {number(r.get('budget'))} |" for r in rows],
+             "", "</details>"]
+    scope = "against the base branch and the budgets" if result.get("compared") else "against the budgets (no base figures)"
+    if outcome == "success" and not failing:
+        return f"{len(rows)} figures within budget, checked {scope}", table
+
+    over = [r for r in failing if r.get("status") == "over budget"]
+    regressed = [r for r in failing if r.get("status") == "regressed"]
+    detail = []
+    if over:
+        detail += ["**Over budget:**", *listed([line(r) for r in over]), ""]
+    if regressed:
+        detail += ["**Slower than the base branch, beyond run-to-run noise** (both measured on the same runner):",
+                   *listed([line(r) for r in regressed]), ""]
+    sections = sorted({str(r.get("doc", "")) for r in failing if str(r.get("doc", "")).replace("-", "").isalnum()})
+    page = doc("docs/performance.md")
+    links = ", ".join(f"[{s.replace('-', ' ')}]({page}#{s})" for s in sections) or f"[performance]({page})"
+    detail += [reproduce, "", f"Budgets and what they protect: {links}. "
+               "A pull request that fails this check is not merged until it is fixed, or the maintainer agrees "
+               "the budget should change.", "", *table]
+    return f"{len(failing)} failing", detail
+
+
 def main() -> int:
     logs, out = Path(sys.argv[1]), Path(sys.argv[2])
     out.mkdir(parents=True, exist_ok=True)
@@ -136,6 +208,7 @@ def main() -> int:
         ("License headers", "HEADERS", "headers.log", headers_section),
         ("Coverage floor", "COVERAGE", "coverage.log", coverage_section),
         ("App build", "APP", "app.log", app_section),
+        ("Performance", "PERF", "perf-result.json", perf_section),
     ]
     rows, details = [], []
     failed = False

@@ -147,6 +147,9 @@ Achievements.
   yet tracked, see whether its tool is on this Mac and what Burnline will read,
   import its history while watching it arrive, and see any medals it earned.
 - Achievements shows a badge with how many medal arrivals wait.
+- **The foot** says what this build is, the version or a nightly's night-sky card, with
+  a button to check for updates. An update found appears above it as
+  **Update to 0.2.0** until it is installed. See [updates](updates.md).
 
 ### Pages
 
@@ -304,8 +307,8 @@ The native Settings window, one tab per pane, grouped forms inside.
 `AboutView`, in Settings and in its own window from the app menu and the
 popover. It carries the copyright, the AGPL-3.0 notice, no warranty, the
 source link, the **Section 7(b) attribution word for word** (a test checks it
-against `NOTICE`), and the licenses of GRDB, zstd, Lottie, the Noto fire and
-the Silkscreen font, bundled from `macos/Burnline/Acknowledgements/`. This is a
+against `NOTICE`), and the licenses of GRDB, zstd, Lottie, Sparkle, the Noto
+fire and the Silkscreen font, bundled from `macos/Burnline/Acknowledgements/`. This is a
 license obligation and is never behind a flag. See [licensing](licensing.md).
 
 ## Keyboard

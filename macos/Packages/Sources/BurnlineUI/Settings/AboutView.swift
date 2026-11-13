@@ -14,6 +14,8 @@ import SwiftUI
 /// from the interface. Shown in Settings and in its own window, reached from
 /// the app menu and the menu bar. A licence obligation: never behind a flag.
 public struct AboutView: View {
+    @Environment(UpdateModel.self) private var updates: UpdateModel?
+
     public init() {}
 
     /// The attribution exactly as NOTICE words it. It must not be altered.
@@ -31,6 +33,7 @@ public struct AboutView: View {
         ("GRDB.swift", "MIT License", "GRDB"),
         ("Zstandard", "BSD License", "zstd"),
         ("Lottie", "Apache License 2.0", "Lottie"),
+        ("Sparkle", "MIT License", "Sparkle"),
         ("Silkscreen font", "SIL Open Font License 1.1", "Silkscreen"),
         ("Animated Noto Emoji fire, by Google", "CC BY 4.0", "NotoFire"),
     ]
@@ -41,7 +44,8 @@ public struct AboutView: View {
                 VStack(spacing: 6) {
                     Image(nsImage: AboutView.icon).resizable().frame(width: 96, height: 96)
                     Text("Burnline").font(.title.weight(.semibold))
-                    Text("Version \(Self.version)").font(.callout).foregroundStyle(.secondary).textSelection(.enabled)
+                    Text("Version \(build.fullVersion)").font(.callout).foregroundStyle(.secondary).textSelection(.enabled)
+                    if build.isNightly { NightlyBadge(build: build) }
                     Text("AI coding usage, limits, and cost in one place.").foregroundStyle(.secondary)
                 }
                 VStack(spacing: 4) {
@@ -85,15 +89,14 @@ public struct AboutView: View {
         .frame(minWidth: 460, minHeight: 420)
     }
 
-    /// The icon from the asset catalog. The system's own copy comes through
-    /// Launch Services, which shows a placeholder for an unregistered build.
-    static var icon: NSImage { NSImage(named: "AppIcon") ?? NSApp.applicationIconImage }
+    private var build: BuildInfo { updates?.build ?? .main() }
 
-    static var version: String {
-        let info = Bundle.main.infoDictionary
-        let short = info?["CFBundleShortVersionString"] as? String ?? "development"
-        let build = info?["CFBundleVersion"] as? String
-        return build.map { "\(short) (\($0))" } ?? short
+    /// This build's icon from the asset catalog, the nightly one in a
+    /// nightly. The system's own copy comes through Launch Services, which
+    /// shows a placeholder for an unregistered build.
+    public static var icon: NSImage {
+        let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleIconName") as? String ?? "AppIcon"
+        return NSImage(named: name) ?? NSApp.applicationIconImage
     }
 
     /// A shipped licence file, wherever the build placed it in the bundle.

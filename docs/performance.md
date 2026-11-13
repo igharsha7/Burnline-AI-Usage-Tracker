@@ -22,6 +22,47 @@ touches the paths below, and put both numbers in the pull request.
 | Space returned after deleting a year | 80% (see [why revised](#two-revised-targets)) |
 | Side files | WAL 64 MB, 3 backups, parser errors 90 days |
 
+## The performance gate
+
+CI checks every pull request against these budgets, and against the branch it
+targets. Two suites, skipped unless `BURNLINE_PERF` names a directory for
+their figures, measure what a user would feel:
+
+- `StorePerformanceTests`: half a million synthetic events written (insert
+  rate, bytes per event), then every dashboard range read warm, each the
+  fastest of five runs.
+- `SyncPerformanceTests`: a first import of 2,000 invented Claude Code
+  transcripts, then the idle sync that finds nothing changed, the fastest of
+  seven.
+
+Run them yourself, in release:
+
+```sh
+BURNLINE_PERF=/tmp/perf swift test --package-path macos/Packages -c release --no-parallel --filter PerformanceTests
+python3 .github/scripts/perf_compare.py --head /tmp/perf
+```
+
+In CI, the Performance job builds the pull request and its base branch and
+measures them in turns on the same runner, three times each, keeping each figure's
+best run. The base's compiled suites are cached by its commit, so only the
+first run against a base builds it. A pull request that changes nothing in
+`macos/Packages/`, `shared/` or the gate itself is not measured, and the
+report says so. `.github/scripts/perf_compare.py` then fails the check when:
+
+- **a figure is over its budget.** The budgets are the table above, except
+  the insert rate, whose floor in CI is 10,000 a second: the shared runner
+  measured the same code at 19,700 one run and 27,200 the next, so a floor
+  at the 20,000 target failed on noise alone. It guards against disaster;
+  the comparison with the base, measured in turns on the same runner, catches
+  real drops.
+- **a figure is worse than the base by more than noise.** A time may be 25%
+  and 3 ms slower, an insert rate 25% lower, the size per event 3% larger.
+
+The report on the pull request lists every figure beside the base's and the
+budget. A pull request that fails the gate is not merged until it is fixed, or
+until the maintainer agrees a budget should change, in which case the change
+and its reason go in this page.
+
 ## Storage
 
 `ScaleTests`, ten million synthetic events over five years:
@@ -154,6 +195,7 @@ How it stays there:
 - Animations (the popover's glow, the comparison ticker, the Streaks fire) run
   only while they are on screen, and hold still under Reduce Motion.
 - `PRAGMA optimize` runs on a slow timer and at quit.
+- The update check is one timer a day, Sparkle's own.
 
 ## Measuring a change
 
