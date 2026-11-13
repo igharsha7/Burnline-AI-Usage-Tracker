@@ -3,6 +3,18 @@
   <channel>
     <title>Burnline</title>
     <item>
+      <title>Burnline 0.1.1-nightly.20261113</title>
+      <pubDate>Fri, 13 Nov 2026 17:04:58 +0000</pubDate>
+      <sparkle:version>7</sparkle:version>
+      <sparkle:shortVersionString>0.1.1-nightly.20261113</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:channel>nightly</sparkle:channel>
+      <sparkle:fullReleaseNotesLink>https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/tag/nightly-build</sparkle:fullReleaseNotesLink>
+      <description>&lt;h3&gt;Changes&lt;/h3&gt;
+&lt;ul&gt;&lt;li&gt;Set the version to 0.1.1&lt;/li&gt;&lt;li&gt;Say that macOS asks about Claude&amp;#x27;s login again after each update&lt;/li&gt;&lt;li&gt;Say when a stable build is following nightly&lt;/li&gt;&lt;li&gt;Keep a nightly copy on nightly after it updates to a stable release&lt;/li&gt;&lt;li&gt;Skip the macOS checks when only documentation changes&lt;/li&gt;&lt;li&gt;Say Burnline is released, and give the Homebrew steps that work&lt;/li&gt;&lt;li&gt;Ready the README for the first release&lt;/li&gt;&lt;/ul&gt;</description>
+      <enclosure url="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/download/nightly-build/Burnline-0.1.1-nightly.20261113.dmg" length="13950889" type="application/octet-stream" sparkle:edSignature="vAN14tKe/FtiOpEfUJi0CAyZj1FyJ3sIkL4gGf9l4ZbnMpegmsZTbQ9LPMJe4YMDP5Fwqass2Y0vMnNJcq+1DQ==" />
+    </item>
+    <item>
       <title>Burnline 0.1.0</title>
       <pubDate>Fri, 13 Nov 2026 15:40:12 +0000</pubDate>
       <sparkle:version>6</sparkle:version>
@@ -13,18 +25,6 @@
 &lt;ul&gt;&lt;li&gt;Prepare release 1: in-app updates, a performance gate and a README that shows the app by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/1&lt;/li&gt;&lt;li&gt;Measure only what can change speed, build the base once, and stop starving tests by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/2&lt;/li&gt;&lt;li&gt;Run the child-process tests one at a time by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/4&lt;/li&gt;&lt;li&gt;Stop a hung test run in minutes, and never block on a child&amp;#x27;s exit by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/5&lt;/li&gt;&lt;li&gt;Sign releases with one certificate and pack them in a designed disk image by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/6&lt;/li&gt;&lt;li&gt;Build, sign and publish releases and nightlies from a workflow by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/7&lt;/li&gt;&lt;li&gt;Publish each stable release to a Homebrew tap by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/8&lt;/li&gt;&lt;li&gt;Bundle the current price list for the first release by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/10&lt;/li&gt;&lt;li&gt;Leave the disk image unsigned, so a first install warns once by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/11&lt;/li&gt;&lt;li&gt;Explain the first open plainly, in a larger disk image window by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/13&lt;/li&gt;&lt;li&gt;Ready the README for the first release by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/15&lt;/li&gt;&lt;li&gt;Release v0.1.0 by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/16&lt;/li&gt;&lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/igharsha7/Burnline-AI-Usage-Tracker/commits/v0.1.0&lt;/p&gt;</description>
       <enclosure url="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/download/v0.1.0/Burnline-0.1.0.dmg" length="12989523" type="application/octet-stream" sparkle:edSignature="9g2DxsDGegnkqSzS8zdsDQCSK7oTIiXLcN/T4QK+5oXsWrLRp6mbduKZjJ1CKsdNJNe1yezoI4SyT0keCo6gBA==" />
-    </item>
-    <item>
-      <title>Burnline 0.1.0-nightly.20261113</title>
-      <pubDate>Fri, 13 Nov 2026 13:08:25 +0000</pubDate>
-      <sparkle:version>5</sparkle:version>
-      <sparkle:shortVersionString>0.1.0-nightly.20261113</sparkle:shortVersionString>
-      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <sparkle:channel>nightly</sparkle:channel>
-      <sparkle:fullReleaseNotesLink>https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/tag/nightly-build</sparkle:fullReleaseNotesLink>
-      <description>&lt;h3&gt;Changes&lt;/h3&gt;
-&lt;ul&gt;&lt;li&gt;Explain the first open plainly, in a larger disk image window&lt;/li&gt;&lt;/ul&gt;</description>
-      <enclosure url="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/download/nightly-build/Burnline-0.1.0-nightly.20261113.dmg" length="13951694" type="application/octet-stream" sparkle:edSignature="FPsJ4xgiKIkUfjd7JEjdy4+33Ig8WKsip+kvRvQ6ptKLlFYS4vwCp+Kda6+vlohvo33sdKTnSFqt6d0N/APcCA==" />
     </item>
   </channel>
 </rss>
