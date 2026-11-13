@@ -4,15 +4,15 @@
     <title>Burnline</title>
     <item>
       <title>Burnline 0.1.0-nightly.20261113</title>
-      <pubDate>Fri, 13 Nov 2026 12:29:02 +0000</pubDate>
-      <sparkle:version>4</sparkle:version>
+      <pubDate>Fri, 13 Nov 2026 13:08:25 +0000</pubDate>
+      <sparkle:version>5</sparkle:version>
       <sparkle:shortVersionString>0.1.0-nightly.20261113</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
       <sparkle:channel>nightly</sparkle:channel>
       <sparkle:fullReleaseNotesLink>https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/tag/nightly-build</sparkle:fullReleaseNotesLink>
       <description>&lt;h3&gt;Changes&lt;/h3&gt;
-&lt;ul&gt;&lt;li&gt;Leave the disk image unsigned, so a first install warns once&lt;/li&gt;&lt;li&gt;Bundle the current price list for the first release&lt;/li&gt;&lt;/ul&gt;</description>
-      <enclosure url="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/download/nightly-build/Burnline-0.1.0-nightly.20261113.dmg" length="13552028" type="application/octet-stream" sparkle:edSignature="RD/pGBFlVwKXdv9KubeCLAnI6idOMFA5VTFlxDsE382Rs1WSIO9t3CDrlo88FPEUhQ8EeRMAkP3rwrsYmcuOAw==" />
+&lt;ul&gt;&lt;li&gt;Explain the first open plainly, in a larger disk image window&lt;/li&gt;&lt;/ul&gt;</description>
+      <enclosure url="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/download/nightly-build/Burnline-0.1.0-nightly.20261113.dmg" length="13951694" type="application/octet-stream" sparkle:edSignature="FPsJ4xgiKIkUfjd7JEjdy4+33Ig8WKsip+kvRvQ6ptKLlFYS4vwCp+Kda6+vlohvo33sdKTnSFqt6d0N/APcCA==" />
     </item>
   </channel>
 </rss>
