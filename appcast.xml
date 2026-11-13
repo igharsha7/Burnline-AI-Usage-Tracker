@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+  <channel>
+    <title>Burnline</title>
+    <item>
+      <title>Burnline 0.1.0-nightly.20261113</title>
+      <pubDate>Fri, 13 Nov 2026 11:19:25 +0000</pubDate>
+      <sparkle:version>3</sparkle:version>
+      <sparkle:shortVersionString>0.1.0-nightly.20261113</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:channel>nightly</sparkle:channel>
+      <sparkle:fullReleaseNotesLink>https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/tag/nightly-build</sparkle:fullReleaseNotesLink>
+      <description>&lt;h3&gt;Changes&lt;/h3&gt;
+&lt;ul&gt;&lt;li&gt;Cover a part-quarter day every run, so coverage stops changing between runs&lt;/li&gt;&lt;li&gt;Publish each stable release to a Homebrew tap&lt;/li&gt;&lt;li&gt;Strip release builds, and check the app inside the disk image&lt;/li&gt;&lt;li&gt;Build, sign and publish releases and nightlies from a workflow&lt;/li&gt;&lt;li&gt;Sign releases with one certificate and pack them in a designed disk image&lt;/li&gt;&lt;li&gt;Stop a hung test run in minutes, and never block on a child&amp;#x27;s exit&lt;/li&gt;&lt;li&gt;Keep the release cache at the path it is restored to&lt;/li&gt;&lt;li&gt;Run the child-process tests one at a time&lt;/li&gt;&lt;li&gt;Say what a helper test saw when its ready line does not come&lt;/li&gt;&lt;li&gt;Warm CI&amp;#x27;s caches from the branches pull requests target&lt;/li&gt;&lt;li&gt;Read a helper&amp;#x27;s readiness and id from one line&lt;/li&gt;&lt;li&gt;Measure only what can change speed, and build the base once&lt;/li&gt;&lt;li&gt;Give real child processes time to answer on a starved runner&lt;/li&gt;&lt;li&gt;Explain a failed child-process send, and fit the insert floor to CI&lt;/li&gt;&lt;li&gt;Stop a live-usage test failing on a busy runner&lt;/li&gt;&lt;li&gt;Build the performance suites in release, and report a failed build&lt;/li&gt;&lt;li&gt;Update in app, from a stable or a nightly channel&lt;/li&gt;&lt;li&gt;Show the app in the README, from a demo store of invented usage&lt;/li&gt;&lt;li&gt;Fail a pull request that is slower than its base or over a budget&lt;/li&gt;&lt;li&gt;Describe decisions and tests in their own words&lt;/li&gt;&lt;li&gt;Start Burnline&amp;#x27;s public history&lt;/li&gt;&lt;/ul&gt;</description>
+      <enclosure url="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/download/nightly-build/Burnline-0.1.0-nightly.20261113.dmg" length="13554178" type="application/octet-stream" sparkle:edSignature="KDehAyDrB8xNuiXL1ZOpl8i0XDAL99XP3A88+p0X5yQrG81Q4Cs0XC/iekGrx24zJWA3KumEC7a7OclSb+lDAw==" />
+    </item>
+  </channel>
+</rss>
