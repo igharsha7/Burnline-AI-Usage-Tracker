@@ -37,11 +37,12 @@ cask "burnline" do
   ]
 
   caveats <<~EOS
-    Burnline is not notarized, so macOS stops it the first time it opens:
+    Burnline is not notarized (that needs Apple's $99-a-year developer program,
+    and Burnline is free), so macOS asks once, the first time it opens:
 
       1. Open Burnline. When macOS says it cannot verify the developer, choose Done.
-      2. Open System Settings, then Privacy & Security.
-      3. Choose Open Anyway beside Burnline, and confirm.
+      2. Open System Settings, then Privacy & Security, and scroll to Security.
+      3. Choose Open Anyway beside Burnline, then confirm with your password or Touch ID.
 
     This is needed once. Updates install from within Burnline and open straight away.
   EOS

@@ -231,17 +231,26 @@ and Gatekeeper asks once, naming `Burnline Release` as its origin.
 ## Opening an un-notarized app
 
 Since macOS 15, Control-clicking the app and choosing Open no longer works
-for un-notarized apps. The README and every release must show the route that
-does:
+for un-notarized apps. The README, the `.dmg`'s background, the cask's
+caveats and every release's notes show the route that does, in the same
+words:
 
-1. Open Burnline once. macOS says it cannot verify the developer; choose Done.
-2. Open **System Settings → Privacy & Security**.
-3. Scroll to the message about Burnline and choose **Open Anyway**.
+1. Open Burnline once. macOS says it cannot verify the developer; choose
+   **Done**, not Move to Trash.
+2. Open **System Settings → Privacy & Security** and scroll to Security.
+3. Choose **Open Anyway** beside the message about Burnline.
 4. Confirm with your password or Touch ID.
 
 This is needed once, on first install. Versions installed by the in-app
 updater are not quarantined and open straight away; a new `.dmg` downloaded
-by hand asks again.
+by hand asks again. The `.dmg` itself is unsigned and opens without a
+warning (see [building a release](#building-a-release)). On an account that
+is not an administrator, dragging Burnline into Applications also asks for
+an administrator's name and password: that is macOS guarding Applications,
+not Gatekeeper.
+
+Each place also says why, briefly: notarization needs the Apple Developer
+Program at $99 a year, which a free project with no income does not pay.
 
 ## What a release does not do
 

@@ -20,12 +20,12 @@ symlinks = {"Applications": "/Applications"}
 
 background = defines["background"]  # noqa: F821
 # The window's frame includes its title bar, so it is taller than the
-# 440-point background by that much. Finder may add a path bar over the
+# 540-point background by that much. Finder may add a path bar over the
 # bottom, which the background leaves empty.
-window_rect = ((200, 120), (660, 472))
+window_rect = ((200, 100), (720, 572))
 icon_locations = {
-    os.path.basename(app): (165, 172),
-    "Applications": (495, 172),
+    os.path.basename(app): (180, 172),
+    "Applications": (540, 172),
 }
 icon_size = 112
 text_size = 13
