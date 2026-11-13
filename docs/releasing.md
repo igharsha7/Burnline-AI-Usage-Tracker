@@ -2,9 +2,8 @@
 
 How a Burnline release is made and distributed.
 
-> **Status.** No release has been published yet; Burnline is built from
-> source today. Everything the first release needs is in place: this page is
-> the checklist it follows, and every later one reuses.
+The first release, v0.1.0, was published on 13 November 2026. This page is
+the checklist every release follows.
 
 ## Distribution
 
@@ -206,8 +205,16 @@ The tap is a public repository of its own, `igharsha7/homebrew-tap`; its
 cask installs the `.dmg` from the GitHub Release and checks its SHA-256:
 
 ```sh
+brew tap igharsha7/tap
+brew trust --cask igharsha7/tap/burnline
 brew install --cask igharsha7/tap/burnline
 ```
+
+Homebrew 7 refuses to load a cask from a third-party tap until it is
+trusted, so `brew install` alone fails with "requires the tap". `brew trust
+--cask` trusts Burnline's cask only, not the whole tap; older Homebrew has no
+`trust` command and does not need it. The README, the tap's own README and
+this page give the same three lines.
 
 The cask's source is `.github/homebrew/burnline.rb` in this repository, so it
 is reviewed like everything else. Each stable release, the release workflow
