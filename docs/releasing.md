@@ -93,7 +93,11 @@ from the inside out: Sparkle's helpers and framework first, keeping their
 entitlements, then the app. An identity given to `xcodebuild` would reach
 the packages' resource bundles too, which then demand a development team. The
 script checks that every nested piece verifies and that the signature names
-the certificate, then packs the app into a signed `.dmg` in `build/release/`.
+the certificate, then packs the app into a `.dmg` in `build/release/`. The
+image itself is left unsigned: macOS assesses a signed image when it is
+opened, and with a self-signed certificate that is a second warning before
+the app's own. The app inside is signed, and the image is covered by
+Sparkle's signature and the published checksum.
 
 The `.dmg` is made by [dmgbuild](https://github.com/dmgbuild/dmgbuild) (MIT),
 installed at a pinned version into a private environment under
