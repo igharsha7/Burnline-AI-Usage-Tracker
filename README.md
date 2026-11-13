@@ -11,6 +11,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/latest"><img src="https://img.shields.io/github/v/release/igharsha7/Burnline-AI-Usage-Tracker?label=release&color=FF8A4C" alt="Latest release"></a>
   <a href="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/actions/workflows/ci.yml"><img src="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-orange" alt="License: AGPL-3.0"></a>
   <img src="https://img.shields.io/badge/macOS-14%2B-lightgrey?logo=apple" alt="macOS 14 or later">
@@ -31,7 +32,7 @@
   <img src="docs/images/overview.png" alt="The Burnline dashboard: six months of cost by provider, a weekly cost chart, and where the tokens went">
 </p>
 
-<!-- Demo video: add it here once recorded. -->
+https://github.com/user-attachments/assets/23203fec-bffa-4772-b79b-ac24273038b8
 
 You ran an agent all afternoon. How much of your 5-hour window is left? Which
 project ate the week? What would those months have cost at API prices? Is the
@@ -123,10 +124,32 @@ tone in Settings, **dry**, **nerd** or **roast**, or turn comparisons off.
 
 ## Install
 
-Burnline needs **macOS 14 or later**, and Claude Code, Codex, or both.
+Burnline needs **macOS 14 or later**.
 
-> **The first release is on its way.** A `.dmg` and a Homebrew tap
-> arrive with v0.1.0. Until then, build it from source; it takes a minute.
+**Download** the `.dmg` from the
+[latest release](https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/latest),
+open it, and drag Burnline into Applications.
+
+**Or with Homebrew:**
+
+```sh
+brew install --cask igharsha7/tap/burnline
+```
+
+Either way, macOS asks once the first time Burnline opens; the steps are just
+below. On first launch, pick the tools to track: Burnline imports their
+history and settles into the menu bar. It tracks whichever of **Claude Code**
+and **Codex** you use, one or both. With neither, it opens to an empty
+dashboard that fills in once you start. It can drop its Dock icon in
+Settings.
+
+**Updates.** Burnline checks once a day and shows an **Update** button when a
+new version is out; nothing installs until you choose it. Want new work
+first? Switch to the **Nightly** channel in Settings → General → Updates.
+Nightlies are pre-releases, built from the newest work. See
+[updates](docs/updates.md).
+
+**Build from source** (Xcode 26 or later):
 
 ```sh
 git clone https://github.com/igharsha7/Burnline-AI-Usage-Tracker.git
@@ -134,9 +157,8 @@ cd Burnline-AI-Usage-Tracker
 open macos/Burnline.xcodeproj
 ```
 
-Choose the **Burnline** scheme and press Run. It needs Xcode 26 or later. On
-first launch, pick the tools to track; Burnline imports their history and
-settles into the menu bar. It can drop its Dock icon in Settings.
+Choose the **Burnline** scheme and press Run. [Development](docs/development.md#running-a-debug-build-safely)
+covers running a build safely alongside an installed copy.
 
 ### Opening it the first time
 
@@ -185,7 +207,6 @@ Details in [privacy and security](docs/privacy-and-security.md).
 
 ## Coming next
 
-- **v0.1.0**: the first release, as a `.dmg` and a Homebrew tap.
 - **v0.2.0**: **OpenCode** and **Antigravity**.
 - **Windows**: in progress, built on the same database format.
 
