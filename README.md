@@ -183,6 +183,14 @@ covers running a build safely alongside an installed copy.
 That's it. Burnline opens, and it never asks again: updates installed from
 within Burnline open straight away.
 
+**macOS also asks about Claude's login.** For Claude's limits, Burnline reads
+the login Claude Code keeps in your Keychain, so macOS asks whether Burnline
+may use it. Choose **Always Allow**. Expect the same question again after
+each update: the approval is tied to the developer's Apple team, which
+Burnline doesn't have, so macOS treats each new version as a new app. If you
+choose Deny, Burnline asks Claude Code itself for your limits instead, which
+works but can't see banked resets.
+
 **Why does macOS ask?** Apple only lets an app open without asking once it is
 *notarized*: signed by a member of the Apple Developer Program and scanned by
 Apple. Membership costs $99 a year. Burnline is free, open source and has no

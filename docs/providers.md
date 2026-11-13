@@ -90,7 +90,10 @@ read gives the plan (`subscriptionType`, such as `max` or `pro`), which the
 endpoint does not report. The refresh token is never decoded into memory.
 
 - The first read shows macOS's Keychain prompt. If the user declines, Burnline
-  stops asking for the rest of the session and uses the fallback.
+  stops asking for the rest of the session and uses the fallback. The prompt
+  returns after each update, since a self-signed build has no Apple team for
+  macOS to file the approval under; see
+  [privacy and security](privacy-and-security.md).
 - **An expired token is never renewed.** Renewing would write to Claude Code's
   login, and Burnline is read-only toward providers. The expiry is reported,
   the fallback is used, and Claude Code renews the login next time it runs
