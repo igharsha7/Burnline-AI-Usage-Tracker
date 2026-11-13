@@ -4,7 +4,7 @@ Burnline is a native macOS menu-bar app and dashboard that shows AI coding
 usage, plan limits and what that usage would cost at API prices, for Claude
 Code and OpenAI Codex, with OpenCode and Antigravity planned for v0.2.0 and a
 Windows version in progress. It is local-first: no account, no backend, no
-telemetry. Nothing has been released yet.
+telemetry. The first release, v0.1.0, came out on 13 November 2026.
 
 Stack: Swift 6 · SwiftUI, with AppKit where required · SQLite through GRDB ·
 Swift Charts. macOS 14 or later.
