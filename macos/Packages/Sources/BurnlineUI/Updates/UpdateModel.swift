@@ -34,7 +34,8 @@ public final class UpdateModel {
     public let unavailableReason: String?
     public private(set) var lastCheck: Date?
 
-    /// The channel followed. A nightly build follows nightly until told otherwise.
+    /// The channel followed. A nightly build follows nightly until told
+    /// otherwise, and keeps following it after it updates to a stable release.
     public var channel: UpdateChannel {
         didSet { defaults.set(channel.rawValue, forKey: Self.channelKey) }
     }
@@ -52,7 +53,12 @@ public final class UpdateModel {
         self.defaults = defaults
         self.updater = updater
         self.unavailableReason = updater == nil ? unavailableReason ?? "This build cannot update itself." : nil
-        channel = defaults.string(forKey: Self.channelKey).flatMap(UpdateChannel.init(rawValue:)) ?? build.channel
+        let saved = defaults.string(forKey: Self.channelKey).flatMap(UpdateChannel.init(rawValue:))
+        // Kept from the first run, so the channel a copy started on outlives
+        // the build: a nightly that updates to a stable release, which is a
+        // stable build, still follows nightly.
+        if saved == nil { defaults.set(build.channel.rawValue, forKey: Self.channelKey) }
+        channel = saved ?? build.channel
         automaticallyChecks = updater?.automaticallyChecks ?? false
         lastCheck = updater?.lastCheck
         updater?.start(reporting: self)

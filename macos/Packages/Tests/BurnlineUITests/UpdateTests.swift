@@ -55,6 +55,20 @@ struct UpdateTests {
         #expect(UpdateModel(build: Self.nightly(), defaults: defaults, updater: FakeUpdater()).channel == .stable)
     }
 
+    @Test func `a nightly copy that updates to a stable release keeps following nightly`() {
+        let (defaults, _) = SettingsTests.defaults()
+        _ = UpdateModel(build: Self.nightly(), defaults: defaults, updater: FakeUpdater())
+
+        let updated = UpdateModel(build: Self.stable, defaults: defaults, updater: FakeUpdater())
+        #expect(updated.channel == .nightly && updated.allowedFeedChannels == ["nightly"])
+    }
+
+    @Test func `a stable copy follows stable from its first run`() {
+        let (defaults, _) = SettingsTests.defaults()
+        _ = UpdateModel(build: Self.stable, defaults: defaults, updater: FakeUpdater())
+        #expect(UpdateModel(build: Self.nightly(), defaults: defaults, updater: FakeUpdater()).channel == .stable)
+    }
+
     @Test func `only a stable build moving onto nightly is asked to confirm`() {
         let (defaults, _) = SettingsTests.defaults()
         let stable = UpdateModel(build: Self.stable, defaults: defaults, updater: FakeUpdater())
