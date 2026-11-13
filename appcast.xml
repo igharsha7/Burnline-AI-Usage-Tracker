@@ -3,6 +3,18 @@
   <channel>
     <title>Burnline</title>
     <item>
+      <title>Burnline 0.1.1</title>
+      <pubDate>Fri, 13 Nov 2026 17:13:03 +0000</pubDate>
+      <sparkle:version>8</sparkle:version>
+      <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:fullReleaseNotesLink>https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/tag/v0.1.1</sparkle:fullReleaseNotesLink>
+      <description>&lt;h3&gt;What&amp;#x27;s Changed&lt;/h3&gt;
+&lt;ul&gt;&lt;li&gt;Say Burnline is released, fix the Homebrew steps, and skip CI for documentation by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/17&lt;/li&gt;&lt;li&gt;Say Burnline is released, fix the Homebrew steps, and skip CI for documentation by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/18&lt;/li&gt;&lt;li&gt;Keep nightly users on nightly, explain a stable build following it, and the Keychain prompt after updates by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/19&lt;/li&gt;&lt;li&gt;Set the version to 0.1.1 by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/20&lt;/li&gt;&lt;li&gt;Release v0.1.1 by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/22&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/igharsha7/Burnline-AI-Usage-Tracker/compare/v0.1.0...v0.1.1&lt;/p&gt;</description>
+      <enclosure url="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/download/v0.1.1/Burnline-0.1.1.dmg" length="12988802" type="application/octet-stream" sparkle:edSignature="zRDRtEocbilzLjL0d6Tf60fBx8Rb/ECfXk1Gw2KL7Metj4VeqPnwrO0GXiub/Ra2uVRB+F9Hhseg1XPBEh7wCw==" />
+    </item>
+    <item>
       <title>Burnline 0.1.1-nightly.20261113</title>
       <pubDate>Fri, 13 Nov 2026 17:04:58 +0000</pubDate>
       <sparkle:version>7</sparkle:version>
