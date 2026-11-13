@@ -4,7 +4,9 @@
 # Copyright (C) 2026 Challapalli Harshavardhan Reddy
 # Licensed under the GNU Affero General Public License v3. See LICENSE and NOTICE.
 #
-# The checks every pull request must pass, in two jobs that run side by side:
+# The checks every pull request must pass. Scope looks at what changed: a pull
+# request that only touches documentation (Markdown, and the README's images)
+# skips the two macOS jobs. Otherwise they run side by side:
 #
 # - Tests and build: the test suite, license headers, the coverage floor and a
 #   build of the app. Each step runs even when an earlier one failed, so one
@@ -36,8 +38,40 @@ env:
   LOGS: ${{ github.workspace }}/ci-logs
 
 jobs:
+  scope:
+    name: Scope
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      # "false" when every changed file is documentation, so no check could
+      # change its result.
+      code: ${{ steps.scope.outputs.code }}
+    env:
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Decide what to check
+        id: scope
+        run: |
+          # A push to nightly has no base: always check.
+          if [ -z "$BASE_SHA" ]; then echo "code=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          changed=$(git diff --name-only "$BASE_SHA" HEAD)
+          echo "$changed"
+          # Markdown anywhere, and the images the README and docs show.
+          others=$(echo "$changed" | grep -v -E '(\.md$|^docs/images/)' || true)
+          if [ -n "$changed" ] && [ -z "$others" ]; then
+            echo "code=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          fi
+
   tests:
     name: Tests and build
+    needs: scope
+    if: needs.scope.outputs.code == 'true'
     runs-on: macos-26
     timeout-minutes: 60
     outputs:
@@ -119,6 +153,8 @@ jobs:
 
   performance:
     name: Performance
+    needs: scope
+    if: needs.scope.outputs.code == 'true'
     runs-on: macos-26
     timeout-minutes: 60
     outputs:
@@ -250,7 +286,7 @@ jobs:
 
   checks:
     name: Checks
-    needs: [tests, performance]
+    needs: [scope, tests, performance]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -277,6 +313,7 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           BASE_REF: ${{ github.event.pull_request.base.ref || github.ref_name }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          DOCS_ONLY: ${{ needs.scope.outputs.code == 'false' }}
         run: |
           mkdir -p ci-logs ci-report
           python3 .github/scripts/ci_report.py ci-logs ci-report
@@ -290,4 +327,7 @@ jobs:
 
       - name: Fail if any check failed
         run: |
+          test "${{ needs.scope.result }}" = success
+          # Documentation only: the macOS jobs were skipped on purpose.
+          if [ "${{ needs.scope.outputs.code }}" = false ]; then exit 0; fi
           test "${{ needs.tests.result }}" = success && test "${{ needs.performance.result }}" = success

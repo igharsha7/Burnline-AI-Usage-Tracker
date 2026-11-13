@@ -14,7 +14,8 @@
 # Reads each check's outcome from the environment (TESTS, HEADERS, COVERAGE,
 # APP, PERF: success, failure or skipped, and PERF also unaffected when the
 # pull request changes nothing that affects speed) and writes <out-dir>/report.md and
-# <out-dir>/meta.json. Everything quoted from the logs comes from the pull
+# <out-dir>/meta.json. DOCS_ONLY=true means only documentation changed and no
+# check ran. Everything quoted from the logs comes from the pull
 # request's own code, so it is shown only inside code spans, with mentions
 # and markup made harmless.
 
@@ -212,7 +213,11 @@ def main() -> int:
     ]
     rows, details = [], []
     failed = False
+    docs_only = os.environ.get("DOCS_ONLY") == "true"
     for title, variable, log_name, section in checks:
+        if docs_only:
+            rows.append(f"| {ICON['unaffected']} {title} | not run: only documentation changed |")
+            continue
         outcome = os.environ.get(variable, "")
         failed |= outcome == "failure"
         result, detail = section(read(logs, log_name), outcome)
@@ -226,7 +231,9 @@ def main() -> int:
     heading = ("## ❌ CI found something to fix" if failed else "## ✅ CI passed")
     intro = ("Every check below must pass before this pull request is reviewed. "
              "Each failure says what went wrong and where to read about it."
-             if failed else "Every check passed. A maintainer will review this pull request.")
+             if failed else
+             "Only documentation changed, so no check needed to run. A maintainer will review this pull request."
+             if docs_only else "Every check passed. A maintainer will review this pull request.")
     report = [MARKER, heading, "", intro, "", "| Check | Result |", "|---|---|", *rows, "", *details,
               "---",
               f"Commit `{sha}` · [full log]({run_url}) · {safe(toolchain[0]) if toolchain else ''} · "

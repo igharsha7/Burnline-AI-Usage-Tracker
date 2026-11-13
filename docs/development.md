@@ -240,8 +240,12 @@ for the Windows version in progress, with language-neutral contracts in
 ## CI
 
 `.github/workflows/ci.yml` runs on every pull request to `main`, a staging
-branch or `nightly`, and on every push to `nightly`, in three jobs:
+branch or `nightly`, and on every push to `nightly`, in four jobs:
 
+- **Scope**, first and in seconds: if every file the pull request changes is
+  Markdown or an image under `docs/images/`, the two macOS jobs are skipped
+  and Checks passes with a report saying only documentation changed. Anything
+  else, including the cask template and workflows, runs everything.
 - **Tests and build**, on a macOS runner with the newest Xcode 26: the test
   suite (with coverage), the license header check, the coverage floor and an
   unsigned app build. Each step runs even if an earlier one failed. The suite
@@ -256,7 +260,7 @@ branch or `nightly`, and on every push to `nightly`, in three jobs:
 - **Checks**, once both finish: `.github/scripts/ci_report.py` turns their logs
   into one report (a table of the checks, then for each failure the failing
   tests, files or figures and the page to read), writes it to the run's
-  summary page and uploads it as an artifact. Checks fails if either job did,
+  summary page and uploads it as an artifact. Checks fails if any job did,
   and it is the status the branch rules require.
 
 `.github/workflows/release.yml` builds, signs and publishes releases and
