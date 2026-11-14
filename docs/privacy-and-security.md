@@ -76,13 +76,20 @@ access token, for the usage endpoint.
 - The refresh token is never decoded.
 - **Never renewed.** Renewing would write to Claude Code's login. An expired
   token is reported, and Claude Code renews it the next time it runs.
-- The first read shows macOS's Keychain prompt. Declining stops Burnline asking
-  for the rest of the session; quota then comes through Claude Code itself.
-- The prompt returns after each update. "Always Allow" is filed under the
-  developer's Apple team, and a self-signed build has none, so macOS treats
-  each version as a new app. A Developer ID certificate would end it; see
-  [releasing](releasing.md#signing). Claude Code can also rewrite the item
-  when it renews its login, which may bring the prompt back between updates.
+- **macOS asks only when the user can expect it.** The first read on a Mac
+  may show macOS's Keychain prompt. Every later read is made with Keychain
+  interaction turned off, so where macOS would ask, it refuses at once
+  instead; quota then comes through Claude Code itself, banked resets stay as
+  last read, and Settings → Providers and the Limits page offer **Allow…**,
+  which lets the next read show the prompt.
+- macOS forgets "Always Allow" whenever Claude Code renews its login, since
+  Claude Code rewrites its Keychain item, and after each update, since the
+  approval is filed under the developer's Apple team and a self-signed build
+  has none. A Developer ID certificate would end the second; see
+  [releasing](releasing.md#signing).
+- **Read Claude Code's login**, in Settings → Providers, is on by default.
+  Off, the Keychain is never searched and Claude's quota comes through Claude
+  Code alone.
 - Codex's login is never seen: Codex's app-server makes its own request.
 - A test sends a sentinel token through a full refresh and checks that neither
   the database files nor any printed state contain it.
@@ -121,7 +128,7 @@ Permissions it may ask for:
 
 | Permission | When | Why |
 |---|---|---|
-| Keychain access to "Claude Code-credentials" | The first Claude quota read | The usage endpoint needs Claude Code's token |
+| Keychain access to "Claude Code-credentials" | The first Claude quota read, and when the user chooses Allow… | The usage endpoint needs Claude Code's token |
 | Notifications | In onboarding, on Send Test, or before the first alert there is to show | Alerts |
 | Login item | When the user turns on Open at login | Launch at login |
 

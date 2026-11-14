@@ -29,6 +29,8 @@ public struct LiveIngestion: Sendable {
     /// Every change to usage and quota, for the interface.
     public let changes: ChangeFeed
     public let calendar: LocalCalendar
+    /// Whether Claude Code's login may be read, and how the last read went.
+    public let claudeLogin: ClaudeLoginAccess
 
     /// `resources` holds the shared `schema` and `pricing` directories, as
     /// bundled with the app. Throws when the database cannot be opened, such
@@ -37,10 +39,11 @@ public struct LiveIngestion: Sendable {
     /// is how long events are kept in full before compaction; `alerts` are
     /// the user's notification choices; `weekStart` is the user's first day
     /// of the week, nil for the locale's; `tracked` are the providers the
-    /// user chose, the only ones read.
+    /// user chose, the only ones read. `claudeLogin` says whether Claude
+    /// Code's login may be read from the Keychain for its usage endpoint.
     public init(resources: URL, pricingUpdates: Bool, retention: DetailRetention, history: HistoryRetention = .default,
                 alerts: AlertSettings = AlertSettingsStore().load(), weekStart: Weekday? = nil,
-                tracked: Set<ProviderKey>) throws {
+                tracked: Set<ProviderKey>, claudeLogin: ClaudeLoginAccess) throws {
         let clock = SystemClock()
         // One resolver, so a repository both tools worked in is resolved once.
         let resolver = ProjectIdentityResolver()
@@ -48,10 +51,14 @@ public struct LiveIngestion: Sendable {
         // Claude's usage endpoint see banked resets; the fallbacks do not.
         try self.init(
             resources: resources, pricingUpdates: pricingUpdates, retention: retention, history: history,
-            alerts: alerts, weekStart: weekStart, tracked: tracked, location: Self.location, clock: clock,
+            alerts: alerts, weekStart: weekStart, tracked: tracked, claudeLogin: claudeLogin,
+            location: Self.location, clock: clock,
             poster: SystemNotificationPoster(),
             readers: Self.demoQuotaReaders(clock: clock) ?? [
-                FallbackQuotaReader([ClaudeUsageEndpointReader(clock: clock), ClaudeCodeUsageReader(clock: clock)]),
+                FallbackQuotaReader([
+                    ClaudeUsageEndpointReader(credentials: KeychainClaudeCredentials(access: claudeLogin), clock: clock),
+                    ClaudeCodeUsageReader(clock: clock),
+                ]),
                 FallbackQuotaReader([CodexAppServerReader(clock: clock), CodexRolloutQuotaReader()]),
             ],
             adapters: [ClaudeCodeAdapter(resolver: resolver), CodexAdapter(resolver: resolver), CursorAdapter()])
@@ -62,9 +69,11 @@ public struct LiveIngestion: Sendable {
     /// quota is read and which adapters read history. Tests assemble the app
     /// here against a scratch directory and stubs.
     init(resources: URL, pricingUpdates: Bool, retention: DetailRetention, history: HistoryRetention,
-         alerts: AlertSettings, weekStart: Weekday?, tracked: Set<ProviderKey>, location: StoreLocation,
+         alerts: AlertSettings, weekStart: Weekday?, tracked: Set<ProviderKey>,
+         claudeLogin: ClaudeLoginAccess = ClaudeLoginAccess(enabled: false), location: StoreLocation,
          clock: any WallClock, poster: any NotificationPoster, readers: [any QuotaReader],
          adapters: [any UsageProviderAdapter]) throws {
+        self.claudeLogin = claudeLogin
         let schema = try Schema(directory: resources.appending(path: "schema"))
         let database = try BurnlineDatabase.open(at: location, schema: schema, clock: clock)
         try database.models.sync(ModelAliasManifest.load(
@@ -107,6 +116,20 @@ public struct LiveIngestion: Sendable {
     public func track(_ provider: ProviderKey) async {
         await reconciler.track(provider)
         await quota.track(provider)
+    }
+
+    /// Turns reading Claude Code's login on or off, and reads Claude's quota
+    /// again so the change shows at once.
+    public func readClaudeLogin(_ enabled: Bool) async {
+        claudeLogin.setEnabled(enabled)
+        await quota.refresh(.claudeCode)
+    }
+
+    /// Reads Claude's quota with macOS allowed to ask for its login, because
+    /// the user chose to allow it again.
+    public func allowClaudeLogin() async {
+        claudeLogin.requestPrompt()
+        await quota.refresh(.claudeCode)
     }
 
     /// Stages `backup` to replace the database at the next launch, for

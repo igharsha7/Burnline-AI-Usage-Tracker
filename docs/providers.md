@@ -89,11 +89,19 @@ Keychain item, for one request, into a `SecretString`, and drops it. The same
 read gives the plan (`subscriptionType`, such as `max` or `pro`), which the
 endpoint does not report. The refresh token is never decoded into memory.
 
-- The first read shows macOS's Keychain prompt. If the user declines, Burnline
-  stops asking for the rest of the session and uses the fallback. The prompt
-  returns after each update, since a self-signed build has no Apple team for
-  macOS to file the approval under; see
-  [privacy and security](privacy-and-security.md).
+- Whether it may be read, and how the last read went, is a
+  `ClaudeLoginAccess` the app builds from the **Read Claude Code's login**
+  setting and shares with Settings and the Limits page.
+- Only the first read on a Mac, or one the user asked for with **Allow…**, may
+  show macOS's Keychain prompt. Every other read runs with Keychain
+  interaction turned off (`SecKeychainSetUserInteractionAllowed`, process
+  wide, so under a lock), and a read macOS would have asked about fails at
+  once as needing permission; the fallback is used. This matters because
+  Claude Code rewrites its Keychain item each time it renews its login, which
+  makes macOS forget the approval every few hours, and a self-signed build
+  loses it at each update too; see [privacy and security](privacy-and-security.md).
+- Declining the prompt is remembered for the session, so the interface says
+  so rather than asking for permission again.
 - **An expired token is never renewed.** Renewing would write to Claude Code's
   login, and Burnline is read-only toward providers. The expiry is reported,
   the fallback is used, and Claude Code renews the login next time it runs

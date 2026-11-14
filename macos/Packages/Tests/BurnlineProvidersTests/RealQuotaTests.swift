@@ -31,7 +31,8 @@ struct RealQuotaTests {
     }
 
     @Test func `Claude's usage endpoint`() async {
-        let reader = ClaudeUsageEndpointReader()
+        let reader = ClaudeUsageEndpointReader(
+            credentials: KeychainClaudeCredentials(access: ClaudeLoginAccess(enabled: true, mayAsk: true)))
         await Self.probe("claude usage endpoint", raw: { try await reader.rawResponse(at: SystemClock().now).data },
                          read: { try await reader.read() })
     }

@@ -358,7 +358,7 @@ struct QuotaReaderTests {
     @Test func `a credentials file is read before the Keychain`() throws {
         let file = TestDirectory.make("ClaudeHome").appending(path: ".credentials.json")
         try Data(Tools.json(["claudeAiOauth": ["accessToken": Self.token]]).utf8).write(to: file)
-        let source = KeychainClaudeCredentials(files: [file]) { _ in
+        let source = KeychainClaudeCredentials(files: [file], access: ClaudeLoginAccess(enabled: true)) { _, _ in
             Issue.record("the Keychain was searched although a credentials file exists")
             return (errSecItemNotFound, nil)
         }
@@ -366,27 +366,95 @@ struct QuotaReaderTests {
         #expect(login.token.withValue { $0 } == Self.token && login.plan == nil)
     }
 
-    /// Counts Keychain searches, answering each with `status` and `data`.
-    final class KeychainStub: @unchecked Sendable {
-        // @unchecked: `count` is only touched under `lock`.
+    @Test func `the login is read from the credentials file in Claude Code's configured home`() throws {
+        let home = TestDirectory.make("ClaudeConfig")
+        try Data(Tools.json(["claudeAiOauth": ["accessToken": Self.token]]).utf8)
+            .write(to: home.appending(path: ".credentials.json"))
+        let access = ClaudeLoginAccess(enabled: true)
+        let source = KeychainClaudeCredentials(access: access, environment: ["CLAUDE_CONFIG_DIR": home.path])
+        #expect(try source.login(at: Self.now).token.withValue { $0 } == Self.token)
+        #expect(access.isEnabled)
+    }
+
+    #if DEBUG
+    @Test func `a debug build told to skip the Keychain treats reading as off`() {
+        let access = ClaudeLoginAccess(enabled: true)
+        let source = KeychainClaudeCredentials(access: access, environment: [
+            "CLAUDE_CONFIG_DIR": TestDirectory.make("ClaudeEmpty").path, "BURNLINE_SKIP_KEYCHAIN": "1",
+        ])
+        #expect(throws: QuotaReadError.notSignedIn("Reading Claude Code's login is turned off in Settings.")) {
+            try source.login(at: Self.now)
+        }
+        #expect(access.status == .off)
+    }
+    #endif
+
+    /// A stand-in for the Keychain's prompt switch, recording every change.
+    final class InteractionSwitch: @unchecked Sendable {
+        // @unchecked: every stored property is touched only under `lock`.
         private let lock = NSLock()
-        private var count = 0
-        let status: OSStatus
-        let data: Data?
-        init(_ status: OSStatus, _ data: Data? = nil) { self.status = status; self.data = data }
-        var searches: Int { lock.withLock { count } }
+        private var allowed: Bool
+        private var changes: [Bool] = []
+        init(allowed: Bool) { self.allowed = allowed }
+        var isAllowed: Bool { lock.withLock { allowed } }
+        var history: [Bool] { lock.withLock { changes } }
+        var interaction: KeychainClaudeCredentials.Interaction {
+            .init(isAllowed: { self.isAllowed },
+                  allow: { value in self.lock.withLock { self.allowed = value; self.changes.append(value) } })
+        }
+    }
+
+    @Test(arguments: [true, false])
+    func `a silent search turns Keychain prompts off while it runs, then puts them back`(before: Bool) {
+        let state = InteractionSwitch(allowed: before)
+        var during: Bool?
+        let status = KeychainClaudeCredentials.search(mayPrompt: false, interaction: state.interaction) {
+            during = state.isAllowed
+            return errSecInteractionNotAllowed
+        }
+        #expect(status == errSecInteractionNotAllowed && during == false)
+        #expect(state.isAllowed == before && state.history == [false, before])
+    }
+
+    @Test func `a search the user asked for leaves Keychain prompts as they are`() {
+        let state = InteractionSwitch(allowed: true)
+        let status = KeychainClaudeCredentials.search(mayPrompt: true, interaction: state.interaction) { errSecSuccess }
+        #expect(status == errSecSuccess && state.history == [])
+    }
+
+    /// Records each Keychain search and whether it could prompt, answering
+    /// with `status` and `data`, which a test may change between reads.
+    final class KeychainStub: @unchecked Sendable {
+        // @unchecked: every stored property is touched only under `lock`.
+        private let lock = NSLock()
+        private var asked: [Bool] = []
+        private var answer: (OSStatus, Data?)
+        let access: ClaudeLoginAccess
+        init(_ status: OSStatus, _ data: Data? = nil, access: ClaudeLoginAccess = ClaudeLoginAccess(enabled: true)) {
+            answer = (status, data)
+            self.access = access
+        }
+        /// Whether each search so far was allowed to show macOS's prompt.
+        var prompts: [Bool] { lock.withLock { asked } }
+        func answer(_ status: OSStatus, _ data: Data? = nil) { lock.withLock { answer = (status, data) } }
         func source() -> KeychainClaudeCredentials {
-            KeychainClaudeCredentials(files: []) { _ in
-                self.lock.withLock { self.count += 1 }
-                return (self.status, self.data)
+            KeychainClaudeCredentials(files: [], access: access) { _, mayPrompt in
+                self.lock.withLock {
+                    self.asked.append(mayPrompt)
+                    return self.answer
+                }
             }
         }
     }
 
-    @Test func `the login stored in the Keychain is read, with its plan`() throws {
-        let stored = Data(Tools.json(["claudeAiOauth": ["accessToken": Self.token, "subscriptionType": "max"]]).utf8)
-        let login = try KeychainStub(errSecSuccess, stored).source().login(at: Self.now)
+    static let stored = Data(Tools.json(["claudeAiOauth": ["accessToken": token, "subscriptionType": "max"]]).utf8)
+
+    @Test func `the login stored in the Keychain is read silently, with its plan`() throws {
+        let keychain = KeychainStub(errSecSuccess, Self.stored)
+        let login = try keychain.source().login(at: Self.now)
         #expect(login.token.withValue { $0 } == Self.token && login.plan == "max")
+        #expect(keychain.prompts == [false])
+        #expect(keychain.access.status == .allowed)
     }
 
     @Test func `no Keychain item means not signed in, and is asked again next time`() {
@@ -397,19 +465,65 @@ struct QuotaReaderTests {
                 try source.login(at: Self.now)
             }
         }
-        #expect(keychain.searches == 2)
+        #expect(keychain.prompts == [false, false])
     }
 
-    @Test(arguments: [errSecUserCanceled, errSecAuthFailed, errSecInteractionNotAllowed])
-    func `a declined or unavailable Keychain is not asked again this session`(status: OSStatus) {
+    @Test(arguments: [errSecAuthFailed, errSecInteractionNotAllowed])
+    func `a login macOS would ask about is refused silently and reported as needing permission`(status: OSStatus) {
         let keychain = KeychainStub(status)
         let source = keychain.source()
-        for _ in 0..<3 {
-            #expect(throws: QuotaReadError.notSignedIn("Burnline was not allowed to read Claude Code's login.")) {
+        for _ in 0..<2 {
+            #expect(throws: QuotaReadError.notSignedIn(
+                "Claude Code renewed its login, so Burnline needs permission to read it again.")) {
                 try source.login(at: Self.now)
             }
         }
-        #expect(keychain.searches == 1)
+        #expect(keychain.prompts == [false, false])
+        #expect(keychain.access.status == .needsPermission)
+    }
+
+    @Test func `allowing again lets one read show macOS's prompt, then reads are silent once more`() throws {
+        let keychain = KeychainStub(errSecAuthFailed)
+        let source = keychain.source()
+        _ = try? source.login(at: Self.now)
+        keychain.answer(errSecSuccess, Self.stored)
+        keychain.access.requestPrompt()
+        _ = try source.login(at: Self.now)
+        _ = try source.login(at: Self.now)
+        #expect(keychain.prompts == [false, true, false])
+        #expect(keychain.access.status == .allowed)
+    }
+
+    @Test func `a first launch lets the first read ask, and only the first`() throws {
+        let keychain = KeychainStub(errSecSuccess, Self.stored, access: ClaudeLoginAccess(enabled: true, mayAsk: true))
+        let source = keychain.source()
+        _ = try source.login(at: Self.now)
+        _ = try source.login(at: Self.now)
+        #expect(keychain.prompts == [true, false])
+    }
+
+    @Test(arguments: [errSecUserCanceled, errSecAuthFailed])
+    func `declining macOS's prompt is remembered while later reads stay silent`(status: OSStatus) {
+        let keychain = KeychainStub(status)
+        let source = keychain.source()
+        keychain.access.requestPrompt()
+        #expect(throws: QuotaReadError.notSignedIn("Burnline was not allowed to read Claude Code's login.")) {
+            try source.login(at: Self.now)
+        }
+        _ = try? source.login(at: Self.now)
+        #expect(keychain.prompts == [true, false])
+        #expect(keychain.access.status == .declined)
+    }
+
+    @Test func `with reading turned off the Keychain is never searched`() {
+        let keychain = KeychainStub(errSecSuccess, Self.stored, access: ClaudeLoginAccess(enabled: true, mayAsk: true))
+        keychain.access.setEnabled(false)
+        keychain.access.requestPrompt()
+        #expect(throws: QuotaReadError.notSignedIn("Reading Claude Code's login is turned off in Settings.")) {
+            try keychain.source().login(at: Self.now)
+        }
+        #expect(keychain.prompts == [])
+        #expect(keychain.access.status == .off)
     }
 
     // MARK: Claude Code's get_usage

@@ -65,6 +65,23 @@ struct SettingsTests {
         #expect(WeekStart.monday.weekday == .monday && WeekStart.system.weekday == nil)
     }
 
+    @Test func `Claude Code's login is read by default, and turning it off is kept`() {
+        let (defaults, name) = Self.defaults()
+        let store = AlertSettingsStore(suiteName: name)
+        let settings = SettingsModel(defaults: defaults, alertStore: store)
+        #expect(settings.readClaudeLogin && settings.launchClaudeLogin().isEnabled)
+        settings.readClaudeLogin = false
+        let access = SettingsModel(defaults: defaults, alertStore: store).launchClaudeLogin()
+        #expect(!access.isEnabled && access.status == .off && !access.takePrompt())
+    }
+
+    @Test func `only the first launch that reads Claude Code's login lets macOS ask unprompted`() {
+        let (defaults, name) = Self.defaults()
+        let store = AlertSettingsStore(suiteName: name)
+        #expect(SettingsModel(defaults: defaults, alertStore: store).launchClaudeLogin().takePrompt())
+        #expect(!SettingsModel(defaults: defaults, alertStore: store).launchClaudeLogin().takePrompt())
+    }
+
     @Test func `EC-D5 only a shorter detail window asks first`() {
         #expect(SettingsModel.shrinks(from: .forever, to: .year))
         #expect(SettingsModel.shrinks(from: .year, to: .ninetyDays))

@@ -164,6 +164,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let history = settings.launchHistory
         let weekStart = settings.launchWeekStart
         let tracked = settings.launchTracked
+        let claudeLogin = settings.launchClaudeLogin()
         let log = log
         ingestion = Task {
             // Opening the store and reading the price history take tens of
@@ -172,7 +173,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             let live: LiveIngestion
             do {
                 live = try await Self.makeIngestion(resources: resources, pricingUpdates: updates, retention: retention,
-                                                    history: history, weekStart: weekStart, tracked: tracked)
+                                                    history: history, weekStart: weekStart, tracked: tracked,
+                                                    claudeLogin: claudeLogin)
             } catch {
                 log.error("Ingestion did not start: \(String(describing: error), privacy: .public)")
                 fail(StoreFailure(error), resources: resources)
@@ -210,9 +212,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @concurrent
     private static func makeIngestion(resources: URL, pricingUpdates: Bool, retention: DetailRetention,
                                       history: HistoryRetention, weekStart: Weekday?,
-                                      tracked: Set<ProviderKey>) async throws -> LiveIngestion {
+                                      tracked: Set<ProviderKey>,
+                                      claudeLogin: ClaudeLoginAccess) async throws -> LiveIngestion {
         try LiveIngestion(resources: resources, pricingUpdates: pricingUpdates, retention: retention, history: history,
-                          weekStart: weekStart, tracked: tracked)
+                          weekStart: weekStart, tracked: tracked, claudeLogin: claudeLogin)
     }
 
     private func start(_ live: LiveIngestion, corpus: ComparisonCorpus?) async {
@@ -223,7 +226,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // One engine, so the dashboard and the menu bar share its rotation.
         let comparisons = corpus.map { ComparisonEngine(corpus: $0, recents: UserDefaultsRecentStore()) }
         status.comparisons = comparisons
-        status.connect(status: live.status, quota: quota, changes: live.changes, calendar: live.calendar)
+        status.connect(status: live.status, quota: quota, changes: live.changes, calendar: live.calendar,
+                       claudeLogin: live.claudeLogin, allowClaudeLogin: { await live.allowClaudeLogin() })
         dashboard.connect(aggregation: live.aggregation, catalog: live.catalog, activity: live.activity,
                           changes: live.changes, health: { await reconciler.health() }, calendar: live.calendar,
                           comparisons: comparisons)
