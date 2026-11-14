@@ -13,7 +13,8 @@ import Foundation
 public enum PreferenceBackup {
     static let keys = [
         SettingsModel.pricingUpdatesKey, SettingsModel.detailRetentionKey, SettingsModel.historyRetentionKey,
-        SettingsModel.weekStartKey, SettingsModel.onboardedKey, SettingsModel.nameKey, SettingsModel.trackedKey, AlertSettingsStore.key,
+        SettingsModel.weekStartKey, SettingsModel.onboardedKey, SettingsModel.nameKey, SettingsModel.trackedKey,
+        SettingsModel.readClaudeLoginKey, AlertSettingsStore.key,
         ActivityPreferences.showAchievementsKey, ActivityPreferences.showComparisonsKey,
         ActivityPreferences.comparisonToneKey, MenuBarTitleMode.storageKey, DockPresence.menuBarOnlyKey,
         DashboardModel.rangeKey, DashboardModel.filtersKey,

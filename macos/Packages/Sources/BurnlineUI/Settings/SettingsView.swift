@@ -111,7 +111,7 @@ private struct GeneralPane: View {
 /// Each provider's sources and how fresh they are: when history last synced
 /// and what that sync read, and the state of its quota.
 private struct ProvidersPane: View {
-    let settings: SettingsModel
+    @Bindable var settings: SettingsModel
     let status: StatusModel
 
     var body: some View {
@@ -141,6 +141,16 @@ private struct ProvidersPane: View {
                     }
                     if let quota = status.quotas.first(where: { $0.provider == provider }) {
                         LabeledContent("Quota") { Text(quotaText(quota)).multilineTextAlignment(.trailing) }
+                    }
+                    if provider == .claudeCode {
+                        Toggle(isOn: $settings.readClaudeLogin) {
+                            Text("Read Claude Code's login")
+                            Text("Claude's usage endpoint needs it, and only it shows banked resets. "
+                                 + "The login is read from the Keychain when quota is read, and never kept.")
+                        }
+                        if let note = ClaudeLoginNote(status: status.claudeLogin) {
+                            note.allowing { Task { await status.allowClaudeLogin() } }
+                        }
                     }
                 } header: {
                     HStack(spacing: 6) {

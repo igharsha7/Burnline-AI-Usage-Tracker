@@ -31,6 +31,9 @@ public final class StatusModel {
     /// Counts requests to bring the dashboard forward from outside a view,
     /// as a notification's click does; the menu-bar label opens it on each.
     public private(set) var dashboardRequests = 0
+    /// How the last read of Claude Code's login went, so the Limits page can
+    /// offer to allow it again; nil until ingestion connects.
+    public private(set) var claudeLogin: ClaudeLoginAccess.Status?
 
     public func requestDashboard() { dashboardRequests += 1 }
 
@@ -49,6 +52,8 @@ public final class StatusModel {
     struct Services {
         let status: StatusService
         let quota: QuotaActor
+        let claudeLogin: ClaudeLoginAccess?
+        let allowClaudeLogin: (@Sendable () async -> Void)?
     }
 
     /// Waits for a duration, for the midnight and live-expiry timers; tests
@@ -62,8 +67,11 @@ public final class StatusModel {
 
     /// Starts following the services: the figures already stored first, then
     /// every change as it is pushed, and a fresh day at midnight.
-    public func connect(status: StatusService, quota: QuotaActor, changes: ChangeFeed, calendar: LocalCalendar) {
-        services = Services(status: status, quota: quota)
+    /// `claudeLogin` and `allowClaudeLogin` are the live app's, for the
+    /// Limits page's offer to read Claude Code's login again.
+    public func connect(status: StatusService, quota: QuotaActor, changes: ChangeFeed, calendar: LocalCalendar,
+                        claudeLogin: ClaudeLoginAccess? = nil, allowClaudeLogin: (@Sendable () async -> Void)? = nil) {
+        services = Services(status: status, quota: quota, claudeLogin: claudeLogin, allowClaudeLogin: allowClaudeLogin)
         self.calendar = calendar
         // Subscribe before the first load, so no change falls between.
         let stream = changes.changes()
@@ -75,6 +83,7 @@ public final class StatusModel {
             // stored one, since both come from the quota actor; keep it.
             let shown = Set(quotas.map(\.provider))
             quotas = Self.ordered(quotas + stored.filter { !shown.contains($0.provider) })
+            self.claudeLogin = claudeLogin?.status
             heatScale = await status.heatScale()
         })
         tasks.append(Task { [weak self] in
@@ -83,7 +92,9 @@ public final class StatusModel {
                 switch change {
                 case .usage: self.scheduleUsageReload()
                 case .achievements: break
-                case .quota(let state): replace(state)
+                case .quota(let state):
+                    replace(state)
+                    if state.provider == .claudeCode { self.claudeLogin = services?.claudeLogin?.status }
                 case .storage(let failure): storeFailure = failure
                 }
             }
@@ -126,6 +137,12 @@ public final class StatusModel {
     @concurrent
     private static func history(_ quota: QuotaActor, _ state: ProviderQuotaState) async -> [String: LimitHistory] {
         quota.history(of: state)
+    }
+
+    /// Reads Claude's quota letting macOS ask for Claude Code's login, as
+    /// the user asked; the pushed state brings the new status.
+    func allowClaudeLogin() async {
+        await services?.allowClaudeLogin?()
     }
 
     /// Reads quota now and reloads the totals: the popover's refresh.

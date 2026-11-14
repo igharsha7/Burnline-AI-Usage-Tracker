@@ -45,6 +45,12 @@ public final class SettingsModel {
     public static let showAchievementsKey = ActivityPreferences.showAchievementsKey
     /// The name engraved on the back of the user's medals.
     public static let nameKey = "userName"
+    /// Whether Claude Code's login may be read from the Keychain, for its
+    /// usage endpoint and banked resets.
+    public static let readClaudeLoginKey = "readClaudeLogin"
+    /// Set once Burnline has let macOS ask about Claude Code's login, so
+    /// later launches read it silently and ask only when the user chooses.
+    public static let claudeLoginAskedKey = "claudeLoginAsked"
 
     var alerts: AlertSettings {
         didSet {
@@ -73,6 +79,15 @@ public final class SettingsModel {
     /// say. Kept in preferences on this Mac and nowhere else.
     var name: String {
         didSet { defaults.set(name, forKey: Self.nameKey) }
+    }
+    /// Whether Claude Code's login is read, for the usage endpoint and
+    /// banked resets. Off, Claude's quota comes through Claude Code alone.
+    var readClaudeLogin: Bool {
+        didSet {
+            defaults.set(readClaudeLogin, forKey: Self.readClaudeLoginKey)
+            let enabled = readClaudeLogin
+            Task { [live] in await live?.readClaudeLogin(enabled) }
+        }
     }
     /// The name as engraved: trimmed, or nil when there is none.
     var engravedName: String? {
@@ -122,6 +137,7 @@ public final class SettingsModel {
         weekStart = WeekStart(rawValue: defaults.integer(forKey: Self.weekStartKey)) ?? .system
         showAchievements = defaults.object(forKey: Self.showAchievementsKey) as? Bool ?? true
         name = defaults.string(forKey: Self.nameKey) ?? ""
+        readClaudeLogin = defaults.object(forKey: Self.readClaudeLoginKey) as? Bool ?? true
         onboarded = defaults.bool(forKey: Self.onboardedKey)
         tracked = Self.tracked(in: defaults)
     }
@@ -176,6 +192,16 @@ public final class SettingsModel {
     public var launchWeekStart: Weekday? { weekStart.weekday }
     public var isOnboarded: Bool { onboarded }
     public var launchTracked: Set<ProviderKey> { tracked }
+
+    /// The access ingestion reads Claude Code's login through. Only the
+    /// first launch that reads it lets macOS ask unprompted; after that,
+    /// asking waits for the user.
+    public func launchClaudeLogin() -> ClaudeLoginAccess {
+        let access = ClaudeLoginAccess(enabled: readClaudeLogin,
+                                       mayAsk: readClaudeLogin && !defaults.bool(forKey: Self.claudeLoginAskedKey))
+        if readClaudeLogin { defaults.set(true, forKey: Self.claudeLoginAskedKey) }
+        return access
+    }
 
     public func connect(_ live: LiveIngestion) {
         self.live = live

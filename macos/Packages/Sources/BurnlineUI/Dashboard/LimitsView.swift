@@ -289,6 +289,10 @@ private struct ProviderLimits: View {
                           banked: banked(for: window.key), history: history[window.key],
                           engine: status.comparisons, calendar: status.calendar, now: now)
             }
+            if state.provider == .claudeCode, let note = ClaudeLoginNote(status: status.claudeLogin) {
+                note.allowing { Task { await status.allowClaudeLogin() } }
+                    .padding(.horizontal, 20)
+            }
             if !state.heldResets.isEmpty || state.unconfirmedResets > 0 {
                 BankedResetRow(resets: state.heldResets, unconfirmed: state.unconfirmedResets, provider: state.provider,
                                calendar: status.calendar, now: now)

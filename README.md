@@ -185,11 +185,14 @@ within Burnline open straight away.
 
 **macOS also asks about Claude's login.** For Claude's limits, Burnline reads
 the login Claude Code keeps in your Keychain, so macOS asks whether Burnline
-may use it. Choose **Always Allow**. Expect the same question again after
-each update: the approval is tied to the developer's Apple team, which
-Burnline doesn't have, so macOS treats each new version as a new app. If you
-choose Deny, Burnline asks Claude Code itself for your limits instead, which
-works but can't see banked resets.
+may use it. Choose **Always Allow**. macOS forgets that approval whenever
+Claude Code renews its login, and after each Burnline update (the approval is
+tied to the developer's Apple team, which Burnline doesn't have). Burnline
+never brings the question up by itself after the first time: it asks Claude
+Code for your limits instead, and Settings → Providers and the Limits page
+show an **Allow…** button for when you want banked resets back. You can also
+turn **Read Claude Code's login** off in Settings → Providers; your limits
+still show, without banked resets.
 
 **Why does macOS ask?** Apple only lets an app open without asking once it is
 *notarized*: signed by a member of the Apple Developer Program and scanned by
