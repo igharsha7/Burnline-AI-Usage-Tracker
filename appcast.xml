@@ -3,6 +3,18 @@
   <channel>
     <title>Burnline</title>
     <item>
+      <title>Burnline 0.1.2</title>
+      <pubDate>Sat, 14 Nov 2026 06:31:56 +0000</pubDate>
+      <sparkle:version>10</sparkle:version>
+      <sparkle:shortVersionString>0.1.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:fullReleaseNotesLink>https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/tag/v0.1.2</sparkle:fullReleaseNotesLink>
+      <description>&lt;h3&gt;What&amp;#x27;s Changed&lt;/h3&gt;
+&lt;ul&gt;&lt;li&gt;Stop asking about Claude Code&amp;#x27;s login every few hours by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/23&lt;/li&gt;&lt;li&gt;Set the version to 0.1.2 by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/24&lt;/li&gt;&lt;li&gt;Release v0.1.2 by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/26&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/igharsha7/Burnline-AI-Usage-Tracker/compare/v0.1.1...v0.1.2&lt;/p&gt;</description>
+      <enclosure url="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/download/v0.1.2/Burnline-0.1.2.dmg" length="13006288" type="application/octet-stream" sparkle:edSignature="qm1KoAbgYZp2QtIYWsAZjCJE0UIy6HNWLWXOQVq9e1eqN/NMlJ/wjpCO8JWQXPfe4kEu/GUjgMpNnlBsT73vBA==" />
+    </item>
+    <item>
       <title>Burnline 0.1.2-nightly.20261114</title>
       <pubDate>Sat, 14 Nov 2026 06:15:10 +0000</pubDate>
       <sparkle:version>9</sparkle:version>
