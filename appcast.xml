@@ -3,6 +3,18 @@
   <channel>
     <title>Burnline</title>
     <item>
+      <title>Burnline 0.1.2-nightly.20261114</title>
+      <pubDate>Sat, 14 Nov 2026 06:15:10 +0000</pubDate>
+      <sparkle:version>9</sparkle:version>
+      <sparkle:shortVersionString>0.1.2-nightly.20261114</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:channel>nightly</sparkle:channel>
+      <sparkle:fullReleaseNotesLink>https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/tag/nightly-build</sparkle:fullReleaseNotesLink>
+      <description>&lt;h3&gt;Changes&lt;/h3&gt;
+&lt;ul&gt;&lt;li&gt;Set the version to 0.1.2&lt;/li&gt;&lt;li&gt;Stop asking about Claude Code&amp;#x27;s login on Burnline&amp;#x27;s own schedule&lt;/li&gt;&lt;/ul&gt;</description>
+      <enclosure url="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/download/nightly-build/Burnline-0.1.2-nightly.20261114.dmg" length="13969655" type="application/octet-stream" sparkle:edSignature="r6qI7qijNNHqeCTLujGdV+aB2hSbgps+AOm57vIPAUv3LgopisX8eCjv7K1TgmpOhZsdZlOo2iwIl75Ic/6aDQ==" />
+    </item>
+    <item>
       <title>Burnline 0.1.1</title>
       <pubDate>Fri, 13 Nov 2026 17:13:03 +0000</pubDate>
       <sparkle:version>8</sparkle:version>
@@ -13,18 +25,6 @@
 &lt;ul&gt;&lt;li&gt;Say Burnline is released, fix the Homebrew steps, and skip CI for documentation by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/17&lt;/li&gt;&lt;li&gt;Say Burnline is released, fix the Homebrew steps, and skip CI for documentation by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/18&lt;/li&gt;&lt;li&gt;Keep nightly users on nightly, explain a stable build following it, and the Keychain prompt after updates by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/19&lt;/li&gt;&lt;li&gt;Set the version to 0.1.1 by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/20&lt;/li&gt;&lt;li&gt;Release v0.1.1 by @igharsha7 in https://github.com/igharsha7/Burnline-AI-Usage-Tracker/pull/22&lt;/li&gt;&lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/igharsha7/Burnline-AI-Usage-Tracker/compare/v0.1.0...v0.1.1&lt;/p&gt;</description>
       <enclosure url="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/download/v0.1.1/Burnline-0.1.1.dmg" length="12988802" type="application/octet-stream" sparkle:edSignature="zRDRtEocbilzLjL0d6Tf60fBx8Rb/ECfXk1Gw2KL7Metj4VeqPnwrO0GXiub/Ra2uVRB+F9Hhseg1XPBEh7wCw==" />
-    </item>
-    <item>
-      <title>Burnline 0.1.1-nightly.20261113</title>
-      <pubDate>Fri, 13 Nov 2026 17:04:58 +0000</pubDate>
-      <sparkle:version>7</sparkle:version>
-      <sparkle:shortVersionString>0.1.1-nightly.20261113</sparkle:shortVersionString>
-      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <sparkle:channel>nightly</sparkle:channel>
-      <sparkle:fullReleaseNotesLink>https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/tag/nightly-build</sparkle:fullReleaseNotesLink>
-      <description>&lt;h3&gt;Changes&lt;/h3&gt;
-&lt;ul&gt;&lt;li&gt;Set the version to 0.1.1&lt;/li&gt;&lt;li&gt;Say that macOS asks about Claude&amp;#x27;s login again after each update&lt;/li&gt;&lt;li&gt;Say when a stable build is following nightly&lt;/li&gt;&lt;li&gt;Keep a nightly copy on nightly after it updates to a stable release&lt;/li&gt;&lt;li&gt;Skip the macOS checks when only documentation changes&lt;/li&gt;&lt;li&gt;Say Burnline is released, and give the Homebrew steps that work&lt;/li&gt;&lt;li&gt;Ready the README for the first release&lt;/li&gt;&lt;/ul&gt;</description>
-      <enclosure url="https://github.com/igharsha7/Burnline-AI-Usage-Tracker/releases/download/nightly-build/Burnline-0.1.1-nightly.20261113.dmg" length="13950889" type="application/octet-stream" sparkle:edSignature="vAN14tKe/FtiOpEfUJi0CAyZj1FyJ3sIkL4gGf9l4ZbnMpegmsZTbQ9LPMJe4YMDP5Fwqass2Y0vMnNJcq+1DQ==" />
     </item>
     <item>
       <title>Burnline 0.1.0</title>
