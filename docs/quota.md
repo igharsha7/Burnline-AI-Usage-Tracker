@@ -45,7 +45,7 @@ reasons carries a credential or a response body, so all can be logged.
 | Reason | Shown as |
 |---|---|
 | `notInstalled` | "Codex is not installed." |
-| `notSignedIn` | Not signed in, or the Keychain read was declined |
+| `notSignedIn` | Not signed in, the Keychain read was declined or needs permission again, or reading the login is off |
 | `credentialExpired` | "The login has expired. Using the tool again renews it." (EC-Q4) |
 | `unreachable` | Offline, timed out, or the service failed (EC-Q3) |
 | `rateLimited` | "The provider asked Burnline to check less often." |

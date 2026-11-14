@@ -159,7 +159,7 @@ public struct ClaudeUsageEndpointReader: QuotaReader {
     /// Burnline names itself rather than posing as Claude Code.
     static let userAgent = "Burnline (+https://github.com/igharsha7/Burnline-AI-Usage-Tracker)"
 
-    public init(credentials: any ClaudeCredentialSource = KeychainClaudeCredentials(),
+    public init(credentials: any ClaudeCredentialSource,
                 transport: any HTTPTransport = EphemeralHTTPTransport(), clock: any WallClock = SystemClock()) {
         self.credentials = credentials
         self.transport = transport
