@@ -20,6 +20,15 @@
 </p>
 
 <p align="center">
+  <a href="https://www.producthunt.com/products/burnline?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-burnline">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1318849&theme=dark">
+      <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1318849&theme=light" width="250" height="54" alt="Burnline on Product Hunt">
+    </picture>
+  </a>
+</p>
+
+<p align="center">
   <a href="#install">Install</a> ·
   <a href="#features">Features</a> ·
   <a href="#privacy">Privacy</a> ·
