@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "generatedAt": "2026-11-11T11:54:58Z",
+ "generatedAt": "2026-11-18T13:08:39Z",
  "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
  "versions": [
   {
@@ -2675,6 +2675,20 @@
   },
   {
    "provider": "codex",
+   "model": "gpt-6-astra-law",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "reconstructed",
+   "perMillion": {
+    "input": "20",
+    "output": "75",
+    "cachedInput": "2"
+   }
+  },
+  {
+   "provider": "codex",
    "model": "gpt-6-cyber",
    "validFrom": "1970-01-01T00:00:00Z",
    "tier": "standard",
@@ -3106,6 +3120,209 @@
     "output": "7.5",
     "cachedInput": "0.1",
     "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "16",
+    "output": "80",
+    "cachedInput": "0.8",
+    "cacheWrite": "20"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "32",
+    "output": "120",
+    "cachedInput": "1.6",
+    "cacheWrite": "40"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "8",
+    "output": "40",
+    "cachedInput": "0.4",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "16",
+    "output": "60",
+    "cachedInput": "0.8",
+    "cacheWrite": "20"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "ultrafast",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "24",
+    "output": "120",
+    "cachedInput": "1.2",
+    "cacheWrite": "30"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-astra",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "ultrafast",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "48",
+    "output": "180",
+    "cachedInput": "2.4",
+    "cacheWrite": "60"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-astra-law",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "8",
+    "output": "40",
+    "cachedInput": "0.4",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-astra-law",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "16",
+    "output": "60",
+    "cachedInput": "0.8",
+    "cacheWrite": "20"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "4",
+    "output": "20",
+    "cachedInput": "0.2",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "8",
+    "output": "30",
+    "cachedInput": "0.4",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "2",
+    "output": "10",
+    "cachedInput": "0.1",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "4",
+    "output": "15",
+    "cachedInput": "0.2",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "ultrafast",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "6",
+    "output": "30",
+    "cachedInput": "0.3",
+    "cacheWrite": "7.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-sol",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "ultrafast",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "12",
+    "output": "45",
+    "cachedInput": "0.6",
+    "cacheWrite": "15"
    }
   },
   {
