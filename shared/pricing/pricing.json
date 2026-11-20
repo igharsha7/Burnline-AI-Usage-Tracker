@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "generatedAt": "2026-11-19T13:18:19Z",
+ "generatedAt": "2026-11-20T12:58:59Z",
  "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
  "versions": [
   {
@@ -2834,6 +2834,20 @@
   {
    "provider": "codex",
    "model": "gpt-6-rosalind",
+   "validFrom": "2026-11-20T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "10",
+    "output": "50",
+    "cachedInput": "1",
+    "cacheWrite": "12.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-rosalind",
    "validFrom": "1970-01-01T00:00:00Z",
    "tier": "standard",
    "abovePromptTokens": 272000,
@@ -2844,6 +2858,21 @@
     "output": "112.5",
     "cachedInput": "3",
     "cacheWrite": "37.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-rosalind",
+   "validFrom": "2026-11-20T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "20",
+    "output": "75",
+    "cachedInput": "2",
+    "cacheWrite": "25"
    }
   },
   {
