@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "generatedAt": "2026-11-20T12:58:59Z",
+ "generatedAt": "2026-11-25T14:29:00Z",
  "source": "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json",
  "versions": [
   {
@@ -2662,6 +2662,60 @@
   },
   {
    "provider": "codex",
+   "model": "gpt-6-astra-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "20",
+    "output": "100",
+    "cachedInput": "2"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "40",
+    "output": "150",
+    "cachedInput": "4"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "10",
+    "output": "50",
+    "cachedInput": "1"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6-astra-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "20",
+    "output": "75",
+    "cachedInput": "2"
+   }
+  },
+  {
+   "provider": "codex",
    "model": "gpt-6-astra-law",
    "validFrom": "1970-01-01T00:00:00Z",
    "tier": "standard",
@@ -3080,6 +3134,60 @@
   },
   {
    "provider": "codex",
+   "model": "gpt-6.1-sol-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "4",
+    "output": "20",
+    "cachedInput": "0.2"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-sol-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "8",
+    "output": "30",
+    "cachedInput": "0.4"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-sol-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "2",
+    "output": "10",
+    "cachedInput": "0.1"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.1-sol-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "4",
+    "output": "15",
+    "cachedInput": "0.2"
+   }
+  },
+  {
+   "provider": "codex",
    "model": "gpt-6.1-terra",
    "validFrom": "1970-01-01T00:00:00Z",
    "tier": "flex",
@@ -3254,6 +3362,64 @@
   },
   {
    "provider": "codex",
+   "model": "gpt-6.2-astra-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "16",
+    "output": "80",
+    "cachedInput": "0.8",
+    "cacheWrite": "20"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-astra-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "32",
+    "output": "120",
+    "cachedInput": "1.6",
+    "cacheWrite": "40"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-astra-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "8",
+    "output": "40",
+    "cachedInput": "0.4",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-astra-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "16",
+    "output": "60",
+    "cachedInput": "0.8",
+    "cacheWrite": "20"
+   }
+  },
+  {
+   "provider": "codex",
    "model": "gpt-6.2-astra-law",
    "validFrom": "1970-01-01T00:00:00Z",
    "tier": "standard",
@@ -3366,6 +3532,64 @@
     "output": "45",
     "cachedInput": "0.6",
     "cacheWrite": "15"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-sol-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "4",
+    "output": "20",
+    "cachedInput": "0.2",
+    "cacheWrite": "5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-sol-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "priority",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "8",
+    "output": "30",
+    "cachedInput": "0.4",
+    "cacheWrite": "10"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-sol-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "2",
+    "output": "10",
+    "cachedInput": "0.1",
+    "cacheWrite": "2.5"
+   }
+  },
+  {
+   "provider": "codex",
+   "model": "gpt-6.2-sol-healthcare",
+   "validFrom": "1970-01-01T00:00:00Z",
+   "tier": "standard",
+   "abovePromptTokens": 272000,
+   "source": "litellm",
+   "confidence": "exact",
+   "perMillion": {
+    "input": "4",
+    "output": "15",
+    "cachedInput": "0.2",
+    "cacheWrite": "5"
    }
   },
   {
